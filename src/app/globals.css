@@ -1,21 +1,68 @@
+@import url("https://use.typekit.net/vmf7uij.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --main-clr-light: #47d799;
+  --main-clr: #33d38e;
+  --main-clr-pale: #2dbd7f;
+  --second-clr-light: #582f93;
+  --second-clr: #461887;
+  --second-clr-pale: #3f1579;
+  --blue-clr: #006fff;
+  --pink-clr: #f3e9ff;
+  --pink-clr-light: #f1edf6;
+
+  --text-clr-stroke: #979797;
+  --text-clr: #9d94a8;
+  --text-clr-mutated: #707070;
+  --shadow-clr: #00000029;
+  --shadow-clr-plate: #c7c7c7;
+  --font-cairo: "Cairo", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    direction: rtl;
+    color: var(--text-clr);
+    font-family: var(--font-cairo);
   }
 }
+@layer components {
+  .heading {
+    @apply font-semibold text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
+  }
+  .heading-big {
+    @apply font-semibold text-4xl md:text-5xl lg:text-6xl xl:text-[80px] text-second;
+  }
+  .heading-sub {
+    @apply font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-[40px] text-second;
+  }
+  .heading-h3 {
+    @apply font-semibold text-xl md:text-2xl;
+  }
+  .text-big {
+    @apply text-xl lg:text-2xl xl:text-3xl;
+  }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* buttons */
+  .btn-secondary {
+    @apply p-3 rounded-sm max-md:w-full text-lg md:text-xl text-white bg-second
+    hover:bg-second-pale transition-colors mr-auto disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary-outline {
+    @apply p-3 rounded-sm max-md:w-full text-lg md:text-xl text-second border-2 border-second
+    hover:bg-second hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-glass {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 
+    rounded-sm bg-pink-light hover:opacity-90 transition-colors text-lg md:text-xl;
+  }
+
+  /* Submit Button */
+  /* .auth-submit {
+    @apply text-xl md:text-2xl font-semibold;
+  } */
 }
