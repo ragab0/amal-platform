@@ -1,12 +1,12 @@
-// import { Cairo } from "next/font/google";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "@/providers/ReduxProvider";
 
-// const cairo = Cairo({
-//   subsets: ["latin", "arabic"],
-//   variable: "--font-cairo",
-//   display: "swap",
-// });
+const cairo = Cairo({
+  subsets: ["latin", "arabic"],
+  variable: "--font-cairo",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Amal",

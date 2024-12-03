@@ -1,4 +1,5 @@
 @import url("https://use.typekit.net/vmf7uij.css");
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -29,19 +30,33 @@
     color: var(--text-clr);
     font-family: var(--font-cairo);
   }
+  input {
+    direction: rtl;
+  }
+  textarea {
+    @apply placeholder:text-xl;
+  }
+  time {
+    font-size: 14px;
+    opacity: 0.8;
+  }
 }
+
 @layer components {
   .heading {
     @apply font-semibold text-3xl md:text-4xl lg:text-5xl xl:text-6xl;
   }
   .heading-big {
-    @apply font-semibold text-4xl md:text-5xl lg:text-6xl xl:text-[80px] text-second;
+    @apply font-semibold text-4xl md:text-5xl lg:text-6xl xl:text-[80px] text-second text-center my-14;
   }
   .heading-sub {
     @apply font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-[40px] text-second;
   }
   .heading-h3 {
     @apply font-semibold text-xl md:text-2xl;
+  }
+  .heading-h4 {
+    @apply font-semibold md:text-lg;
   }
   .text-big {
     @apply text-xl lg:text-2xl xl:text-3xl;
@@ -60,9 +75,10 @@
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 
     rounded-sm bg-pink-light hover:opacity-90 transition-colors text-lg md:text-xl;
   }
+}
 
-  /* Submit Button */
-  /* .auth-submit {
-    @apply text-xl md:text-2xl font-semibold;
-  } */
+@layer utilities {
+  .btn-secondary-makeMain {
+    @apply bg-main hover:bg-main-pale;
+  }
 }

@@ -5,7 +5,7 @@ const nameRegex =
   /^[\u0600-\u06FFa-zA-Z]+([\u0600-\u06FFa-zA-Z]+\s?)*[\u0600-\u06FFa-zA-Z]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const headlineRegex =
-  /^[\u0600-\u06FFa-zA-Z]+([\u0600-\u06FFa-zA-Z]+\s_|\-?)*[\u0600-\u06FFa-zA-Z]+$/;
+  /^[\u0600-\u06FFa-zA-Z]+([\u0600-\u06FFa-zA-Z]+[\s_|\-]?)*[\u0600-\u06FFa-zA-Z]+$/;
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d\s!@#$%^&*(),.?":{}|<>]{8,128}$/;
 
