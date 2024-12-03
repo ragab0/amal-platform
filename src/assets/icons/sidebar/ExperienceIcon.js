@@ -1,4 +1,4 @@
-export default function Experience(props) {
+export default function ExperienceIcon(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

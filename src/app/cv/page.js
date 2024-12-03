@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { personalInfoSchema } from "@/validations/personalInfo";
 import FormInput from "@/app/cv/components/FormInput";
-import DownArrow from "@/assets/icons/DownArrow";
+import DownArrow from "@/assets/icons/DownArrowIcon";
 
 export default function PersonalDetails() {
   const [showAdditional, setShowAdditional] = useState(false);

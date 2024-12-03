@@ -1,12 +1,12 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import PersonalDetails from "@/assets/icons/sidebar/PersonalDetails";
-import Experience from "@/assets/icons/sidebar/Experience";
-import Skills from "@/assets/icons/sidebar/Skills";
-import Education from "@/assets/icons/sidebar/Education";
-import About from "@/assets/icons/sidebar/About";
-import References from "@/assets/icons/sidebar/References";
+import PersonalDetails from "@/assets/icons/sidebar/PersonalDetailsIcon";
+import Experience from "@/assets/icons/sidebar/ExperienceIcon";
+import Skills from "@/assets/icons/sidebar/SkillsIcon";
+import Education from "@/assets/icons/sidebar/EducationIcon";
+import About from "@/assets/icons/sidebar/AboutIcon";
+import References from "@/assets/icons/sidebar/ReferencesIcon";
 
 // import the icons in client-side and text on the server-side for better SEO;
 const icons = {

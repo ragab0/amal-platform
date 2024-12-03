@@ -6,9 +6,9 @@ import { experienceSchema } from "@/validations/experience";
 import { motion, AnimatePresence } from "framer-motion";
 import FormInput from "@/app/cv/components/FormInput";
 import MarkdownEditor, { MDPreview } from "@/app/cv/components/MarkdownEditor";
-import DeleteIcon from "@/assets/icons/Delete";
-import EditIcon from "@/assets/icons/Edit";
-import MoreIcon from "@/assets/icons/More";
+import DeleteIcon from "@/assets/icons/DeleteIcon";
+import EditIcon from "@/assets/icons/EditIcon";
+import MoreIcon from "@/assets/icons/MoreIcon";
 
 export default function Experience() {
   const [experiences, setExperiences] = useState([]);
