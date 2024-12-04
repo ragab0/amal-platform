@@ -16,7 +16,7 @@ export default function CVLayout({ children }) {
   return (
     <div className="flex w-full gap-y-4 gap-x-10 bg-gray-50">
       {/* side one */}
-      <aside className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-[#33D38E] py-10 overflow-y-auto">
+      <aside className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-main py-10 overflow-y-auto">
         <div>
           <div className="flex justify-center mb-14">
             <Logo />

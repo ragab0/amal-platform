@@ -3,7 +3,7 @@
 
 export const sidebarData = [
   {
-    name: "التفاصيل الشخصية",
+    name: "المعلومات الشخصية",
     href: "/cv",
     icon: "PersonalDetails",
   },
