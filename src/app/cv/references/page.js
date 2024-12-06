@@ -63,7 +63,7 @@ export default function References() {
       <h1 className="heading-big mb-12">المراجع</h1>
 
       {/* On Demand Section */}
-      <div className="w-full h-[60px] bg-[#33D38E] rounded-[6px] mb-8 flex items-center justify-between px-8">
+      <div className="w-full h-[60px] bg-main rounded-[6px] mb-8 flex items-center justify-between px-8">
         <h2 className="text-white text-lg font-semibold">
           عرض &quot;المراجع متوفرة عند الطلب&quot; في سيرتك الذاتية
         </h2>
