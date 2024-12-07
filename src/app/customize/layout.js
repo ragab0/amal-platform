@@ -4,12 +4,12 @@ import ResumeActions from "./components/ResumeActions";
 import ResumeTemplate from "./components/ResumeTemplate";
 
 export const metadata = {
-  title: "تخصيص السيرة الذاتية | منصة أمل",
+  title: "تخصيص السيرة الذاتية | منصة عمل",
   description:
     "قم بتخصيص سيرتك الذاتية باختيار القالب المناسب وتعديل الألوان والخطوط",
-  keywords: ["سيرة ذاتية", "تخصيص", "تصميم", "قوالب", "منصة أمل"],
+  keywords: ["سيرة ذاتية", "تخصيص", "تصميم", "قوالب", "منصة عمل"],
   openGraph: {
-    title: "تخصيص السيرة الذاتية | منصة أمل",
+    title: "تخصيص السيرة الذاتية | منصة عمل",
     description:
       "قم بتخصيص سيرتك الذاتية باختيار القالب المناسب وتعديل الألوان والخطوط",
     locale: "ar_SA",

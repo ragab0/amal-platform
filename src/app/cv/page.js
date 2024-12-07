@@ -24,7 +24,7 @@ export default function PersonalDetails() {
 
   return (
     <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
-      <h1 className="heading-big mb-12">المعلومات الشخصية</h1>
+      <h1 className="heading-big">المعلومات الشخصية</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
         {/* Single column fields */}
         <div className="space-y-8">

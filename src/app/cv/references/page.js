@@ -60,7 +60,7 @@ export default function References() {
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
     >
-      <h1 className="heading-big mb-12">المراجع</h1>
+      <h1 className="heading-big">المراجع</h1>
 
       {/* On Demand Section */}
       <div className="w-full h-[60px] bg-main rounded-[6px] mb-8 flex items-center justify-between px-8">

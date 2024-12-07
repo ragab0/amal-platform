@@ -70,14 +70,11 @@ export default function Education() {
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
     >
-      <h1 className="heading-big mb-12">التعليــــم والمؤهلات</h1>
+      <h1 className="heading-big">التعليــــم والمؤهلات</h1>
 
       {/* Education Form */}
       {(showForm || educations.length === 0) && (
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="w-full space-y-8"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
           {/* Single column fields */}
           <div className="space-y-8">
             <FormInput

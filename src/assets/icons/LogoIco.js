@@ -9,7 +9,7 @@ const LogoIco = (props) => (
     <g id="Group_717" data-name="Group 717" transform="translate(-116 -41)">
       <g
         id="Group_671"
-        fill="#461887"
+        fill="currentColor"
         data-name="Group 671"
         transform="translate(116 68.024)"
       >
@@ -33,7 +33,7 @@ const LogoIco = (props) => (
       >
         <path
           id="Path_39875"
-          fill="#461887"
+          fill="currentColor"
           d="M523.485 552.532v-6.49h6.308v6.49a7.475 7.475 0 0 0 7.474 7.474h.451a7.476 7.476 0 0 0 7.475-7.474v-6.49h6.307v6.49a13.785 13.785 0 0 1-13.782 13.782h-.451a13.785 13.785 0 0 1-13.782-13.782"
           data-name="Path 39875"
           transform="translate(-523.485 -546.042)"
@@ -45,7 +45,7 @@ const LogoIco = (props) => (
           cx="10.685"
           cy="10.685"
           r="10.685"
-          fill="#461887"
+          fill="currentColor"
           data-name="Ellipse 5"
           transform="rotate(-76.66 13.15 10.397)"
         ></circle>
@@ -60,7 +60,7 @@ const LogoIco = (props) => (
           cx="10.685"
           cy="10.685"
           r="10.685"
-          fill="#461887"
+          fill="currentColor"
           data-name="Ellipse 6"
         ></circle>
       </g>
@@ -74,7 +74,7 @@ const LogoIco = (props) => (
           cx="10.685"
           cy="10.685"
           r="10.685"
-          fill="#461887"
+          fill="currentColor"
           data-name="Ellipse 7"
         ></circle>
       </g>
@@ -82,7 +82,7 @@ const LogoIco = (props) => (
         id="Rectangle_61"
         width="27.008"
         height="6.308"
-        fill="#461887"
+        fill="currentColor"
         data-name="Rectangle 61"
         rx="3.154"
         transform="translate(219.741 147.126)"

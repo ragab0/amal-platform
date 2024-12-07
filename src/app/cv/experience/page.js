@@ -69,7 +69,7 @@ export default function Experience() {
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
     >
-      <h1 className="heading-big mb-12">الخبرات المهنية</h1>
+      <h1 className="heading-big">الخبرات المهنية</h1>
       {!showForm && (
         <>
           {/* Experience Cards */}

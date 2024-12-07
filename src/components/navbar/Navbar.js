@@ -21,11 +21,11 @@ const userInfo = {
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This should be managed by your auth state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <nav className="relative bg-main">
-      <div className="container mx-auto p-4 flex gap-2 items-center justify-between">
+      <div className="container mx-auto px-4 py-[10px] flex gap-2 items-center justify-between">
         {/* Logo */}
         <div className="flex-shrink-0">
           <Logo isLittle={true} />

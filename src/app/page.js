@@ -1,3 +1,5 @@
-export default function Home() {
-  return <div>Home</div>;
+import MainLayout from "./(main)/layout";
+
+export default function DefaultPage() {
+  return <MainLayout />;
 }

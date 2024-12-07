@@ -91,7 +91,7 @@ export default function Skills() {
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
     >
-      <h1 className="heading-big mb-12">المهـــــــــــــــــارات</h1>
+      <h1 className="heading-big mt">المهـــــــــــــــــارات</h1>
 
       <AnimatePresence mode="wait">
         {/* Skills Form */}
