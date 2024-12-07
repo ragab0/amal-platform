@@ -67,3 +67,17 @@ export function HoverButton({ children }) {
     </motion.div>
   );
 }
+
+export function RightToLeft({ children, index, className, payload }) {
+  return (
+    <motion.div
+      initial={{ x: 100, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      className={className}
+      {...payload}
+    >
+      {children}
+    </motion.div>
+  );
+}
