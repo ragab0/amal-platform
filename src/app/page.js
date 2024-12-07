@@ -1,5 +1,5 @@
 import MainLayout from "./(main)/layout";
 
-export default function DefaultPage() {
-  return <MainLayout />;
+export default function HomePage() {
+  return <MainLayout>Home page...</MainLayout>;
 }
