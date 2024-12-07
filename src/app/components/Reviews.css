@@ -1,0 +1,53 @@
+.reviews-slider .slick-list {
+  margin: 0 -12px;
+  padding: 50px 0;
+}
+
+.reviews-slider .slick-dots {
+  bottom: 0;
+}
+
+.reviews-slider .slick-dots li {
+  margin: 0 6px;
+}
+
+.reviews-slider .slick-dots li button:before {
+  display: none;
+}
+
+.reviews-slider .slick-dots li button {
+  width: 17px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  transition: background-color 0.3s ease;
+}
+
+.reviews-slider .slick-dots li.slick-active button {
+  background-color: #461887;
+}
+
+.reviews-slider .review-content {
+  scrollbar-width: thin;
+  scrollbar-color: #461887 transparent;
+}
+
+.reviews-slider .review-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reviews-slider .review-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reviews-slider .review-content::-webkit-scrollbar-thumb {
+  background-color: #461887;
+  border-radius: 20px;
+}
+
+.reviews-slider .line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
