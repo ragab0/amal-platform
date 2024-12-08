@@ -29,6 +29,7 @@
     direction: rtl;
     color: var(--text-clr);
     font-family: var(--font-cairo);
+    text-align: right;
   }
   input {
     direction: rtl;

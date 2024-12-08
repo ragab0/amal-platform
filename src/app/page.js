@@ -3,7 +3,9 @@ import { faqs } from "@/assets/data/faqs";
 import MainLayout from "./(main)/layout";
 import FAQClient from "./components/FAQClient";
 import Reviews from "./components/Reviews";
-import GoSection from "./components/GoSection";
+import Banner from "@/components/banner/Banner";
+import Image from "next/image";
+import { cvTemplates } from "@/assets/data/homeData";
 
 export default function HomePage() {
   return (
@@ -29,7 +31,23 @@ export default function HomePage() {
         <Reviews />
       </section>
       <section className="container mx-auto px-4">
-        <GoSection />
+        <Banner title="انطلق في تصميم سيرتك الذاتية المميزة !وأجعل فرصك أقوى">
+          <div className="grid sm:grid-cols-2 gap-1 mx-auto">
+            {cvTemplates.map((template, index) => (
+              <div
+                key={index}
+                className={`w-[170px] h-[240px] border-2 border-white rounded-[4px] overflow-hidden`}
+              >
+                <Image
+                  src={template.src}
+                  alt={template.alt}
+                  width={170}
+                  height={240}
+                />
+              </div>
+            ))}
+          </div>
+        </Banner>
       </section>
     </MainLayout>
   );
