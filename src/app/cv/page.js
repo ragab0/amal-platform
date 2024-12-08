@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { personalInfoSchema } from "@/validations/personalInfo";
-import FormInput from "@/app/cv/components/FormInput";
+import FormInput from "@/components/formInput/FormInput";
 import DownArrow from "@/assets/icons/DownArrowIcon";
 
 export default function PersonalDetails() {

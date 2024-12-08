@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { experienceSchema } from "@/validations/experience";
 import { motion, AnimatePresence } from "framer-motion";
-import FormInput from "@/app/cv/components/FormInput";
+import FormInput from "@/components/formInput/FormInput";
 import MarkdownEditor, { MDPreview } from "@/app/cv/components/MarkdownEditor";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";

@@ -3,6 +3,7 @@ import { faqs } from "@/assets/data/faqs";
 import MainLayout from "./(main)/layout";
 import FAQClient from "./components/FAQClient";
 import Reviews from "./components/Reviews";
+import GoSection from "./components/GoSection";
 
 export default function HomePage() {
   return (
@@ -17,8 +18,8 @@ export default function HomePage() {
       <section className="container mx-auto px-4">
         <div className="text-center">
           <FadeInUp>
-            <h2 className="heading-sub">تقديم أفضل انطباع من البداية</h2>
-            <p className="text-xl mt-4 max-w-4xl mx-auto">
+            <h2 className="heading-sub mb-12">تقديم أفضل انطباع من البداية</h2>
+            <p className="heading-h3 font-medium mt-4 max-w-4xl mx-auto">
               لا تدع الفرصة تضيع بسبب سيرة ذاتية غير ملائمة. سواءً كنت خريجًا
               جديدًا، محترفًا، أو تبحث عن تغيير مسارك المهني، نحن هنا لنساعدك
               على النجاح
@@ -26,6 +27,9 @@ export default function HomePage() {
           </FadeInUp>
         </div>
         <Reviews />
+      </section>
+      <section className="container mx-auto px-4">
+        <GoSection />
       </section>
     </MainLayout>
   );

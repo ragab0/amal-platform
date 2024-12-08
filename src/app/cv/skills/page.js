@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import { skillsSchema } from "@/validations/skills";
-import FormInput from "@/app/cv/components/FormInput";
+import FormInput from "@/components/formInput/FormInput";
 import FormSelect from "@/app/cv/components/FormSelect";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";

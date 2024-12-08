@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { referencesSchema } from "@/validations/references";
-import FormInput from "@/app/cv/components/FormInput";
+import FormInput from "@/components/formInput/FormInput";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";
 import Toggle from "@/app/cv/components/Toggle";

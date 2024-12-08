@@ -61,8 +61,8 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="container mx-auto px-4 pb-[250px]">
-      <div className="text-center my-[160px]">
+    <div className="container mx-auto px-4">
+      <header className="text-center my-[160px]">
         <FadeInUp>
           <h1 className="heading-big">الخدمات</h1>
         </FadeInUp>
@@ -71,7 +71,7 @@ export default function ServicesPage() {
             تقدم لكم منصة عمل خدماتها المميزة والاحترافية
           </h2>
         </FadeInUp>
-      </div>
+      </header>
       <div className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center gap-[5%] mt-16">
         {services.map((service, index) => (
           <HoverCard

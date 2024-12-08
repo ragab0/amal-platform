@@ -23,8 +23,8 @@ export default function Reviews() {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    // autoplay: true,
-    // autoplaySpeed: 5000,
+    autoplay: true,
+    autoplaySpeed: 5000,
     pauseOnHover: true,
     rtl: true,
     arrows: false,
@@ -53,7 +53,7 @@ export default function Reviews() {
     <div className="reviews-slider w-full max-w-[1400px] mx-auto px-3 lg:px-6 pb-[60px]">
       <Slider {...settings}>
         {reviews.map(({ image, name, rating, content }, i) => (
-          <div key={i}>
+          <div key={i} className="cursor-grab">
             <div className="relative w-fit mx-auto transition-transform duration-300 ease-linear hover:-translate-y-2">
               <div
                 className="text-center translate-y-1/2 bg-second-pale w-[130px] h-[130px] sm:w-[175px] sm:h-[175px] lg:w-[200px] lg:h-[200px] 
@@ -86,9 +86,13 @@ export default function Reviews() {
                     />
                   ))}
                 </div>
-                <div className="review-content overflow-y-auto">
+                <div
+                  className={`review-content ${
+                    expandedReviews[i] ? "overflow-y-auto" : ""
+                  }`}
+                >
                   <p
-                    className={`text-xs sm:text-sm leading-relaxed 
+                    className={`text-xs sm:text-sm leading-relaxed
                       ${!expandedReviews[i] ? "line-clamp" : ""}
                     `}
                   >

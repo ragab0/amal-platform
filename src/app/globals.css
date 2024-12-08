@@ -76,7 +76,8 @@
     rounded-sm bg-pink-light hover:opacity-90 transition-colors text-lg md:text-xl;
   }
   .btn-primary {
-    @apply bg-main hover:bg-main-pale text-center;
+    @apply bg-main text-white hover:bg-main-pale text-center inline-block
+      text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-md hover:bg-opacity-90 transition-all duration-300;
   }
 }
 

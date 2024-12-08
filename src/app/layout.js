@@ -1,6 +1,8 @@
 import "./globals.css";
 import { Cairo } from "next/font/google";
 import StoreProvider from "@/providers/ReduxProvider";
+import { devLinks } from "@/assets/data/dev";
+import Link from "next/link";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -67,6 +69,18 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
+        <ul className="container px-4 mx-auto flex justify-center items-center py-6 md:py-10 gap-4">
+          {devLinks.map(({ name, href }, index) => (
+            <li key={index}>
+              <Link
+                href={href}
+                className="text-second text-[20px] font-medium hover:text-accent transition-colors"
+              >
+                {name}
+              </Link>
+            </li>
+          ))}
+        </ul>
         <StoreProvider>{children}</StoreProvider>
       </body>
     </html>
