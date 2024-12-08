@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useId } from "react";
 
-const FormInput = ({
+export default function FormInput({
   label,
   type = "text",
   icon,
@@ -11,22 +11,31 @@ const FormInput = ({
   error,
   must = false,
   disabled = false,
+  inpClassName = "",
+  spaceBlock = true,
   ...props
-}) => {
+}) {
   const id = useId();
 
   return (
-    <div className="flex flex-col mb-8">
-      <label
-        htmlFor={id}
-        className={`mb-5 text-[22px] leading-[30px] font-cairo text-text ${
-          disabled ? "opacity-70" : ""
-        }`}
-      >
-        {label}
-        {must && <span className="text-red-500">*</span>}
-      </label>
-      <div className="relative">
+    <div className={`flex flex-col ${spaceBlock ? "mb-8" : ""}`}>
+      {label && (
+        <label
+          htmlFor={id}
+          className={`mb-5 text-[22px] leading-[30px] font-cairo text-text ${
+            disabled ? "opacity-70" : ""
+          }`}
+        >
+          {label}
+          {must && <span className="text-red-500">*</span>}
+        </label>
+      )}
+      <div className="relative flex items-center">
+        {icon && (
+          <div className="absolute right-3 z-10 flex items-center justify-center">
+            {icon}
+          </div>
+        )}
         <input
           id={id}
           type={type}
@@ -37,14 +46,12 @@ const FormInput = ({
                 ? "border-red-500 text-red-500 focus:border-red-500 focus:ring-[rgba(220,53,69,0.25)]"
                 : "border-gray-300 text-[#495057] focus:ring-[rgba(0,123,255,0.25)]  hover:border-gray-400"
             } 
-            `}
+          ${inpClassName}
+          `}
           {...(register && register(name))}
           {...props}
           disabled={disabled}
         />
-        {icon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2">{icon}</div>
-        )}
       </div>
       <AnimatePresence mode="wait">
         {error && (
@@ -61,6 +68,4 @@ const FormInput = ({
       </AnimatePresence>
     </div>
   );
-};
-
-export default FormInput;
+}
