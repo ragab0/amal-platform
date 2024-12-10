@@ -2,26 +2,24 @@
 import { useState } from "react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FaUserCircle } from "react-icons/fa";
+import { navLinks } from "@/assets/data/navbar";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { logout } from "@/store/features/auth/authThunks";
 import NotificationIco from "@/assets/icons/NotificationIco";
 import Logo from "../logo/Logo";
 import Link from "next/link";
 
-const navLinks = [
-  { name: "الرئيسية", href: "/" },
-  { name: "من نحن", href: "/about" },
-  { name: "الخدمات", href: "/services" },
-  { name: "الوظائف", href: "/jobs" },
-  { name: "الاستشارات", href: "/consultations" },
-];
-
-const userInfo = {
-  name: "محمد أحمد",
-  email: "mohamed@example.com",
-};
-
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+
+  const handleLogout = async () => {
+    await dispatch(logout());
+    router.push("/login");
+  };
 
   return (
     <nav className="relative bg-main">
@@ -36,15 +34,15 @@ export default function Navbar() {
             <Link
               key={link.name}
               href={link.href}
-              className="mx-4 text-white hover:text-gray-200 transition-colors  text-lg"
+              className="mx-4 text-white hover:text-gray-200 transition-colors text-lg"
             >
               {link.name}
             </Link>
           ))}
         </div>
         {/* User Section */}
-        <div className="hidden lg:flex gap-6 items-center space-x-4 ">
-          {isLoggedIn ? (
+        <div className="hidden lg:flex gap-6 items-center space-x-4">
+          {isAuthenticated ? (
             <>
               {/* Notification Icon */}
               <div className="relative">
@@ -58,32 +56,51 @@ export default function Navbar() {
                   </span>
                 </Link>
               </div>
-              {/* User Info */}
-              <div className="flex gap-4 items-center space-x-3 text-center text-white">
-                <div>
-                  <p className="text-xl font-medium">{userInfo.name}</p>
-                  <p className="t font-poppins text-sm">{userInfo.email}</p>
+              {/* User Profile */}
+              <div className="relative group">
+                <button className="flex items-center text-white">
+                  <FaUserCircle className="h-14 w-14" />
+                  <span className="mr-2">{user.name}</span>
+                </button>
+                <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
+                  <div className="py-1">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      الملف الشخصي
+                    </Link>
+                    <Link
+                      href="/cv"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      السيرة الذاتية
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      تسجيل الخروج
+                    </button>
+                  </div>
                 </div>
-                <Link href="/profile" className="w-[55px] h-[55px]">
-                  <FaUserCircle className="w-full h-full t" />
-                </Link>
               </div>
             </>
           ) : (
-            <div className="flex gap-2 items-center ">
+            <>
               <Link
                 href="/login"
-                className="text-white hover:text-gray-200 transition-colors "
+                className="text-white hover:text-gray-200 transition-colors"
               >
                 تسجيل الدخول
               </Link>
               <Link
                 href="/signup"
-                className="bg-white text-main px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors "
+                className="bg-white text-main px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 إنشاء حساب
               </Link>
-            </div>
+            </>
           )}
         </div>
         {/* Mobile Menu Button */}
@@ -111,7 +128,7 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            {!isLoggedIn && (
+            {!isAuthenticated && (
               <div className="flex flex-col gap-4 mt-4 py-4 items-center">
                 <Link
                   href="/login"

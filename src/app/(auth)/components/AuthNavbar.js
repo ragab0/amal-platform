@@ -8,7 +8,7 @@ export default function AuthNavbar() {
         <Logo />
         <div className="flex gap-4 md:gap-8">
           <Link
-            href="/about"
+            href="/"
             className="text-white py-3 hover:underline text-lg md:text-2xl"
           >
             الرئيسية

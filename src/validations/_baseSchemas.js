@@ -1,13 +1,12 @@
 import * as yup from "yup";
 
 /* Patterns for validation */
-const nameRegex =
-  /^[\u0600-\u06FFa-zA-Z]+([\u0600-\u06FFa-zA-Z]+\s?)*[\u0600-\u06FFa-zA-Z]+$/;
+const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const headlineRegex =
-  /^[\u0600-\u06FFa-zA-Z]+([\u0600-\u06FFa-zA-Z]+[\s_|\-]?)*[\u0600-\u06FFa-zA-Z]+$/;
+const headlineRegex = /^[\u0600-\u06FFa-zA-Z\s_\|\-]+$/;
 const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d\s!@#$%^&*(),.?":{}|<>]{8,128}$/;
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z\d\s!@#$%^&*(),.?":{}|<>]{8,255}$/;
+const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
 
 /* Base schemas for reuse */
 export const firstNameSchema = yup
@@ -18,7 +17,8 @@ export const firstNameSchema = yup
   .matches(
     nameRegex,
     "الاسم الأول غير صالح، يجب أن يتكون من حروف عربية أو إنجليزية فقط"
-  );
+  )
+  .trim();
 export const lastNameSchema = yup
   .string()
   .required("الاسم الأخير مطلوب")
@@ -27,7 +27,8 @@ export const lastNameSchema = yup
   .matches(
     nameRegex,
     "الاسم الأخير غير صالح، يجب أن يتكون من حروف عربية أو إنجليزية فقط"
-  );
+  )
+  .trim();
 
 export const headlineSchema = yup
   .string()
@@ -37,11 +38,14 @@ export const headlineSchema = yup
   .matches(
     headlineRegex,
     "المسمى الوظيفي غير صالح، يمكن استخدام فقط الحروف العربية والانجليزية والرموز (-_|)"
-  );
+  )
+  .trim();
 
 export const phoneSchema = yup
   .string()
-  .matches(/^[0-9+\s-]+$/, "رقم الهاتف غير صالح")
+  .min(7, "رقم الهاتف يجب أن يكون على الأقل 7 ارقام")
+  .max(15, "رقم الهاتف يجب أن لا يتجاوز 15 رقم")
+  .matches(phoneRegex, "رقم الهاتف غير صالح")
   .required("رقم الهاتف مطلوب");
 
 export const passwordSchema = yup

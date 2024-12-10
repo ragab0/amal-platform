@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "@/validations/auth";
-import { signup } from "@/store/features/auth/authThunks";
+import { signup, sendVerificationCode } from "@/store/features/auth/authThunks";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import AuthInput from "../components/AuthInput";
 import AuthSocialOptions from "../components/AuthSocialOptions";
@@ -11,8 +11,9 @@ import AuthOtherLinks from "../components/AuthOtherLinks";
 
 export default function SignupForm({ steps }) {
   const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.auth);
+  const { loading, error } = useAppSelector((state) => state.auth);
   const [currentStep, setCurrentStep] = useState(1);
+  const [codeSent, setCodeSent] = useState(false);
 
   const {
     register,
@@ -26,7 +27,20 @@ export default function SignupForm({ steps }) {
   });
 
   const onSubmit = async (data) => {
-    await dispatch(signup(data));
+    console.log(123, data, currentStep);
+    const formData = { ...data, role: "user" };
+    await dispatch(signup(formData));
+  };
+
+  const handleSendCode = async () => {
+    const email = getValues("email");
+    await dispatch(sendVerificationCode(email));
+    setCodeSent(true);
+  };
+
+  const handleResendCode = async () => {
+    const email = getValues("email");
+    await dispatch(sendVerificationCode(email));
   };
 
   const handleNextStep = async () => {
@@ -35,6 +49,10 @@ export default function SignupForm({ steps }) {
 
     if (isValid) {
       setCurrentStep((prev) => prev + 1);
+    }
+
+    if (currentStep === steps.length - 1) {
+      handleSubmit(onSubmit)();
     }
   };
 
@@ -125,7 +143,11 @@ export default function SignupForm({ steps }) {
             {currentStep === 3 && (
               <div className="text-center space-y-8">
                 <p className="text-lg md:text-xl text-text">
-                  تم إرسال رمز التحقق إلى بريدك الإلكتروني {getValues("email")}
+                  {codeSent
+                    ? `تم إرسال رمز التحقق إلى بريدك الإلكتروني ${getValues(
+                        "email"
+                      )}`
+                    : "اضغط على إرسال الرمز للحصول على رمز التحقق"}
                 </p>
                 <AuthInput
                   type="text"
@@ -136,6 +158,16 @@ export default function SignupForm({ steps }) {
                   className="text-center"
                   maxLength={6}
                 />
+                {codeSent && (
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    className="text-main hover:underline"
+                    disabled={loading}
+                  >
+                    إعادة إرسال الرمز
+                  </button>
+                )}
               </div>
             )}
 
@@ -159,14 +191,28 @@ export default function SignupForm({ steps }) {
                   التالي
                 </button>
               ) : (
-                <button
-                  type="submit"
-                  className="btn-secondary w-full"
-                  disabled={loading}
-                  aria-busy={loading}
-                >
-                  {loading ? "جاري إنشاء الحساب..." : "إنشاء الحساب"}
-                </button>
+                <>
+                  {!codeSent ? (
+                    <button
+                      type="button"
+                      className="btn-secondary w-full"
+                      onClick={handleSendCode}
+                      disabled={loading}
+                      aria-busy={loading}
+                    >
+                      {loading ? "جاري إرسال الرمز..." : "إرسال الرمز"}
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn-secondary w-full"
+                      disabled={loading}
+                      aria-busy={loading}
+                    >
+                      {loading ? "جاري إنشاء الحساب..." : "إنشاء الحساب"}
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </form>
