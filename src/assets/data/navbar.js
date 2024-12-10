@@ -5,3 +5,8 @@ export const navLinks = [
   { name: "الوظائف", href: "/jobs" },
   { name: "الاستشارات", href: "/consultations" },
 ];
+
+export const userMenuItems = [
+  { id: 1, href: "/profile", label: "الملف الشخصي" },
+  { id: 2, href: "/cv", label: "السيرة الذاتية" },
+];

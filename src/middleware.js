@@ -21,9 +21,9 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
-    "/profile/:path*",
-    "/cv/:path*",
-    "/customize/:path*",
-    "/notifications/:path*",
+    // "/profile/:path*",
+    // "/cv/:path*",
+    // "/customize/:path*",
+    // "/notifications/:path*",
   ],
 };

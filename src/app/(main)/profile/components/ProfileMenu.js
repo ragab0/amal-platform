@@ -1,17 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import ConfirmModal from "@/components/modals/ConfirmModal";
 import { usePathname } from "next/navigation";
+import LogoutButton from "@/components/buttons/LogoutButton";
 
 export default function ProfileMenu({ menuItems }) {
   const pathname = usePathname();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  function logoutHandler() {
-    console.log("Logging out...");
-    setShowLogoutModal(false);
-  }
 
   return (
     <div className="my-10">
@@ -26,25 +20,7 @@ export default function ProfileMenu({ menuItems }) {
           {item.label}
         </Link>
       ))}
-      {/* Logout Button */}
-      <button
-        onClick={() => setShowLogoutModal(true)}
-        className="text-xl py-5 text-shadow-plate cursor-pointer hover:text-red-600 transition-colors"
-      >
-        تسجيل الخروج
-      </button>
-      {/* Modal comp */}
-      {showLogoutModal && (
-        <ConfirmModal
-          isOpen={showLogoutModal}
-          onClose={() => setShowLogoutModal(false)}
-          onConfirm={logoutHandler}
-          title="تنبيـــه"
-          message="هل أنت متأكد من رغبتك في تسجيل الخروج؟"
-          confirmText="موافق"
-          cancelText="إلغــــاء"
-        />
-      )}
+      <LogoutButton className="text-xl py-5 text-shadow-plate cursor-pointer hover:text-red-600 transition-colors" />
     </div>
   );
 }
