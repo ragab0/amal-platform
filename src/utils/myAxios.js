@@ -9,6 +9,23 @@ const myAxios = axios.create({
   },
 });
 
+// Add request interceptor to log requests
+myAxios.interceptors.request.use(
+  (config) => {
+    console.log("Request config:", {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      withCredentials: config.withCredentials
+    });
+    return config;
+  },
+  (error) => {
+    console.error("Request error:", error);
+    return Promise.reject(error);
+  }
+);
+
 // Response interceptor for handling errors globally
 myAxios.interceptors.response.use(
   (response) => response,
