@@ -1,5 +1,8 @@
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import { Cairo } from "next/font/google";
+import { getInitialAuthState } from "@/actions/auth";
+import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
 import DevNavbar from "./components/DevNavbar";
 
@@ -64,12 +67,30 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // Get initial auth state server-side
+  const preloadedState = await getInitialAuthState();
+
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
-        <DevNavbar />
-        <StoreProvider>{children}</StoreProvider>
+        <StoreProvider preloadedState={preloadedState}>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+            toastClassName="font-normal"
+          />
+          <DevNavbar />
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );

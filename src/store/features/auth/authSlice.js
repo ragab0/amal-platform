@@ -5,16 +5,17 @@ import {
   logout,
   checkAuth,
   verifyEmail,
-  resendVerification,
   forgotPassword,
   resetPassword,
+  generateVerificationCode,
 } from "./authThunks";
 
 const initialState = {
   user: {},
-  isAuthenticated: true,
+  isAuthenticated: false,
   loading: false,
   error: null,
+  verifyPyaload: {},
 };
 
 const authSlice = createSlice({
@@ -33,14 +34,12 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(signup.fulfilled, (state, action) => {
+      .addCase(signup.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload.result;
-        state.isAuthenticated = true;
       })
-      .addCase(signup.rejected, (state, action) => {
+      .addCase(signup.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = payload.result?.message;
       })
 
       // 02 Login
@@ -48,14 +47,17 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(login.fulfilled, (state, action) => {
+      .addCase(login.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.user = action.payload.result;
+        state.user = payload.result || {};
         state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state, action) => {
+      .addCase(login.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.user = {};
+        state.isAuthenticated = false;
+        state.error = payload.result?.message;
+        state.verifyPayload = payload.result?.payload;
       })
 
       // 03 Logout
@@ -63,12 +65,12 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(logout.fulfilled, () => {
         return initialState;
       })
-      .addCase(logout.rejected, (state, action) => {
+      .addCase(logout.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = payload.result?.message;
       })
 
       // 04 Check Auth
@@ -76,48 +78,46 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(checkAuth.fulfilled, (state, action) => {
+      .addCase(checkAuth.fulfilled, (state, { payload }) => {
         state.loading = false;
-        state.user = action.payload.result;
+        state.user = payload.result || {};
         state.isAuthenticated = true;
       })
-      .addCase(checkAuth.rejected, (state, action) => {
+      .addCase(checkAuth.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.user = {};
         state.isAuthenticated = false;
+        state.error = payload.result?.message;
       })
 
       /** verifcations */
-      // 01 Verify Email
+      // 01 Generate Verification Code
+      .addCase(generateVerificationCode.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(generateVerificationCode.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(generateVerificationCode.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload.result?.message;
+      })
+
+      // 02 Verify Email
       .addCase(verifyEmail.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(verifyEmail.fulfilled, (state, action) => {
+      .addCase(verifyEmail.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload.result;
-        state.isAuthenticated = true;
       })
-      .addCase(verifyEmail.rejected, (state, action) => {
+      .addCase(verifyEmail.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.error.message;
-        state.isAuthenticated = false;
+        state.error = payload.result?.message;
       })
 
-      // 02 Resend Verification
-      .addCase(resendVerification.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(resendVerification.fulfilled, (state) => {
-        state.loading = false;
-      })
-      .addCase(resendVerification.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
-      // 03 Forgot Password
+      // 02 Forgot Password
       .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -125,12 +125,12 @@ const authSlice = createSlice({
       .addCase(forgotPassword.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(forgotPassword.rejected, (state, action) => {
+      .addCase(forgotPassword.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = payload.result?.message;
       })
 
-      // 04 Reset Password
+      // 03 Reset Password
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -138,9 +138,9 @@ const authSlice = createSlice({
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(resetPassword.rejected, (state, action) => {
+      .addCase(resetPassword.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = payload.result?.message;
       });
   },
 });

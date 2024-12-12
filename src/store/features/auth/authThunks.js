@@ -1,3 +1,7 @@
+/** error.response?.data is an object with two props {status: "success/fail", result/s} */
+/** the result prop is either an object in case success or string in case fail */
+/** the results prop is about an array of objects; */
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import myAxios from "@/utils/myAxios";
 
@@ -8,7 +12,7 @@ export const signup = createAsyncThunk(
       const response = await myAxios.post("/auth/signup", userData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Signup failed");
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -20,7 +24,7 @@ export const login = createAsyncThunk(
       const response = await myAxios.post("/auth/login", credentials);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Login failed");
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -32,7 +36,7 @@ export const logout = createAsyncThunk(
       await myAxios.post("/auth/logout");
       return null;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "Logout failed");
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -44,39 +48,31 @@ export const checkAuth = createAsyncThunk(
       const response = await myAxios.get("/auth/is-login");
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Authentication check failed"
-      );
+      return rejectWithValue(error.response?.data || {});
+    }
+  }
+);
+
+export const generateVerificationCode = createAsyncThunk(
+  "auth/generateVerificationCode",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await myAxios.post("/auth/generate-verification", data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
 
 export const verifyEmail = createAsyncThunk(
   "auth/verifyEmail",
-  async (email, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const response = await myAxios.post("/auth/verify-email", { email });
+      const response = await myAxios.post("/auth/verify-email", data);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to send verification code"
-      );
-    }
-  }
-);
-
-export const resendVerification = createAsyncThunk(
-  "auth/resendVerification",
-  async (email, { rejectWithValue }) => {
-    try {
-      const response = await myAxios.post("/auth/resend-verification", {
-        email,
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to send verification code"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -88,9 +84,7 @@ export const forgotPassword = createAsyncThunk(
       const response = await myAxios.post("/auth/forgot-password", { email });
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to send verification code"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -102,9 +96,7 @@ export const resetPassword = createAsyncThunk(
       const response = await myAxios.post("/auth/reset-password", data);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to reset password"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );

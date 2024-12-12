@@ -9,7 +9,7 @@ const passwordRegex =
 const phoneRegex = /^\+?[0-9\s-]{7,15}$/;
 
 /* Base schemas for reuse */
-export const firstNameSchema = yup
+export const fnameSchema = yup
   .string()
   .required("الاسم الأول مطلوب")
   .min(3, "الاسم الأول يجب أن يكون على الأقل 3 أحرف")
@@ -19,7 +19,7 @@ export const firstNameSchema = yup
     "الاسم الأول غير صالح، يجب أن يتكون من حروف عربية أو إنجليزية فقط"
   )
   .trim();
-export const lastNameSchema = yup
+export const lnameSchema = yup
   .string()
   .required("الاسم الأخير مطلوب")
   .min(3, "الاسم الأخير يجب أن يكون على الأقل 3 أحرف")

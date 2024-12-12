@@ -1,9 +1,9 @@
 import * as yup from "yup";
 import {
   emailSchema,
-  firstNameSchema,
+  fnameSchema,
   headlineSchema,
-  lastNameSchema,
+  lnameSchema,
   passwordConfirmSchema,
   passwordSchema,
 } from "./_baseSchemas";
@@ -14,8 +14,8 @@ export const loginSchema = yup.object({
 });
 
 export const signupSchema = yup.object({
-  firstName: firstNameSchema,
-  lastName: lastNameSchema,
+  fname: fnameSchema,
+  lname: lnameSchema,
   headline: headlineSchema,
   email: emailSchema,
   password: passwordSchema,

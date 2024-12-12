@@ -1,17 +1,17 @@
 import * as yup from "yup";
 import {
   emailSchema,
-  firstNameSchema,
+  fnameSchema,
   headlineSchema,
-  lastNameSchema,
+  lnameSchema,
   passwordConfirmSchema,
   passwordSchema,
   phoneSchema,
 } from "./_baseSchemas";
 
 export const settingsPersonalInfoSchema = yup.object({
-  firstName: firstNameSchema,
-  lastName: lastNameSchema,
+  fname: fnameSchema,
+  lname: lnameSchema,
   headline: headlineSchema,
   phone: phoneSchema,
   country: yup.string().required("الدولة مطلوبة"),

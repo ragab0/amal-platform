@@ -1,60 +1,94 @@
 "use client";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { signupSchema } from "@/validations/auth";
-import { signup, sendVerificationCode } from "@/store/features/auth/authThunks";
-import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import AuthInput from "../components/AuthInput";
 import AuthSocialOptions from "../components/AuthSocialOptions";
 import AuthOtherLinks from "../components/AuthOtherLinks";
+import { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useRouter, useSearchParams } from "next/navigation";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signupSchema } from "@/validations/auth";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { toast } from "react-toastify";
+import {
+  signup,
+  generateVerificationCode,
+  verifyEmail,
+} from "@/store/features/auth/authThunks";
 
 export default function SignupForm({ steps }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
-  const { loading, error } = useAppSelector((state) => state.auth);
+  const { loading } = useAppSelector((state) => state.auth);
   const [currentStep, setCurrentStep] = useState(1);
   const [codeSent, setCodeSent] = useState(false);
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
     trigger,
     getValues,
+    setValue,
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(signupSchema),
-    mode: "onChange",
   });
 
-  const onSubmit = async (data) => {
-    console.log(123, data, currentStep);
-    const formData = { ...data, role: "user" };
-    await dispatch(signup(formData));
-  };
+  // Handle verification step redirect from login
+  useEffect(() => {
+    const email = searchParams.get("email");
+    const step = searchParams.get("step");
+    if (email && step === "3") {
+      setValue("email", email);
+      setCurrentStep(3);
+    } else {
+      setCurrentStep(1); // Reset to step 1 for any other search param manipulation xD;
+    }
+  }, [searchParams, setValue]);
 
-  const handleSendCode = async () => {
-    const email = getValues("email");
-    await dispatch(sendVerificationCode(email));
-    setCodeSent(true);
-  };
-
-  const handleResendCode = async () => {
-    const email = getValues("email");
-    await dispatch(sendVerificationCode(email));
-  };
-
-  const handleNextStep = async () => {
+  async function handleNextStep() {
     const currentFields = steps[currentStep - 1].fields;
     const isValid = await trigger(currentFields);
-
     if (isValid) {
-      setCurrentStep((prev) => prev + 1);
+      // If moving to the last step and it's a new registration
+      if (currentStep === steps.length - 1 && !searchParams.get("email")) {
+        const formData = { ...getValues(), role: "user" };
+        const { payload, error } = await dispatch(signup(formData));
+        if (!error && payload?.status === "success") {
+          toast.success("تم إنشاء الحساب بنجاح");
+          setCurrentStep((prev) => prev + 1);
+        }
+      } else {
+        setCurrentStep((prev) => prev + 1);
+      }
     }
+  }
 
-    if (currentStep === steps.length - 1) {
-      handleSubmit(onSubmit)();
+  async function handleSendCode() {
+    const email = getValues("email");
+    const { payload, error } = await dispatch(
+      generateVerificationCode({ email })
+    );
+    if (!error && payload?.status === "success") {
+      toast.success("تم إرسال رمز التحقق");
+      setCodeSent(true);
     }
-  };
+  }
+
+  async function onSubmit(_) {}
+
+  async function handleSubmitCode() {
+    const email = getValues("email");
+    const code = getValues("verificationCode");
+    const isValid = await trigger(code);
+    if (isValid) {
+      const { payload, error } = await dispatch(verifyEmail({ email, code }));
+      if (!error && payload?.status === "success") {
+        toast.success("تم التحقق بنجاح");
+        router.replace("/auth/callback");
+      }
+    }
+  }
 
   return (
     <>
@@ -78,8 +112,7 @@ export default function SignupForm({ steps }) {
                 </div>
                 <span
                   className={`text-sm md:text-base
-                  ${i + 1 <= currentStep ? "text-main" : ""}
-                  `}
+                  ${i + 1 <= currentStep ? "text-main" : ""}`}
                 >
                   {text}
                 </span>
@@ -94,15 +127,15 @@ export default function SignupForm({ steps }) {
                   type="text"
                   placeholder="الاسم الأول"
                   register={register}
-                  name="firstName"
-                  error={errors.firstName}
+                  name="fname"
+                  error={errors.fname}
                 />
                 <AuthInput
                   type="text"
                   placeholder="الاسم الأخير"
                   register={register}
-                  name="lastName"
-                  error={errors.lastName}
+                  name="lname"
+                  error={errors.lname}
                 />
                 <AuthInput
                   type="text"
@@ -161,7 +194,7 @@ export default function SignupForm({ steps }) {
                 {codeSent && (
                   <button
                     type="button"
-                    onClick={handleResendCode}
+                    onClick={handleSendCode}
                     className="text-main hover:underline"
                     disabled={loading}
                   >
@@ -173,7 +206,7 @@ export default function SignupForm({ steps }) {
 
             {/* BUTTONS */}
             <div className="flex max-md:flex-col items-center justify-between gap-4 mt-12">
-              {currentStep > 1 && (
+              {currentStep > 1 && currentStep < steps.length && (
                 <button
                   type="button"
                   className="btn-secondary-outline"
@@ -187,8 +220,10 @@ export default function SignupForm({ steps }) {
                   type="button"
                   className="btn-secondary"
                   onClick={handleNextStep}
+                  disabled={loading}
+                  aria-busy={loading}
                 >
-                  التالي
+                  {loading ? "جاري التحقق..." : "التالي"}
                 </button>
               ) : (
                 <>
@@ -208,8 +243,9 @@ export default function SignupForm({ steps }) {
                       className="btn-secondary w-full"
                       disabled={loading}
                       aria-busy={loading}
+                      onClick={handleSubmitCode}
                     >
-                      {loading ? "جاري إنشاء الحساب..." : "إنشاء الحساب"}
+                      {loading ? "جاري تأكيد الرمز..." : "تأكيد الرمز"}
                     </button>
                   )}
                 </>

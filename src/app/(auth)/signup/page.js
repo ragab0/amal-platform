@@ -17,7 +17,7 @@ export const metadata = {
 const steps = [
   {
     text: "المعلومات الشخصية",
-    fields: ["firstName", "lastName", "headline"],
+    fields: ["fname", "lname", "headline"],
   },
   {
     text: "معلومات الحساب",

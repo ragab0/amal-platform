@@ -1,11 +1,11 @@
 export const personalInfoInputs = [
   {
-    name: "firstName",
+    name: "fname",
     label: "الاسم الأول",
     placeholder: "أدخل اسمك الأول",
   },
   {
-    name: "lastName",
+    name: "lname",
     label: "الاسم الأخير",
     placeholder: "أدخل الاسم الأخير",
   },

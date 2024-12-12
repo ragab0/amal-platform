@@ -8,10 +8,20 @@ import NotificationIco from "@/assets/icons/NotificationIco";
 import Logo from "../logo/Logo";
 import Link from "next/link";
 import LogoutButton from "../buttons/LogoutButton";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user, isAuthenticated, loading } = useAppSelector(
+    (state) => state.auth
+  );
+
+  const AuthButtonsSkeleton = () => (
+    <>
+      <div className="h-8 w-24 bg-gray-300 animate-pulse rounded"></div>
+      <div className="h-10 w-28 bg-gray-300 animate-pulse rounded-lg"></div>
+    </>
+  );
 
   return (
     <nav className="relative bg-main">
@@ -34,7 +44,9 @@ export default function Navbar() {
         </div>
         {/* User Section */}
         <div className="hidden lg:flex gap-6 items-center space-x-4">
-          {isAuthenticated ? (
+          {loading ? (
+            <AuthButtonsSkeleton />
+          ) : isAuthenticated ? (
             <>
               {/* Notification Icon */}
               <div className="relative">
@@ -52,12 +64,26 @@ export default function Navbar() {
               <div className="relative group">
                 <button className="flex items-center text-white gap-4 ">
                   <div className="flex flex-col justify-center text-center">
-                    <span className="mr-2">{user.name || "UnNamed!"}</span>
+                    <span className="mr-2">
+                      {user.fname && user.lname
+                        ? `${user.fname} ${user.lname}`
+                        : "UnNamed!"}
+                    </span>
                     <span className="text-sm">
                       {user.email || "saleh@amal.com"}
                     </span>
                   </div>
-                  <FaUserCircle className="h-14 w-14" />
+                  {user.photo ? (
+                    <Image
+                      src={user.photo}
+                      alt="User"
+                      width={40}
+                      height={40}
+                      className="w-14 h-14 rounded-full"
+                    />
+                  ) : (
+                    <FaUserCircle className="h-14 w-14" />
+                  )}
                 </button>
                 <div className="absolute left-0 pt-2">
                   <div className="rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">

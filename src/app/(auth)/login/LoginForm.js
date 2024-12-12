@@ -4,11 +4,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../../../validations/auth";
 import { login } from "@/store/features/auth/authThunks";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import AuthInput from "../components/AuthInput";
 import AuthOtherLinks from "../components/AuthOtherLinks";
 import AuthSocialOptions from "../components/AuthSocialOptions";
 
 export default function LoginForm() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { loading } = useAppSelector((state) => state.auth);
 
@@ -21,7 +24,19 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data) => {
-    await dispatch(login(data));
+    const { payload, error } = await dispatch(login(data));
+    if (error) {
+      if (payload?.result?.payload?.isVerified === false) {
+        toast.error("يرجى التحقق من البريد الإلكتروني");
+        router.replace(`/signup?email=${payload.result.payload.email}&step=3`);
+      }
+      return;
+    }
+
+    if (!error && payload?.status === "success") {
+      // the toast will show on the callback page;
+      router.replace("/auth/callback");
+    }
   };
 
   return (

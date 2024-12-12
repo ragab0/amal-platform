@@ -1,29 +1,29 @@
 import { NextResponse } from "next/server";
-
-const publickPaths = ["/login", "/signup", "/forgotPassword"];
+import { authRoutes } from "@/assets/data/authData";
 
 export function middleware(request) {
-  const isPublicPath = publickPaths.includes(request.nextUrl.pathname);
+  const { pathname } = request.nextUrl;
   const token = request.cookies.get("jwt")?.value;
 
-  // Redirect to login if accessing protected route without token
-  if (!isPublicPath && !token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  function matchesPath(paths, currentPath) {
+    return paths.some((path) => currentPath.startsWith(path));
   }
 
-  // Redirect to home if accessing auth pages with valid token
-  if (isPublicPath && token) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  const isPublicPath = matchesPath(authRoutes.public, pathname);
+  const isProtectedPath = matchesPath(authRoutes.protected, pathname);
 
-  return NextResponse.next();
+  if (isProtectedPath && !token) {
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
+  } else if (isPublicPath && token) {
+    return NextResponse.redirect(new URL("/profile", request.url));
+  } else {
+    return NextResponse.next();
+  }
 }
 
 export const config = {
-  matcher: [
-    // "/profile/:path*",
-    // "/cv/:path*",
-    // "/customize/:path*",
-    // "/notifications/:path*",
-  ],
+  //Match all paths except (API routes & Next.js internals & static files & public files)
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml).*)"],
 };
