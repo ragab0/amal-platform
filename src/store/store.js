@@ -15,7 +15,7 @@ export function makeStore(preloadedState = {}) {
     },
     preloadedState,
     middleware: function (getDefaultMiddles) {
-      return process.env.NODE_ENV === "development..........."
+      return process.env.NODE_ENV !== "development..........."
         ? getDefaultMiddles().concat(logger)
         : getDefaultMiddles();
     },
