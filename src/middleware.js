@@ -6,7 +6,7 @@ export const authRoutes = {
     "/signup",
     "/forgotPassword",
     "/resetPassword",
-    "/auth/callback",
+    // "/auth/callback",
   ],
   protected: ["/profile", "/cv", "/customize", "/notifications", "/dashboard"],
 };

@@ -2,8 +2,8 @@
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { checkAuth } from "@/store/features/auth/authThunks";
-import { useAppDispatch } from "@/hooks/ReduxHooks";
 import { toast } from "react-toastify";
+import { useAppDispatch } from "@/hooks/ReduxHooks";
 import CircleLoader from "@/components/loaders/CircleLoader";
 
 export default function CallbackPage() {
@@ -15,16 +15,22 @@ export default function CallbackPage() {
     if (!isFirstRender.current) return;
     isFirstRender.current = false;
 
-    appDispatch(checkAuth())
-      .then(({ error, payload }) => {
+    const handleCallback = async () => {
+      try {
+        const { error } = await appDispatch(checkAuth()).unwrap();
         if (!error) {
           toast.success("تم تسجيل الدخول بنجاح");
           router.replace("/");
+        } else {
+          toast.error("فشل تسجيل الدخول");
+          router.replace("/login");
         }
-      })
-      .finally(() => {
+      } catch (error) {
+        toast.error("حدث خطأ أثناء تسجيل الدخول");
         router.replace("/login");
-      });
+      }
+    };
+    handleCallback();
   }, [appDispatch, router]);
 
   return (
