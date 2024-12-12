@@ -8,7 +8,6 @@ export async function getInitialAuthState() {
     const token = cookieStore.get("jwt")?.value;
 
     if (!token) {
-      console.log("no token, FROM USER SERVER AUTH");
       return;
     }
 

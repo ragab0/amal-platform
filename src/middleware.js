@@ -5,8 +5,6 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("jwt")?.value;
 
-  console.log("token FROM MIDDLWARE SERVER is: ", token);
-
   function matchesPath(paths, currentPath) {
     return paths.some((path) => currentPath.startsWith(path));
   }

@@ -15,17 +15,15 @@ export default function CallbackPage() {
     if (!isFirstRender.current) return;
     isFirstRender.current = false;
 
-    console.log("Starting auth check in callback page");
     appDispatch(checkAuth())
       .then(({ error, payload }) => {
-        console.log("Auth check response:", { error, payload });
         if (!error) {
           toast.success("تم تسجيل الدخول بنجاح");
-          // router.replace("/");
+          router.replace("/");
         }
       })
       .finally(() => {
-        // router.replace("/login");
+        router.replace("/login");
       });
   }, [appDispatch, router]);
 
