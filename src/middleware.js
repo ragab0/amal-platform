@@ -1,5 +1,15 @@
 import { NextResponse } from "next/server";
-import { authRoutes } from "@/assets/data/authData";
+
+export const authRoutes = {
+  public: [
+    "/login",
+    "/signup",
+    "/forgotPassword",
+    "/resetPassword",
+    "/auth/callback",
+  ],
+  protected: ["/profile", "/cv", "/customize", "/notifications", "/dashboard"],
+};
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
@@ -11,6 +21,8 @@ export function middleware(request) {
 
   const isPublicPath = matchesPath(authRoutes.public, pathname);
   const isProtectedPath = matchesPath(authRoutes.protected, pathname);
+
+  console.log("MIDDLEWARE", { isPublicPath, isProtectedPath, pathname });
 
   if (isProtectedPath && !token) {
     const loginUrl = new URL("/login", request.url);
