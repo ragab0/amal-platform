@@ -82,3 +82,18 @@ export function RightToLeft({ children, index, className, payload }) {
     </motion.div>
   );
 }
+
+export function HoverCvPreviewCard({ children, index }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3, delay: index * 0.1 }}
+      whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+      className="bg-white border border-text rounded-[6px] p-[24px_40px]"
+    >
+      {children}
+    </motion.div>
+  );
+}

@@ -90,6 +90,7 @@ export default function Skills() {
     <div
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
+      // style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
       <h1 className="heading-big mt">المهـــــــــــــــــارات</h1>
 

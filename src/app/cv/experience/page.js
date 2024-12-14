@@ -3,17 +3,26 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { experienceSchema } from "@/validations/experience";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, delay } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { updateCV } from "@/store/features/cvs/cvsThunks";
+import { toast } from "react-toastify";
+import FormActions from "@/components/buttons/FormActions";
+import AddButton from "@/components/buttons/AddButton";
+import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
 import MarkdownEditor, { MDPreview } from "@/app/cv/components/MarkdownEditor";
-import DeleteIcon from "@/assets/icons/DeleteIcon";
-import EditIcon from "@/assets/icons/EditIcon";
 import MoreIcon from "@/assets/icons/MoreIcon";
+import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 
 export default function Experience() {
-  const [experiences, setExperiences] = useState([]);
+  const dispatch = useAppDispatch();
   const [editingId, setEditingId] = useState(null);
   const pageRef = useRef(null);
+  const {
+    myCV: { experiences = [] },
+    loading,
+  } = useAppSelector((state) => state.cvs);
 
   const {
     register,
@@ -25,13 +34,24 @@ export default function Experience() {
     resolver: yupResolver(experienceSchema),
   });
 
-  function handleDelete(id) {
-    setExperiences(experiences.filter((exp) => exp.id !== id));
+  async function handleDelete(targetId) {
+    const updatedExperiences = experiences.filter(
+      (exp) => exp._id !== targetId
+    );
+    const { payload, error } = await dispatch(
+      updateCV({ experiences: updatedExperiences })
+    );
+
+    if (!error && payload?.status === "success") {
+      toast.success("تم حذف الخبرة بنجاح");
+    } else {
+      toast.error("فشل حذف الخبرة");
+    }
   }
 
   function handleEdit(experience) {
-    setEditingId(experience.id);
-    reset(experience); // default values;
+    setEditingId(experience._id);
+    reset(experience);
   }
 
   function handleCancel() {
@@ -39,52 +59,56 @@ export default function Experience() {
     reset();
   }
 
-  function onSubmit(data) {
+  async function onSubmit(data) {
+    let updatedExperiences;
     if (editingId) {
-      setExperiences(
-        experiences.map((exp) => (exp.id === editingId ? data : exp))
+      updatedExperiences = experiences.map((exp) =>
+        exp._id === editingId ? { ...exp, ...data } : exp
       );
     } else {
-      const newExp = { ...data, id: Date.now() };
-      setExperiences([...experiences, newExp]);
+      updatedExperiences = [...experiences, { ...data, _id: undefined }];
     }
-    setEditingId(null);
-    reset();
+
+    const { payload, error } = await dispatch(
+      updateCV({ experiences: updatedExperiences })
+    );
+
+    if (!error && payload?.status === "success") {
+      setEditingId(null);
+      reset();
+      toast.success(
+        editingId ? "تم تحديث الخبرة بنجاح" : "تمت إضافة الخبرة بنجاح"
+      );
+    } else {
+      toast.error(editingId ? "فشل تحديث الخبرة" : "فشل إضافة الخبرة");
+    }
   }
 
   function handleDescriptionClick(exp) {
     handleEdit(exp);
     setTimeout(() => {
       const t = pageRef.current.querySelector("textarea");
-      t.focus();
-      t.scrollIntoView({ behavior: "smooth" });
-    }, 0);
+      t?.focus();
+      t?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   }
 
   const showForm = experiences.length === 0 || editingId !== null;
-  console.log(experiences);
 
   return (
     <div
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
+      style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
       <h1 className="heading-big">الخبرات المهنية</h1>
       {!showForm && (
         <>
-          {/* Experience Cards */}
+          {/* Experiences Cards */}
           <div className="w-full space-y-6">
             <AnimatePresence>
               {experiences.map((exp, index) => (
-                <motion.div
-                  key={exp.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                  className="bg-white border border-text rounded-[6px] p-[24px_40px]"
-                >
+                <HoverCvPreviewCard key={exp._id} index={index}>
                   {/* Header */}
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex gap-4 items-center">
@@ -93,24 +117,10 @@ export default function Experience() {
                       </h3>
                       <h4 className="heading-h4">{exp.company}</h4>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                        onClick={() => handleDelete(exp.id)}
-                        className="text-text hover:text-red-500 transition-colors"
-                      >
-                        <DeleteIcon />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                        onClick={() => handleEdit(exp)}
-                        className="text-text hover:text-green-500 transition-colors"
-                      >
-                        <EditIcon />
-                      </motion.button>
-                    </div>
+                    <ActionButtons
+                      onDelete={() => handleDelete(exp._id)}
+                      onEdit={() => handleEdit(exp)}
+                    />
                   </div>
 
                   {/* Info */}
@@ -145,19 +155,16 @@ export default function Experience() {
                       إضافة وصف
                     </motion.button>
                   )}
-                </motion.div>
+                </HoverCvPreviewCard>
               ))}
             </AnimatePresence>
           </div>
 
           {/* Add Experience Button */}
-          <button
+          <AddButton
             onClick={() => setEditingId(0)}
-            className="btn-secondary w-full flex items-center justify-center gap-2 mt-8 text-xl"
-          >
-            <MoreIcon className="w-7 h-7 p-2 bg-white text-second rounded-full" />
-            إضافة تجربة عمل أخرى
-          </button>
+            text="إضافة خبرة مهنية جديدة"
+          />
         </>
       )}
 
@@ -180,10 +187,6 @@ export default function Experience() {
               register={register}
               error={errors.company?.message}
             />
-          </div>
-
-          {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="المدينة"
@@ -198,6 +201,10 @@ export default function Experience() {
               register={register}
               error={errors.country?.message}
             />
+          </div>
+
+          {/* Two column fields */}
+          <div className="grid grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="تاريخ البداية"
@@ -216,31 +223,22 @@ export default function Experience() {
             />
           </div>
 
-          <div className="w-full">
-            <MarkdownEditor
-              label="الوصف"
-              name="description"
-              control={control}
-              error={errors.description?.message}
-              placeholder="اكتب وصفاً مختصراً عن دورك ومسؤولياتك..."
-            />
-          </div>
+          {/* Description field */}
+          <MarkdownEditor
+            label="الوصف"
+            name="description"
+            control={control}
+            error={errors.description?.message}
+            placeholder="اكتب وصفاً مختصراً عن دورك ومسؤولياتك..."
+          />
 
-          {/* Form Buttons */}
-          <div className="flex justify-center gap-4">
-            <button type="submit" className="btn-secondary mx-0 w-full">
-              {editingId ? "تعديل" : "إضافة تجربة عمل"}
-            </button>
-            {experiences.length > 0 && (
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn-secondary-outline mx-0"
-              >
-                إلغاء
-              </button>
-            )}
-          </div>
+          {/* Form Actions */}
+          <FormActions
+            editingId={editingId}
+            onCancel={handleCancel}
+            showCancelButton={experiences.length > 0}
+            submitText={editingId ? "تحديث الخبرة المهنية" : "إضافة خبرة مهنية"}
+          />
         </form>
       )}
     </div>

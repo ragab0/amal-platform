@@ -4,11 +4,19 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { personalInfoSchema } from "@/validations/personalInfo";
+import { useAppSelector, useAppDispatch } from "@/hooks/ReduxHooks";
+import { updateCV } from "@/store/features/cvs/cvsThunks";
+import { toast } from "react-toastify";
 import FormInput from "@/components/formInput/FormInput";
 import DownArrow from "@/assets/icons/DownArrowIcon";
 
 export default function PersonalDetails() {
   const [showAdditional, setShowAdditional] = useState(false);
+  const dispatch = useAppDispatch();
+  const {
+    myCV: { personalInfo = {} },
+    loading,
+  } = useAppSelector((state) => state.cvs);
 
   const {
     register,
@@ -16,14 +24,23 @@ export default function PersonalDetails() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(personalInfoSchema),
+    defaultValues: personalInfo,
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    const { payload, error } = await dispatch(updateCV({ personalInfo: data }));
+    if (!error && payload?.status === "success") {
+      toast.success("تم تحديث المعلومات الشخصية بنجاح");
+    } else {
+      toast.error("فشل تحديث المعلومات الشخصية");
+    }
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
+    <div
+      className="flex flex-col items-center w-full max-w-[800px] mx-auto"
+      style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
+    >
       <h1 className="heading-big">المعلومات الشخصية</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
         {/* Single column fields */}
@@ -70,7 +87,7 @@ export default function PersonalDetails() {
         {/* Additional Info Button */}
         <button
           type="button"
-          className="btn-secondary flex items-center justify-center gap-2 mx-0 w-full mt-8"
+          className="btn-secondary-outline flex items-center justify-center gap-2 mx-0 w-full my-8"
           onClick={() => setShowAdditional(!showAdditional)}
         >
           <motion.div
@@ -83,7 +100,7 @@ export default function PersonalDetails() {
         </button>
 
         {/* Additional Info Fields - two columns per row */}
-        <div className="relative overflow-hidden">
+        <div className="relative">
           <AnimatePresence>
             {showAdditional && (
               <motion.div
@@ -113,29 +130,29 @@ export default function PersonalDetails() {
                 />
                 <FormInput
                   label="رخصة القيادة"
-                  name="drivingLicense"
+                  name="driveLicense"
                   register={register}
-                  error={errors.drivingLicense?.message}
+                  error={errors.driveLicense?.message}
                 />
                 <FormInput
                   label="الحالة المدنية"
-                  name="maritalStatus"
+                  name="civilStatus"
                   register={register}
-                  error={errors.maritalStatus?.message}
+                  error={errors.civilStatus?.message}
                 />
                 <FormInput
                   label="لينكد إن"
                   type="url"
-                  name="linkedin"
+                  name="linkedIn"
                   register={register}
-                  error={errors.linkedin?.message}
+                  error={errors.linkedIn?.message}
                 />
                 <FormInput
                   label="الموقع الإلكتروني"
                   type="url"
-                  name="website"
+                  name="portfolio"
                   register={register}
-                  error={errors.website?.message}
+                  error={errors.portfolio?.message}
                 />
               </motion.div>
             )}

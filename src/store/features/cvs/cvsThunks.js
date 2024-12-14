@@ -1,16 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import api from "@/utils/myAxios";
+import myAxios from "@/utils/myAxios";
 
 export const getCV = createAsyncThunk(
   "cvs/getMine",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get("/cvs/mine");
+      const response = await myAxios.get("/cvs/mine");
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch CV"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -19,12 +17,10 @@ export const updateCV = createAsyncThunk(
   "cvs/update",
   async (cvData, { rejectWithValue }) => {
     try {
-      const response = await api.put("/cvs/mine", cvData);
+      const response = await myAxios.put("/cvs/mine", cvData);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to update CV"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );
@@ -34,12 +30,10 @@ export const getAllCVs = createAsyncThunk(
   "cvs/getAll",
   async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/cvs?page=${page}&limit=${limit}`);
+      const response = await myAxios.get(`/cvs?page=${page}&limit=${limit}`);
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "Failed to fetch CVs"
-      );
+      return rejectWithValue(error.response?.data || {});
     }
   }
 );

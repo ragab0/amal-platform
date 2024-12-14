@@ -2,19 +2,26 @@
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { motion, AnimatePresence } from "framer-motion";
 import { referencesSchema } from "@/validations/references";
+import { AnimatePresence } from "framer-motion";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { updateCV } from "@/store/features/cvs/cvsThunks";
+import { toast } from "react-toastify";
+import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 import FormInput from "@/components/formInput/FormInput";
-import DeleteIcon from "@/assets/icons/DeleteIcon";
-import EditIcon from "@/assets/icons/EditIcon";
-import Toggle from "@/app/cv/components/Toggle";
+import ActionButtons from "@/components/buttons/ActionButtons";
+import FormActions from "@/components/buttons/FormActions";
+import AddButton from "@/components/buttons/AddButton";
+import Demand from "./components/Demand";
 
 export default function References() {
-  const [references, setReferences] = useState([]);
+  const dispatch = useAppDispatch();
   const [editingId, setEditingId] = useState(null);
-  const [showForm, setShowForm] = useState(true);
-  const [showOnDemand, setShowOnDemand] = useState(false);
   const pageRef = useRef(null);
+  const {
+    myCV: { references = [] },
+    loading,
+  } = useAppSelector((state) => state.cvs);
 
   const {
     register,
@@ -25,65 +32,113 @@ export default function References() {
     resolver: yupResolver(referencesSchema),
   });
 
-  function handleDelete(id) {
-    setReferences(references.filter((ref) => ref.id !== id));
+  async function handleDelete(targetId) {
+    const updatedReferences = references.filter((ref) => ref._id !== targetId);
+    const { payload, error } = await dispatch(
+      updateCV({ references: updatedReferences })
+    );
+
+    if (!error && payload?.status === "success") {
+      toast.success("تم حذف المرجع بنجاح");
+    } else {
+      toast.error("فشل حذف المرجع");
+    }
   }
 
   function handleEdit(reference) {
-    setEditingId(reference.id);
+    setEditingId(reference._id);
     reset(reference);
-    setShowForm(true);
   }
 
   function handleCancel() {
     setEditingId(null);
     reset();
-    setShowForm(false);
   }
 
-  function onSubmit(data) {
+  async function onSubmit(data) {
+    let updatedReferences;
     if (editingId) {
-      setReferences(
-        references.map((ref) => (ref.id === editingId ? data : ref))
+      updatedReferences = references.map((ref) =>
+        ref._id === editingId ? { ...ref, ...data } : ref
       );
     } else {
-      const newRef = { ...data, id: Date.now() };
-      setReferences([...references, newRef]);
+      updatedReferences = [...references, { ...data, _id: undefined }];
     }
-    setEditingId(null);
-    reset();
-    setShowForm(false);
+
+    const { payload, error } = await dispatch(
+      updateCV({ references: updatedReferences })
+    );
+
+    if (!error && payload?.status === "success") {
+      setEditingId(null);
+      reset();
+      toast.success(
+        editingId ? "تم تحديث المرجع بنجاح" : "تمت إضافة المرجع بنجاح"
+      );
+    } else {
+      toast.error(editingId ? "فشل تحديث المرجع" : "فشل إضافة المرجع");
+    }
   }
+
+  const showForm = references.length === 0 || editingId !== null;
 
   return (
     <div
       className="flex flex-col items-center w-full max-w-[800px] mx-auto"
       ref={pageRef}
+      style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
       <h1 className="heading-big">المراجع</h1>
+      <Demand />
+      {!showForm && (
+        <>
+          <div className="w-full space-y-6">
+            <AnimatePresence>
+              {references.map((ref, index) => (
+                <HoverCvPreviewCard key={ref._id} index={index}>
+                  {/* Header */}
+                  <div className="flex justify-between items-center mb-3 pb-5 border-b border-text">
+                    <h3 className="heading-h3 font-semibold">المرجع</h3>
+                    <ActionButtons
+                      onEdit={() => handleEdit(ref)}
+                      onDelete={() => handleDelete(ref._id)}
+                    />
+                  </div>
 
-      {/* On Demand Section */}
-      <div className="w-full h-[60px] bg-main rounded-[6px] mb-8 flex items-center justify-between px-8">
-        <h2 className="text-white text-lg font-semibold">
-          عرض &quot;المراجع متوفرة عند الطلب&quot; في سيرتك الذاتية
-        </h2>
-        <Toggle
-          isOn={showOnDemand}
-          onToggle={() => setShowOnDemand(!showOnDemand)}
-        />
-      </div>
+                  {/* Info */}
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center">
+                      <h3 className="heading-h3 font-semibold">
+                        {ref.fullName}
+                      </h3>
+                      <h4 className="heading-h4">{ref.company}</h4>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 text-text">
+                    <h4 className="heading-h4">{ref.email}</h4>
+                    <h4 className="heading-h4">{ref.phone}</h4>
+                  </div>
+                </HoverCvPreviewCard>
+              ))}
+            </AnimatePresence>
+          </div>
+
+          {/* Add Reference Button */}
+          <AddButton onClick={() => setEditingId(0)} text="إضافة مرجع جديد" />
+        </>
+      )}
 
       {/* References Form */}
-      {(showForm || references.length === 0) && (
+      {showForm && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
           {/* Single column fields */}
           <div className="space-y-8">
             <FormInput
               must={true}
               label="اسم الشخص (يمكن الاتصال به)"
-              name="name"
+              name="fullName"
               register={register}
-              error={errors.name?.message}
+              error={errors.fullName?.message}
             />
             <FormInput
               must={true}
@@ -114,99 +169,13 @@ export default function References() {
           </div>
 
           {/* Form Actions */}
-          <div className="flex justify-center gap-4">
-            <button type="submit" className="btn-secondary w-full">
-              {editingId ? "تحديث المرجع" : "إضافة مرجع"}
-            </button>
-            {references.length > 0 && !editingId && (
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn-secondary-outline w-full"
-              >
-                إلغاء
-              </button>
-            )}
-            {editingId && (
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="btn-secondary-outline w-full"
-              >
-                إلغاء
-              </button>
-            )}
-          </div>
+          <FormActions
+            editingId={editingId}
+            onCancel={handleCancel}
+            showCancelButton={references.length > 0}
+            submitText={editingId ? "تحديث المرجع" : "إضافة مرجع"}
+          />
         </form>
-      )}
-
-      {/* References Cards */}
-      {!showForm && references.length > 0 && (
-        <>
-          <div className="w-full space-y-6">
-            <AnimatePresence>
-              {references.map((ref, index) => (
-                <motion.div
-                  key={ref.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                  className="bg-white border border-text rounded-[6px] p-[24px_40px]"
-                >
-                  {/* Header */}
-                  <div className="flex justify-between items-center mb-3 pb-5 border-b border-text">
-                    <h3 className="heading-h3 font-semibold">المرجع</h3>
-                    <div className="flex items-center gap-4">
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                        onClick={() => handleDelete(ref.id)}
-                        className="text-text hover:text-red-500 transition-colors"
-                      >
-                        <DeleteIcon />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        transition={{ duration: 0.2 }}
-                        onClick={() => handleEdit(ref)}
-                        className="text-text hover:text-green-500 transition-colors"
-                      >
-                        <EditIcon />
-                      </motion.button>
-                    </div>
-                  </div>
-
-                  {/* Info */}
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center">
-                      <h3 className="heading-h3 font-semibold">{ref.name}</h3>
-                      <h4 className="heading-h4">{ref.company}</h4>
-                    </div>
-                    <div className="flex items-center gap-4 text-text">
-                      <h4 className="heading-h4">
-                        {ref.email} • {ref.phone}
-                      </h4>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-
-          {/* Add Reference Button */}
-          <button
-            onClick={() => {
-              setEditingId(null);
-              reset();
-              setShowForm(true);
-            }}
-            className="btn-secondary w-full mt-8"
-          >
-            إضافة مرجع جديد
-          </button>
-        </>
       )}
     </div>
   );

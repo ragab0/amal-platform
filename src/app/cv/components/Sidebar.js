@@ -37,11 +37,23 @@ export function Sidebar({ items }) {
               }
             `}
           >
-            <Icon />
-            {item.name}
+            <Icon className="w-6 h-6" />
+            <span className="text-lg font-medium">{item.name}</span>
+            {isActive && (
+              <div className="w-2 h-2 ml-auto rounded-full bg-main" />
+            )}
           </Link>
         );
       })}
+
+      {/* Customize CV Link */}
+      <Link
+        href="/customize"
+        className="flex items-center gap-4 p-4 rounded-lg transition-colors mt-8 text-white hover:bg-white/10 border-t border-white/20 pt-8"
+      >
+        {/* <Icons.Template className="w-6 h-6" /> */}
+        <span className="text-lg font-medium">تخصيص السيرة الذاتية</span>
+      </Link>
     </nav>
   );
 }

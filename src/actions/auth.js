@@ -1,41 +1,47 @@
 "use server";
+import axios from "axios";
 import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getInitialAuthState() {
+  const cookieStore = await cookies();
   try {
-    const cookieStore = await cookies();
     const token = cookieStore.get("jwt")?.value;
-
     if (!token) {
-      return;
+      return {
+        auth: {
+          user: {},
+          isAuthenticated: false,
+          loading: false,
+          error: null,
+        },
+      };
     }
 
-    // Using fetch with specific cookie forwarding
-    const response = await fetch(`${API_URL}/auth/is-login`, {
-      credentials: "include",
+    const response = await axios.get(`${API_URL}/auth/is-login`, {
       headers: {
-        Cookie: `jwt=${token}`, // Forward the cookie securely
+        Cookie: `jwt=${token}`,
         "Content-Type": "application/json",
       },
     });
 
-    if (!response.ok) {
-      return;
-    }
-
-    const data = await response.json();
-
     return {
       auth: {
-        user: data.result || {},
+        user: response.data.result || {},
         isAuthenticated: true,
         loading: false,
         error: null,
       },
     };
   } catch (error) {
-    console.error("Error checking auth:", error);
+    return {
+      auth: {
+        user: {},
+        isAuthenticated: false,
+        loading: false,
+        error: error.response?.data?.result || null,
+      },
+    };
   }
 }

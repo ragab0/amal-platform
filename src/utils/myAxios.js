@@ -35,7 +35,6 @@ myAxios.interceptors.response.use(
           });
         }
         break;
-
       case 401:
         error.message = "غير مصرح بها. يرجى تسجيل الدخول مرة أخرى.";
         toast.error(error.message);
@@ -55,9 +54,9 @@ myAxios.interceptors.response.use(
     }
 
     if (process.env.NODE_ENV === "development") {
-      console.error("Response Error:", error);
+      console.log("myAxiosResponse Error:", error);
     }
-    return Promise.reject(error);
+    return response?.status >= 500 ? null : Promise.reject(error);
   }
 );
 

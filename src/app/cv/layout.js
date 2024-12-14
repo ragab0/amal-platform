@@ -1,8 +1,10 @@
-import Logo from "@/components/logo/Logo";
+import "./layout.css";
 import { Sidebar } from "./components/Sidebar";
 import { sidebarData } from "@/assets/data/sidebarData";
+import Logo from "@/components/logo/Logo";
 import ResumeBar from "./components/ResumeBar";
 import NavBtns from "./components/NavBtns";
+import CVDataProvider from "./components/CVDataProvider";
 
 export const metadata = {
   title: "منشئ السيرة الذاتية - منصة عمل",
@@ -14,7 +16,7 @@ export const metadata = {
 
 export default function CVLayout({ children }) {
   return (
-    <div className="flex w-full gap-y-4 gap-x-10 bg-gray-50">
+    <div className="cv-layout flex w-full gap-y-4 gap-x-10 bg-gray-50">
       {/* side one */}
       <aside className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-main py-10 overflow-y-auto">
         <div>
@@ -24,14 +26,17 @@ export default function CVLayout({ children }) {
           <Sidebar items={sidebarData} />
         </div>
       </aside>
-      {/* main content of current page */}
-      <main className="flex-1">
-        {children}
-        <NavBtns />
-      </main>
-      <section className="sticky top-4 w-[612px] overflow-hidden p-5">
-        <ResumeBar />
-      </section>
+      <CVDataProvider>
+        {/* main content of current page */}
+        <main className="flex-1">
+          {children}
+          <NavBtns />
+        </main>
+        {/* third side */}
+        <section className="sticky top-4 w-[612px] overflow-hidden p-5">
+          <ResumeBar />
+        </section>
+      </CVDataProvider>
     </div>
   );
 }

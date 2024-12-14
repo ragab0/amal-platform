@@ -11,6 +11,7 @@ const initialState = {
   totalCount: 0,
   // Common states
   loading: false,
+  isInitialized: false,
   error: null,
 };
 
@@ -36,10 +37,12 @@ const cvsSlice = createSlice({
       .addCase(getCV.fulfilled, (state, action) => {
         state.loading = false;
         state.myCV = action.payload.result;
+        state.isInitialized = true;
       })
       .addCase(getCV.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.isInitialized = true;
       })
 
       // Update My CV
