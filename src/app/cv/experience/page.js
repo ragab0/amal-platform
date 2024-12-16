@@ -7,13 +7,13 @@ import { motion, AnimatePresence, delay } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
+import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
-import MarkdownEditor, { MDPreview } from "@/app/cv/components/MarkdownEditor";
+import DraftEditor from "@/app/cv/components/DraftEditor";
 import MoreIcon from "@/assets/icons/MoreIcon";
-import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 
 export default function Experience() {
   const dispatch = useAppDispatch();
@@ -142,7 +142,7 @@ export default function Experience() {
                   {/* Description or Add Details Button */}
                   {exp.description ? (
                     <div className="mt-6 text-text" data-color-mode="light">
-                      <MDPreview source={exp.description} />
+                      <DraftEditor source={exp.description} />
                     </div>
                   ) : (
                     <motion.button
@@ -224,7 +224,7 @@ export default function Experience() {
           </div>
 
           {/* Description field */}
-          <MarkdownEditor
+          <DraftEditor
             label="الوصف"
             name="description"
             control={control}

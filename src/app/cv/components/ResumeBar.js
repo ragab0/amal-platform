@@ -1,12 +1,10 @@
 "use client";
-import { useState } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useAppSelector } from "@/hooks/ReduxHooks";
 import Template1 from "./templates/Template1";
 
 export default function ResumeBar() {
   const { myCV } = useAppSelector((state) => state.cvs);
-  const [selectedTemplate, setSelectedTemplate] = useState("template1");
 
   return (
     <div className="resume-bar">

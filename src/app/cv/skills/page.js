@@ -9,6 +9,7 @@ import FormInput from "@/components/formInput/FormInput";
 import FormSelect from "@/app/cv/components/FormSelect";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";
+import DraftEditor from "../components/DraftEditor";
 
 const languageLevels = ["مبتدئ", "متوسط", "متقدم", "محترف"];
 
@@ -88,7 +89,7 @@ export default function Skills() {
 
   return (
     <div
-      className="flex flex-col items-center w-full max-w-[800px] mx-auto"
+      className="flex flex-col items-center w-full max-w-[800px] mx-auto pointer-events-none opacity-30"
       ref={pageRef}
       // style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
@@ -109,15 +110,13 @@ export default function Skills() {
               className="w-full space-y-8"
             >
               {/* Description field */}
-              <div className="space-y-8">
-                <FormInput
-                  must={true}
-                  label="الوصف"
-                  name="description"
-                  register={register}
-                  error={errors.description?.message}
-                />
-              </div>
+              <DraftEditor
+                must={true}
+                label="الوصف"
+                name="description"
+                register={register}
+                error={errors.description?.message}
+              />
 
               {/* Languages Section */}
               <div className="space-y-4">
@@ -167,9 +166,8 @@ export default function Skills() {
               {/* Interests Section */}
               <div className="space-y-4">
                 <h3 className="heading-h3 font-semibold">الاهتمامــات</h3>
-                <FormInput
-                  must={true}
-                  label="الوصف"
+
+                <DraftEditor
                   name="interests"
                   register={register}
                   error={errors.interests?.message}

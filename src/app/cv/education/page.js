@@ -9,7 +9,7 @@ import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
 import FormInput from "@/components/formInput/FormInput";
 import FormSelect from "@/app/cv/components/FormSelect";
-import MarkdownEditor, { MDPreview } from "@/app/cv/components/MarkdownEditor";
+import DraftEditor from "@/app/cv/components/DraftEditor";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
@@ -140,7 +140,7 @@ export default function Education() {
                     </div>
                     {edu.description && (
                       <div className="mt-6 text-text" data-color-mode="light">
-                        <MDPreview source={edu.description} />
+                        <DraftEditor source={edu.description} />
                       </div>
                     )}
                   </div>
@@ -213,7 +213,7 @@ export default function Education() {
           </div>
 
           {/* Description field */}
-          <MarkdownEditor
+          <DraftEditor
             label="الوصف"
             name="description"
             control={control}

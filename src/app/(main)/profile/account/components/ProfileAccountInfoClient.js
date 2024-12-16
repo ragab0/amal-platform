@@ -6,22 +6,38 @@ import { FadeInUp } from "@/components/motion/MotionWrappers";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { settingsAccountInfoSchema } from "@/validations/settings";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { updateProfileAccountInfo } from "@/store/features/users/usersThunks";
+import { toast } from "react-toastify";
 
 export default function ProfileAccountClient({ children, inputs = [] }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useAppDispatch();
+  const { user: accountInfo = {}, loading } = useAppSelector(
+    (state) => state.auth
+  );
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    setValue,
   } = useForm({
     resolver: yupResolver(settingsAccountInfoSchema),
+    defaultValues: accountInfo,
   });
 
-  function submitHandler(data) {
-    console.log(data);
+  async function submitHandler(data) {
+    const { payload, error } = await dispatch(updateProfileAccountInfo(data));
+    if (!error && payload?.status === "success") {
+      toast.success("تم تحديث معلومات الحساب بنجاح");
+      setValue("password", "");
+      setValue("passwordConfirm", "");
+    } else {
+      toast.error("فشل تحديث معلومات الحساب");
+    }
     setIsEditing(false);
   }
 
@@ -30,13 +46,12 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
     setIsEditing(false);
   }
 
-  function editHandler() {
-    setIsEditing(true);
-  }
-
   return (
     <>
-      <header className="flex justify-between items-center mb-[100px]">
+      <header
+        className="flex justify-between items-center mb-[100px]"
+        style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
+      >
         <FadeInUp>{children}</FadeInUp>
         <FadeInUp delay={0.2}>
           <div>
@@ -49,7 +64,11 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
               </button>
             )}
             <button
-              onClick={isEditing ? handleSubmit(submitHandler) : editHandler}
+              onClick={
+                isEditing
+                  ? handleSubmit(submitHandler)
+                  : () => setIsEditing(true)
+              }
               className="btn-primary"
             >
               {isEditing ? "حفظ" : "تعديل معلومات الحساب"}
@@ -57,14 +76,17 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
           </div>
         </FadeInUp>
       </header>
-      <form onSubmit={handleSubmit(submitHandler)}>
+      <form
+        onSubmit={handleSubmit(submitHandler)}
+        style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
+      >
         {inputs.map((input, index) => (
           <FadeInUp key={input.name} delay={0.6 + index * 0.2}>
             <FormInput
-              type={input.type}
               label={input.label}
               placeholder={input.placeholder}
               name={input.name}
+              type={input.type}
               register={register}
               error={errors[input.name]?.message}
               disabled={!isEditing}
@@ -89,7 +111,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={() => {
-            console.log("Account deletion initiated");
+            console.log("delete account");
             setShowDeleteModal(false);
           }}
           title="تنبيـــه"

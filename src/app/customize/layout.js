@@ -1,7 +1,7 @@
 import Navbar from "@/components/navbar/Navbar";
 import SubNavbar from "./components/SubNavbar";
 import ResumeActions from "./components/ResumeActions";
-import ResumeTemplate from "./components/ResumeTemplate";
+import ResumeBar from "../cv/components/ResumeBar";
 
 export const metadata = {
   title: "تخصيص السيرة الذاتية | منصة عمل",
@@ -36,8 +36,8 @@ export default function Layout({ children }) {
         <section className="bg-white">
           <ResumeActions />
         </section>
-        <section>
-          <ResumeTemplate />
+        <section className="sticky top-4 w-[800px] h-full overflow-hidden">
+          <ResumeBar />
         </section>
         <section className="bg-white">{children}</section>
       </main>

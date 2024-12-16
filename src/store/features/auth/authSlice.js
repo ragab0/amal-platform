@@ -9,6 +9,10 @@ import {
   resetPassword,
   generateVerificationCode,
 } from "./authThunks";
+import {
+  updateProfileAccountInfo,
+  updateProfileBasicInfo,
+} from "../users/usersThunks";
 
 const initialState = {
   user: {},
@@ -139,6 +143,34 @@ const authSlice = createSlice({
         state.loading = false;
       })
       .addCase(resetPassword.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload.result?.message;
+      })
+
+      /** my profile */
+      // basicInfo
+      .addCase(updateProfileBasicInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfileBasicInfo.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload.result || {};
+      })
+      .addCase(updateProfileBasicInfo.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload.result?.message;
+      })
+      // accountInfo
+      .addCase(updateProfileAccountInfo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfileAccountInfo.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user = payload.result || {};
+      })
+      .addCase(updateProfileAccountInfo.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload.result?.message;
       });

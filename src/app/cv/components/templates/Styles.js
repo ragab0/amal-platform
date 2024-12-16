@@ -1,113 +1,176 @@
-import { StyleSheet } from "@react-pdf/renderer";
+import { StyleSheet, Font } from "@react-pdf/renderer";
+import Cairo from "@/app/fonts/Cairo-VariableFont.ttf";
+
+// Register font using URL
+Font.register({
+  family: "Cairo",
+  src: Cairo,
+});
 
 export const styles = StyleSheet.create({
   page: {
     flexDirection: "row-reverse",
     backgroundColor: "white",
+    fontFamily: "Cairo",
     padding: 0,
+    margin: 0,
+    direction: "rtl",
+    textAlign: "right",
+  },
+  section: {
+    paddingHorizontal: 12,
+    marginBottom: 25,
   },
   sideSection: {
     width: "30%",
-    backgroundColor: "#496E94",
-    padding: 20,
-    color: "white",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "#3f6184",
   },
-  mainSection: {
+  sidebarSection: {
+    paddingBottom: 50,
+    paddingHorizontal: 10,
+    backgroundColor: "#496f94",
+    marginBottom: 0,
+  },
+  mainContent: {
     width: "70%",
-    padding: 30,
+    backgroundColor: "white",
   },
-  logo: {
-    width: 120,
-    height: 120,
-    alignSelf: "center",
-    marginBottom: 20,
-  },
-  name: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-    textAlign: "right",
-  },
-  title: {
-    fontSize: 18,
-    marginBottom: 30,
-    textAlign: "right",
-  },
+
+  // Section Titles && items && lists
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 15,
-    color: "#33637F",
-    textAlign: "right",
+    color: "#6b7f94",
+    marginBottom: 5,
+    borderBottom: "2px solid #6b7f94",
+    fontSize: 15,
+    fontWeight: 700,
   },
-  sideSectionTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 15,
+  sidebarTitle: {
     color: "white",
-    textAlign: "right",
+    textAlign: "center",
+    paddingVertical: "10 5",
+    marginBottom: 0,
+    fontSize: 15,
   },
-  infoRow: {
+
+  listItem: {
+    position: "relative",
+    display: "flex",
     flexDirection: "row-reverse",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  icon: {
-    width: 20,
-    height: 20,
-    marginLeft: 10,
-  },
-  infoText: {
-    fontSize: 12,
-    color: "white",
-  },
-  bulletPoint: {
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    marginBottom: 8,
   },
   bullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "#33637F",
-    marginLeft: 8,
-  },
-  whiteBullet: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: "white",
-    marginLeft: 8,
-  },
-  bulletText: {
+    marginLeft: 5,
     fontSize: 12,
+    color: "white",
   },
+
+  // Description and Text
   description: {
-    fontSize: 12,
-    marginBottom: 20,
-    lineHeight: 1.5,
-    textAlign: "right",
-  },
-  experienceItem: {
-    marginBottom: 15,
+    lineHeight: 1.6,
+    fontSize: 11,
+    color: "#333",
   },
   itemTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-    textAlign: "right",
+    fontSize: 11,
   },
   itemSubtitle: {
     fontSize: 12,
-    marginBottom: 5,
     color: "#666",
-    textAlign: "right",
   },
-  volunteerSection: {
-    marginTop: "auto",
-    backgroundColor: "#33637F",
-    padding: 15,
-    borderRadius: 8,
+  itemDate: {
+    fontSize: 11,
+    color: "#888",
+    marginTop: "-5px",
+  },
+
+  // 01] Logo
+  logoContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#6b7f94",
+  },
+  logo: {
+    height: 138,
+    width: "100%",
+  },
+
+  // 02] Contact Info
+  contactItem: {
+    display: "flex",
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    gap: 5,
+    fontSize: 12,
+    color: "white",
+  },
+  contactIcon: {
+    width: 16,
+    height: 16,
+    color: "white",
+  },
+  contactText: {
+    fontSize: 11,
+    color: "white",
+    lineHeight: 1.6,
+  },
+
+  // 03] Languages
+  languageItem: {
+    display: "flex !important",
+    flexDirection: "row-reverse",
+    alignItems: "center",
+    gap: 10,
+  },
+  languageItemName: {
+    flexShrink: 0,
+  },
+  languageBar: {
+    flex: 1,
+    height: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    marginTop: 5,
+  },
+  languageLevel: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "white",
+  },
+
+  // 04] Volunteer Work
+  volunteerList: {
+    marginRight: 10,
+  },
+  volunteerSubItem: {
+    fontSize: 10,
+    marginTop: 2,
+    color: "white",
+  },
+
+  // 01) Name;
+  name: {
+    textAlign: "center",
+    color: "#5b7d97",
+    fontSize: 20,
+    marginTop: 30,
+    fontWeight: 700,
+  },
+  title: {
+    textAlign: "center",
+    color: "#5b7d97",
+    fontSize: 12,
+    marginBottom: 20,
+  },
+
+  // 02) Objective;
+  // 03) Education;
+  // 04) Experience
+  // 05) Courses;
+  // 06) Personal Skills;
+  experienceItem: {
+    marginBottom: 15,
+    fontSize: 12,
   },
 });

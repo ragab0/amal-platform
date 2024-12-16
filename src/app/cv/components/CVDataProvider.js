@@ -17,7 +17,11 @@ export default function CVDataProvider({ children }) {
   }, [dispatch, myCV?.id]);
 
   if (!isInitialized || (!isInitialized && loading)) {
-    return <CircleLoader />;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <CircleLoader />
+      </div>
+    );
   }
 
   return children;

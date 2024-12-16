@@ -1,14 +1,13 @@
 "use client";
-import Image from "next/image";
-import StarIco from "@/assets/icons/StarIco";
-import { reviews } from "@/assets/data/reviews";
-import Slider from "react-slick";
-import { useState } from "react";
+import "./Reviews.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./Reviews.css";
+import Image from "next/image";
+import StarIco from "@/assets/icons/StarIco";
+import Slider from "react-slick";
+import { useState } from "react";
 
-export default function Reviews() {
+export default function Reviews({ reviews }) {
   const [expandedReviews, setExpandedReviews] = useState({});
 
   const toggleReview = (index) => {

@@ -1,16 +1,26 @@
 import { FadeInUp } from "@/components/motion/MotionWrappers";
-import { faqs } from "@/assets/data/faqs";
+import {
+  cvTemplates,
+  faqs,
+  ourServices,
+  reviews,
+} from "@/assets/data/homeData";
 import MainLayout from "./(main)/layout";
 import FAQClient from "./components/FAQClient";
 import Reviews from "./components/Reviews";
 import Banner from "@/components/banner/Banner";
 import Image from "next/image";
-import { cvTemplates } from "@/assets/data/homeData";
+import Services from "./components/Services";
 
 export default function HomePage() {
   return (
     <MainLayout className="space-y-[100px] mb-[200px]">
-      <section className="container mx-auto px-4"></section>
+      <section className="container mx-auto px-4 mt-[100px]">
+        <FadeInUp>
+          <h2 className="heading-sub mb-[50px] text-center">خدماتنا المميزة</h2>
+        </FadeInUp>
+        <Services ourServices={ourServices} />
+      </section>
       <section className="container mx-auto px-4">
         <FadeInUp>
           <h2 className="heading-sub mb-[50px]">الأسئلة الشائعة</h2>
@@ -28,7 +38,7 @@ export default function HomePage() {
             </p>
           </FadeInUp>
         </div>
-        <Reviews />
+        <Reviews reviews={reviews} />
       </section>
       <section className="container mx-auto px-4">
         <Banner title="انطلق في تصميم سيرتك الذاتية المميزة !وأجعل فرصك أقوى">

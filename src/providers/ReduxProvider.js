@@ -14,7 +14,7 @@ export default function StoreProvider({ children, preloadedState = {} }) {
     storeRef.current = makeStore(preloadedState);
     if (preloadedState.auth?.error) {
       toast.error(preloadedState.auth.error);
-      myAxios.post("/auth/logout");
+      // myAxios.post("/auth/logout");
     }
   }
 

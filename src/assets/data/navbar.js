@@ -3,7 +3,7 @@ export const navLinks = [
   { name: "من نحن", href: "/about" },
   { name: "الخدمات", href: "/services" },
   { name: "الوظائف", href: "/jobs" },
-  { name: "الاستشارات", href: "/consultations" },
+  // { name: "الاستشارات", href: "/consultations" },
 ];
 
 export const userMenuItems = [

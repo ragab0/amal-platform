@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Template</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap");
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        font-family: "Cairo", sans-serif;
+      }
+
+      .cv-container {
+        width: 210mm;
+        min-height: 297mm;
+        background: white;
+        display: flex;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .sidebar {
+        width: 30%;
+        background-color: #6b7f94;
+        color: white;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .main-content {
+        width: 70%;
+        padding: 20px;
+        background-color: white;
+      }
+
+      .profile-section {
+        text-align: center;
+        display: flex;
+      }
+
+      .cv-logo {
+        width: 100%;
+        height: 100%;
+      }
+
+      .section {
+        margin-bottom: 25px;
+      }
+
+      .sidebar .section {
+        margin-bottom: 0;
+        padding-bottom: 100px;
+        padding-inline: 0.75rem;
+      }
+
+      .sidebar .section:last-of-type {
+        flex: 1;
+      }
+
+      .sidebar .section:nth-of-type(2) {
+        background-color: #496f94;
+      }
+      .sidebar .section:nth-of-type(3) {
+        background-color: #456b8f;
+      }
+      .sidebar .section:nth-of-type(4) {
+        background-color: #3f6184;
+      }
+
+      .section-title {
+        color: #6b7f94;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #6b7f94;
+        padding-bottom: 5px;
+        font-size: 1.2em;
+      }
+
+      .sidebar .section-title {
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        margin-bottom: 0;
+        border: none;
+      }
+
+      .contact-item {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .skills-list {
+        list-style: none;
+      }
+
+      .skills-list li {
+        margin-bottom: 8px;
+      }
+
+      .languages-section > div {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .languages-section > div > div {
+        flex-shrink: 0;
+      }
+
+      .languages-section > div > div:last-of-type {
+        flex: 1;
+      }
+
+      .language-bar {
+        width: 100%;
+        height: 10px;
+        background-color: rgba(255, 255, 255, 0.2);
+        margin-top: 5px;
+      }
+
+      .language-level {
+        height: 100%;
+        background-color: white;
+      }
+
+      .volunteer-item {
+        margin-bottom: 10px;
+      }
+
+      .objective {
+        line-height: 1.6;
+        margin-bottom: 20px;
+        text-align: justify;
+      }
+
+      .education-list,
+      .experience-list,
+      .volunteer-list,
+      .courses-list {
+        list-style: none;
+      }
+
+      .education-list li,
+      .experience-list li,
+      .volunteer-list > li,
+      .courses-list li {
+        margin-bottom: 8px;
+        position: relative;
+        padding-right: 15px;
+      }
+
+      .education-list li::before,
+      .experience-list li::before,
+      .volunteer-list > li::before,
+      .courses-list li::before {
+        content: "•";
+        position: absolute;
+        right: 0;
+      }
+
+      .volunteer-item,
+      ul ol {
+        margin-bottom: 0;
+      }
+      ul ol li {
+        margin-bottom: 0 !important;
+        font-size: 0.8em;
+      }
+
+      .personal-skills {
+        list-style: none;
+      }
+
+      .personal-skills li {
+        margin-bottom: 8px;
+        position: relative;
+        padding-right: 15px;
+      }
+
+      .personal-skills li::before {
+        content: "•";
+        position: absolute;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cv-container">
+      <div class="sidebar">
+        <div class="profile-section">
+          <img
+            src="../../../../assets/imgs/cv-logo.png"
+            alt="CV Logo"
+            class="cv-logo"
+          />
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">المعلومات الشخصية</h2>
+          <div class="contact-info">
+            <div class="contact-item">سعودية</div>
+            <div class="contact-item">0511111111</div>
+            <div class="contact-item">Koqwzzzz@gmail.com</div>
+            <div class="contact-item">2-2-2024</div>
+            <div class="contact-item">الرياض</div>
+          </div>
+        </div>
+
+        <div class="section languages-section">
+          <h2 class="section-title">اللغات</h2>
+          <div>
+            <div>اللغة العربية</div>
+            <div class="language-bar">
+              <div class="language-level" style="width: 100%"></div>
+            </div>
+          </div>
+          <div style="margin-top: 10px">
+            <div>اللغة الإنجليزية</div>
+            <div class="language-bar">
+              <div class="language-level" style="width: 60%"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">العمل التطوعي</h2>
+          <ul class="volunteer-list">
+            <li class="volunteer-item">
+              <div class="volunteer-item">
+                حاصلة على أكثر من 120 ساعة تطوعية
+              </div>
+              <ol class="volunteer-item-list">
+                <li class="volunteer-item">في مجال نفسي</li>
+                <li class="volunteer-item">في مجال إداري</li>
+                <li class="volunteer-item">في مجال تعليمي</li>
+              </ol>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="main-content">
+        <div class="section">
+          <h1 style="text-align: center; color: #5b7d97; margin-top: 30px">
+            خلــــود بــنت مــحــمــد
+          </h1>
+          <p style="text-align: center; color: #5b7d97; margin-bottom: 40px">
+            بكالوريوس رياض أطفال
+          </p>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">الهدف الوظيفي</h2>
+          <p class="objective">
+            الإنضمام لبيئة عمل إحترافية تمكنني من تطوير مهاراتي وإكتساب خبرات
+            جديدة والمساهمة في تطوير خطة العمل التي سأعمل بها لتحقيق الأهداف
+            المشتركة.
+          </p>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">المؤهل العلمي</h2>
+          <ul class="education-list">
+            <li class="education-item">
+              <div>
+                بكالوريوس إدارة أعمال -
+                <span>جامعة الملك خالد</span>
+              </div>
+              <div></div>
+              <div>المعدل:4.22 من5</div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">الخبرات العملية</h2>
+          <ul class="experience-list">
+            <li class="experience-item">
+              في الوقت الحالي ابحث عن فرصة من شأنها أن تساهم في التطور المهني
+              وتنمية المهارات وإكتساب المزيد من الخبرات
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">الدورات التدريبية</h2>
+          <ul class="courses-list">
+            <li>دورة في الحاسب الآلي</li>
+            <li>دورة في اللغة الإنجليزية</li>
+            <li>دورة في رياض الأطفال</li>
+            <li>دورة في اللغة التركية</li>
+            <li>دورة إدارة أعمال</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2 class="section-title">المهارات الشخصية</h2>
+          <ul class="personal-skills">
+            <li>إجادة استخدام الحاسب الآلي</li>
+            <li>سرعة التعلم واكتساب الخبرات</li>
+            <li>الالتزام بالوقت والانضباط بالمواعيد</li>
+            <li>القدرة على تحمل ضغوط العمل</li>
+            <li>التكيف التام مع العمل الجماعي</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
