@@ -9,6 +9,7 @@ import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
 import FormInput from "@/components/formInput/FormInput";
 import DownArrow from "@/assets/icons/DownArrowIcon";
+import getLocalDate from "@/utils/getLocalDate";
 
 export default function PersonalDetails() {
   const [showAdditional, setShowAdditional] = useState(false);
@@ -24,7 +25,10 @@ export default function PersonalDetails() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(personalInfoSchema),
-    defaultValues: personalInfo,
+    defaultValues: {
+      ...personalInfo,
+      birthDate: getLocalDate(personalInfo.birthDate),
+    },
   });
 
   const onSubmit = async (data) => {

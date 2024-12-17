@@ -8,11 +8,11 @@ import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
 import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
+import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
-import DraftEditor from "@/app/cv/components/DraftEditor";
 import MoreIcon from "@/assets/icons/MoreIcon";
 
 export default function Experience() {
@@ -142,7 +142,7 @@ export default function Experience() {
                   {/* Description or Add Details Button */}
                   {exp.description ? (
                     <div className="mt-6 text-text" data-color-mode="light">
-                      <DraftEditor source={exp.description} />
+                      <MDPreview source={exp.description} />
                     </div>
                   ) : (
                     <motion.button
@@ -224,7 +224,7 @@ export default function Experience() {
           </div>
 
           {/* Description field */}
-          <DraftEditor
+          <MarkdownEditor
             label="الوصف"
             name="description"
             control={control}

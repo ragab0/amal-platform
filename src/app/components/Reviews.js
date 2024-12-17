@@ -71,7 +71,7 @@ export default function Reviews({ reviews }) {
               </div>
               <div
                 className={`bg-second-pale p-4 text-white w-[260px] h-[260px] sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px] 
-                  flex flex-col text-center transition-all ease-linear duration-300 
+                  flex flex-col text-center transition-all ease-linear duration-300 overflow-hidden
                   ${expandedReviews[i] ? "rounded-t-full" : "rounded-full"}`}
               >
                 <h3 className="text-xl sm:text-2xl lg:text-[28px] mb-3 sm:mb-4 lg:mb-5 mt-2 sm:mt-3 lg:mt-4">

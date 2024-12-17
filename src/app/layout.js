@@ -4,7 +4,6 @@ import { Cairo } from "next/font/google";
 import { getInitialAuthState } from "@/actions/auth";
 import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
-import DevNavbar from "./components/DevNavbar";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -88,7 +87,6 @@ export default async function RootLayout({ children }) {
             theme="colored"
             toastClassName="font-normal"
           />
-          <DevNavbar />
           {children}
         </StoreProvider>
       </body>

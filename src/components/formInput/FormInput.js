@@ -22,7 +22,7 @@ export default function FormInput({
       {label && (
         <label
           htmlFor={id}
-          className={`mb-5 text-[22px] leading-[30px] font-cairo text-text ${
+          className={`pb-5 text-[22px] leading-[30px] font-cairo text-text ${
             disabled ? "opacity-70" : ""
           }`}
         >

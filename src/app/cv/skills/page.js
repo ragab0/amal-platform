@@ -5,11 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { motion, AnimatePresence } from "framer-motion";
 import { v4 as uuidv4 } from "uuid";
 import { skillsSchema } from "@/validations/skills";
+import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import FormInput from "@/components/formInput/FormInput";
 import FormSelect from "@/app/cv/components/FormSelect";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";
-import DraftEditor from "../components/DraftEditor";
 
 const languageLevels = ["مبتدئ", "متوسط", "متقدم", "محترف"];
 
@@ -110,12 +110,13 @@ export default function Skills() {
               className="w-full space-y-8"
             >
               {/* Description field */}
-              <DraftEditor
+              <MarkdownEditor
                 must={true}
                 label="الوصف"
                 name="description"
-                register={register}
+                control={control}
                 error={errors.description?.message}
+                placeholder="اكتب وصفاً عن مهاراتك..."
               />
 
               {/* Languages Section */}
@@ -165,12 +166,12 @@ export default function Skills() {
 
               {/* Interests Section */}
               <div className="space-y-4">
-                <h3 className="heading-h3 font-semibold">الاهتمامــات</h3>
-
-                <DraftEditor
+                <MarkdownEditor
+                  label="الاهتمامات"
                   name="interests"
-                  register={register}
+                  control={control}
                   error={errors.interests?.message}
+                  placeholder="اكتب عن اهتماماتك..."
                 />
               </div>
 
@@ -292,7 +293,7 @@ export default function Skills() {
                     <div className="space-y-6">
                       <div>
                         <h4 className="heading-h4 font-semibold mb-2">الوصف</h4>
-                        <p className="text-text">{skill.description}</p>
+                        <MDPreview source={skill.description} />
                       </div>
 
                       {/* Languages */}
@@ -320,7 +321,7 @@ export default function Skills() {
                         <h4 className="heading-h4 font-semibold mb-2">
                           الاهتمامات
                         </h4>
-                        <p className="text-text">{skill.interests}</p>
+                        <MDPreview source={skill.interests} />
                       </div>
 
                       {/* Other Skills */}

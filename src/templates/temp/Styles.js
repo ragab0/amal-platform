@@ -1,10 +1,30 @@
 import { StyleSheet, Font } from "@react-pdf/renderer";
-import Cairo from "@/app/fonts/Cairo-VariableFont.ttf";
+import CairoRegular from "@/app/fonts/cairo/Cairo-Regular.ttf";
+import CairoMedium from "@/app/fonts/cairo/Cairo-Medium.ttf";
+import CairoSemiBold from "@/app/fonts/cairo/Cairo-SemiBold.ttf";
+import CairoBold from "@/app/fonts/cairo/Cairo-Bold.ttf";
 
-// Register font using URL
+// Register font for different weights
 Font.register({
   family: "Cairo",
-  src: Cairo,
+  fonts: [
+    {
+      src: CairoRegular,
+      fontWeight: 400,
+    },
+    {
+      src: CairoMedium,
+      fontWeight: 500,
+    },
+    {
+      src: CairoSemiBold,
+      fontWeight: 600,
+    },
+    {
+      src: CairoBold,
+      fontWeight: 700,
+    },
+  ],
 });
 
 export const styles = StyleSheet.create({
@@ -17,9 +37,9 @@ export const styles = StyleSheet.create({
     direction: "rtl",
     textAlign: "right",
   },
-  section: {
-    paddingHorizontal: 12,
-    marginBottom: 25,
+  mainContent: {
+    width: "70%",
+    backgroundColor: "white",
   },
   sideSection: {
     width: "30%",
@@ -27,15 +47,15 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     backgroundColor: "#3f6184",
   },
+  section: {
+    paddingHorizontal: 12,
+    marginBottom: 25,
+  },
   sidebarSection: {
     paddingBottom: 50,
     paddingHorizontal: 10,
     backgroundColor: "#496f94",
     marginBottom: 0,
-  },
-  mainContent: {
-    width: "70%",
-    backgroundColor: "white",
   },
 
   // Section Titles && items && lists
@@ -52,24 +72,12 @@ export const styles = StyleSheet.create({
     paddingVertical: "10 5",
     marginBottom: 0,
     fontSize: 15,
+    fontWeight: 700,
   },
-
   listItem: {
     position: "relative",
     display: "flex",
     flexDirection: "row-reverse",
-  },
-  bullet: {
-    marginLeft: 5,
-    fontSize: 12,
-    color: "white",
-  },
-
-  // Description and Text
-  description: {
-    lineHeight: 1.6,
-    fontSize: 11,
-    color: "#333",
   },
   itemTitle: {
     fontSize: 11,
@@ -82,6 +90,16 @@ export const styles = StyleSheet.create({
     fontSize: 11,
     color: "#888",
     marginTop: "-5px",
+  },
+  bullet: {
+    marginLeft: 5,
+    fontSize: 12,
+    color: "white",
+  },
+  description: {
+    lineHeight: 1.6,
+    fontSize: 11,
+    color: "#333",
   },
 
   // 01] Logo
@@ -162,6 +180,7 @@ export const styles = StyleSheet.create({
     color: "#5b7d97",
     fontSize: 12,
     marginBottom: 20,
+    fontWeight: 500,
   },
 
   // 02) Objective;

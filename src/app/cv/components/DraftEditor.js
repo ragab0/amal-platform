@@ -1,9 +1,9 @@
 "use client";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useId, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import AIIcon from "@/assets/icons/CalenderIcon";
+import dynamic from "next/dynamic";
+// import AIIcon from "@/assets/icons/CalenderIcon";
 
 const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),

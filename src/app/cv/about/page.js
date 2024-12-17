@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
-import DraftEditor, { DraftPreview } from "../components/DraftEditor";
+import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import FormActions from "@/components/buttons/FormActions";
 
 export default function AboutPage() {
@@ -12,33 +13,36 @@ export default function AboutPage() {
     myCV: { personalInfo = {} },
     loading,
   } = useAppSelector((state) => state.cvs);
-  const [isEditing, setIsEditing] = useState(!personalInfo.description);
-  const [description, setDescription] = useState(
-    personalInfo.description || ""
-  );
+  const [isEditing, setIsEditing] = useState(false);
 
-  async function handleSubmit(e) {
-    e?.preventDefault();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      description: personalInfo.description || "",
+    },
+  });
+
+  async function onSubmit(data) {
     const { payload, error } = await dispatch(
       updateCV({
         personalInfo: {
           ...personalInfo,
-          description,
+          description: data.description,
         },
       })
     );
 
     if (!error && payload?.status === "success") {
-      toast.success("تم تحديث الوصف الشخصي بنجاح");
       setIsEditing(false);
+      reset();
+      toast.success("تم حفظ الوصف بنجاح");
     } else {
-      toast.error("فشل تحديث الوصف الشخصي");
+      toast.error("فشل حفظ الوصف الشخصي");
     }
-  }
-
-  function handleCancel() {
-    setDescription(personalInfo.description || "");
-    setIsEditing(false);
   }
 
   return (
@@ -48,15 +52,16 @@ export default function AboutPage() {
     >
       <h1 className="heading-big mb-[120px]">الوصــف الشخصي</h1>
       {isEditing ? (
-        <form onSubmit={handleSubmit} className="w-full">
-          <DraftEditor
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+          <MarkdownEditor
             label="الوصف الشخصي"
-            value={description}
-            onChange={setDescription}
+            name="description"
+            control={control}
+            error={errors.description?.message}
             placeholder="اكتب وصفك الشخصي هنا..."
           />
           <FormActions
-            onCancel={handleCancel}
+            onCancel={() => setIsEditing(false)}
             submitText="حفظ"
             cancelText="إلغاء"
             className="w-full"
@@ -65,7 +70,7 @@ export default function AboutPage() {
         </form>
       ) : (
         <>
-          <DraftPreview content={personalInfo.description} />
+          <MDPreview source={personalInfo.description} />
           <button
             type="button"
             onClick={() => setIsEditing(true)}

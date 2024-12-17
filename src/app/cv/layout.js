@@ -2,7 +2,7 @@ import "./layout.css";
 import { Sidebar } from "./components/Sidebar";
 import { sidebarData } from "@/assets/data/sidebarData";
 import Logo from "@/components/logo/Logo";
-import ResumeBar from "./components/ResumeBar";
+import ResumeBar from "../../templates/ResumeBar";
 import NavBtns from "./components/NavBtns";
 import CVDataProvider from "./components/CVDataProvider";
 
@@ -33,7 +33,7 @@ export default function CVLayout({ children }) {
           <NavBtns />
         </main>
         {/* third side */}
-        <section className="sticky top-4 w-[612px] overflow-hidden p-5">
+        <section className="flex-1 sticky top-4 h-[calc(100vh-4rem)] p-5 ps-0">
           <ResumeBar />
         </section>
       </CVDataProvider>
