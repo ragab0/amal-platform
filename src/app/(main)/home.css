@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.home-page {
+  .heading-sub {
+    @apply text-neutral-9 leading-tight;
+  }
+  .heading-section-name {
+    @apply text-xl text-neutral-6 mb-4 text-center font-medium;
+  }
+}

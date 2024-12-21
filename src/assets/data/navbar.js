@@ -1,9 +1,10 @@
 export const navLinks = [
-  { name: "الرئيسية", href: "/" },
-  { name: "من نحن", href: "/about" },
+  { name: "بناء السيرة الذاتية", href: "/build" },
+  { name: "تحليل السيرة الذاتية", href: "/analyze" },
   { name: "الخدمات", href: "/services" },
   { name: "الوظائف", href: "/jobs" },
-  // { name: "الاستشارات", href: "/consultations" },
+  { name: "الاستشارات", href: "/consultents" },
+  { name: "من نحن", href: "/about" },
 ];
 
 export const userMenuItems = [

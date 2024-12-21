@@ -5,21 +5,46 @@ export function convertMarkdownToPdfText(markdown) {
   return markdown.split("\n").map((line, index) => {
     if (line.startsWith("# ")) {
       return (
-        <Text key={index} style={[, { fontSize: 24, fontWeight: "bold" }]}>
+        <Text
+          key={index}
+          style={[
+            {
+              display: "flex",
+              flexDirection: "row-reverse",
+              fontSize: 24,
+              fontWeight: "bold",
+            },
+          ]}
+        >
           {line.replace("# ", "")}
         </Text>
       );
     }
     if (line.startsWith("## ")) {
       return (
-        <Text key={index} style={[, { fontSize: 20, fontWeight: "bold" }]}>
+        <Text
+          key={index}
+          style={[
+            {
+              display: "flex",
+              flexDirection: "row-reverse",
+              fontSize: 20,
+              fontWeight: "bold",
+            },
+          ]}
+        >
           {line.replace("## ", "")}
         </Text>
       );
     }
     if (line.startsWith("- ")) {
       return (
-        <Text key={index} style={[, { marginLeft: 10 }]}>
+        <Text
+          key={index}
+          style={[
+            { display: "flex", flexDirection: "row-reverse", marginLeft: 10 },
+          ]}
+        >
           • {line.replace("- ", "")}
         </Text>
       );

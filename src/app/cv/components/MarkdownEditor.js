@@ -12,7 +12,12 @@ const MDEditor = dynamic(
 );
 
 export const MDPreview = dynamic(
-  () => import("@uiw/react-markdown-preview").then((mod) => mod.default),
+  () =>
+    import("@uiw/react-markdown-preview").then((mod) => (
+      <div data-color-mode="light" className="w-full">
+        {mod.default}
+      </div>
+    )),
   { ssr: false }
 );
 
@@ -28,7 +33,7 @@ const MarkdownEditor = ({
   const id = useId();
 
   return (
-    <div className="flex flex-col mb-8" data-color-mode="light">
+    <div className="flex flex-col mb-8 w-full" data-color-mode="light">
       <label
         htmlFor={id}
         className="mb-5 text-[22px] leading-[30px] font-cairo text-text"
@@ -36,7 +41,7 @@ const MarkdownEditor = ({
         {label}
         {must && <span className="text-red-500">*</span>}
       </label>
-      <div className="relative">
+      <div className="relative w-full">
         <Controller
           control={control}
           name={name}
@@ -49,7 +54,8 @@ const MarkdownEditor = ({
                 placeholder: placeholder,
               }}
               preview="edit"
-              height={200}
+              className="w-full"
+              height={300}
               {...props}
             />
           )}

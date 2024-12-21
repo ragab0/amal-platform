@@ -8,13 +8,13 @@ module.exports = {
   theme: {
     extend: {
       keyframes: {
-        'slide-in': {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
-        }
+        "slide-in": {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
       animation: {
-        'slide-in': 'slide-in 0.3s ease-out',
+        "slide-in": "slide-in 0.3s ease-out",
       },
       colors: {
         "main-light": "var(--main-clr-light)",
@@ -31,6 +31,11 @@ module.exports = {
         "text-mutated": "var(--text-clr-mutated)",
         shadow: "var(--shadow-clr)",
         "shadow-plate": "var(--shadow-clr-plate)",
+        "neutral-9": "var(--neutral-9)",
+        "neutral-6": "var(--neutral-6)",
+        "neutral-7": "var(--neutral-7)",
+        "purple-main": "var(--purple-main)",
+        "purple-main-plate": "var(--purple-main-plate)",
       },
       fontFamily: {
         cairo: ["var(--font-cairo)"],

@@ -15,6 +15,11 @@
   --blue-clr: #006fff;
   --pink-clr: #f3e9ff;
   --pink-clr-light: #f1edf6;
+  --neutral-9: #0a0a0a;
+  --neutral-6: #404040;
+  --neutral-7: #262626;
+  --purple-main: #7b61ff;
+  --purple-main-plate: #6f55f3;
 
   --text-clr-stroke: #979797;
   --text-clr: #9d94a8;
@@ -51,10 +56,10 @@
     @apply font-semibold text-5xl md:text-6xl lg:text-7xl xl:text-[80px] text-second text-center mb-12;
   }
   .heading-sub {
-    @apply font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-[40px] text-second;
+    @apply font-semibold text-2xl md:text-3xl lg:text-4xl xl:text-[40px] text-second leading-tight;
   }
   .heading-h3 {
-    @apply font-semibold text-xl md:text-2xl;
+    @apply font-semibold text-xl md:text-2xl leading-tight;
   }
   .heading-h4 {
     @apply font-semibold md:text-lg;
@@ -85,5 +90,8 @@
 @layer utilities {
   .btn-secondary-makeMain {
     @apply bg-main hover:bg-main-pale;
+  }
+  .btn-secondary-makePurple {
+    @apply bg-purple-main hover:bg-purple-main-plate;
   }
 }

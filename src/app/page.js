@@ -1,3 +1,15 @@
+import "./(main)/home.css";
+import Image from "next/image";
+import MainLayout from "./(main)/layout";
+import Hero from "./components/Hero";
+import Services from "./components/Services";
+import FAQClient from "./components/FAQClient";
+import Reviews from "./components/Reviews";
+import Banner from "@/components/banner/Banner";
+import ChooseTemplate from "./components/ChooseTemplate";
+import OurApp from "./components/OurApp";
+import OurExperts from "./components/OurExperts";
+import LastJobs from "./components/LastJobs";
 import { FadeInUp } from "@/components/motion/MotionWrappers";
 import {
   cvTemplates,
@@ -5,21 +17,60 @@ import {
   ourServices,
   reviews,
 } from "@/assets/data/homeData";
-import MainLayout from "./(main)/layout";
-import FAQClient from "./components/FAQClient";
-import Reviews from "./components/Reviews";
-import Banner from "@/components/banner/Banner";
-import Image from "next/image";
-import Services from "./components/Services";
 
 export default function HomePage() {
   return (
-    <MainLayout className="space-y-[100px] mb-[200px]">
-      <section className="container mx-auto px-4 mt-[100px]">
+    <MainLayout className="home-page space-y-16 mb-[200px]">
+      <section className="container mx-auto px-4">
         <FadeInUp>
-          <h2 className="heading-sub mb-[50px] text-center">خدماتنا المميزة</h2>
+          <Hero />
+        </FadeInUp>
+      </section>
+      <section
+        className="pt-[60px] pb-[200px] rounded-[50px]"
+        style={{ backgroundColor: "rgba(123, 85, 215, 0.17)" }}
+      >
+        <div className="container mx-auto px-4">
+          <FadeInUp>
+            <h3 className="heading-section-name">قوالب سيرة ذاتية</h3>
+            <h2 className="heading-sub mb-[64px] text-center">
+              اختار القالب المناسب لك
+            </h2>
+          </FadeInUp>
+          <ChooseTemplate />
+        </div>
+      </section>
+      <section className="container mx-auto px-4">
+        <FadeInUp>
+          <h3 className="heading-section-name">مميزات</h3>
+          <h2 className="heading-sub mb-[50px] text-center">
+            كيف يمكن لمنصة عمل مساعدتك؟
+          </h2>
         </FadeInUp>
         <Services ourServices={ourServices} />
+      </section>
+      <section className="bg-pink-light">
+        <FadeInUp className="container mx-auto px-4">
+          <OurApp />
+        </FadeInUp>
+      </section>
+      <section className="container mx-auto px-4">
+        <FadeInUp>
+          <h3 className="heading-section-name">الخبراء</h3>
+          <h2 className="heading-sub mb-[64px] text-center">
+            يمكنك مراجعة السيرة الذاتية مع الخبراء في مجال التوظيف
+          </h2>
+        </FadeInUp>
+        <OurExperts />
+      </section>
+      <section className="container mx-auto px-4 py-[64px]">
+        <FadeInUp>
+          <h3 className="heading-section-name">الوظائف</h3>
+          <h2 className="heading-sub mb-[64px] text-center">
+            أخر الوظائف المعلن عنها
+          </h2>
+        </FadeInUp>
+        <LastJobs />
       </section>
       <section className="container mx-auto px-4">
         <FadeInUp>
