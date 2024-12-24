@@ -1,6 +1,6 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import CloseIcon from "@/assets/icons/DeleteIcon";
+import { HiX } from "react-icons/hi";
 
 export default function ConfirmModal({
   isOpen,
@@ -42,7 +42,7 @@ export default function ConfirmModal({
                 onClick={onClose}
                 className="text-text hover:text-red-500 transition-colors"
               >
-                <CloseIcon />
+                <HiX className="w-12 h-12 p-3 hover:rotate-180 transition-transform" />
               </button>
             </div>
 

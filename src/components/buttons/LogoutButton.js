@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAppDispatch } from "@/hooks/ReduxHooks";
 import { logout } from "@/store/features/auth/authThunks";
 import { toast } from "react-toastify";
+import { HiOutlineLogout } from "react-icons/hi";
 
 export default function LogoutButton({ className = "" }) {
   const dispatch = useAppDispatch();
@@ -19,8 +20,12 @@ export default function LogoutButton({ className = "" }) {
 
   return (
     <>
-      <button onClick={() => setShowLogoutModal(true)} className={className}>
+      <button
+        onClick={() => setShowLogoutModal(true)}
+        className={`flex gap-2 items-center justify-between ${className}`}
+      >
         تسجيل الخروج
+        <HiOutlineLogout />
       </button>
       {showLogoutModal && (
         <ConfirmModal

@@ -2,6 +2,7 @@ import Navbar from "@/components/navbar/Navbar";
 import SubNavbar from "./components/SubNavbar";
 import ResumeActions from "./components/ResumeActions";
 import ResumeBar from "../../templates/ResumeBar";
+import Loading from "./loading.js";
 
 export const metadata = {
   title: "تخصيص السيرة الذاتية | منصة عمل",
