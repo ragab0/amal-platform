@@ -59,7 +59,7 @@ const FormSelect = ({
           type="button"
           id={id}
           onClick={() => setIsOpen(!isOpen)}
-          className={`w-[350px] h-[60px] px-4 bg-white border rounded-[6px] transition-colors duration-200 
+          className={`form-select-button w-[350px] h-[60px] px-4 bg-white border rounded-[6px] transition-colors duration-200 
             focus:outline-none focus:ring-2 focus:ring-text focus:border-transparent flex items-center justify-between
             ${error ? "border-red-500" : "border-[#9D94A8]"}`}
           {...props}

@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
 import FormInput from "@/components/formInput/FormInput";
-import FormSelect from "@/app/cv/components/FormSelect";
+import FormSelect from "@/components/formSelect/FormSelect";
 import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormActions from "@/components/buttons/FormActions";

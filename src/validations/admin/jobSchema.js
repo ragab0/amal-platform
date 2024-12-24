@@ -52,7 +52,7 @@ export const jobSchema = yup.object().shape({
       .min(0, "يجب أن يكون الراتب أكبر من 0")
       .test(
         "is-greater",
-        "يجب أن يكون الحد الأقصى أكبر أو يساوي من الحد الأدنى",
+        "يجب أن يكون الحد الأقصى أكبر من أو يساوي الحد الأدنى",
         function (value) {
           const { from } = this.parent;
           return !from || !value || value >= from;

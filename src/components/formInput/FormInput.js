@@ -43,8 +43,8 @@ export default function FormInput({
             transition-all duration-300 ease-out focus:outline-none focus:ring-4 disabled:cursor-not-allowed
             ${
               error
-                ? "border-red-500 text-red-500 focus:border-red-500 focus:ring-[rgba(220,53,69,0.25)]"
-                : "border-gray-300 text-[#495057] focus:ring-[rgba(0,123,255,0.25)]  hover:border-gray-400"
+                ? "form-error border-red-500 text-red-500 focus:border-red-500 focus:ring-[rgba(220,53,69,0.25)]"
+                : "border-gray-300 hover:border-gray-400 text-[#495057] focus:ring-[rgba(0,123,255,0.25)]"
             } 
           ${inpClassName}
           `}

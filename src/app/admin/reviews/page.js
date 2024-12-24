@@ -122,8 +122,8 @@ export default function ReviewsPage() {
                 register={register}
                 error={errors.comment?.message}
                 must={true}
-                textarea
-                rows={4}
+                // textarea
+                // rows={4}
               />
             </div>
 

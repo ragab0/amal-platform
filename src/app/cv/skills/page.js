@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import { skillsSchema } from "@/validations/skills";
 import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import FormInput from "@/components/formInput/FormInput";
-import FormSelect from "@/app/cv/components/FormSelect";
+import FormSelect from "@/components/formSelect/FormSelect";
 import DeleteIcon from "@/assets/icons/DeleteIcon";
 import EditIcon from "@/assets/icons/EditIcon";
 

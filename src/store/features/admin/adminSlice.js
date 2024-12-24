@@ -99,9 +99,11 @@ const adminSlice = createSlice({
         state.jobs.error = null;
       })
       .addCase(fetchJobs.fulfilled, (state, { payload }) => {
+        console.log(payload, "%%%%%%%%%%%%%%");
+
         state.jobs.isInitialized = true;
         state.jobs.loading = false;
-        state.jobs.results = payload.result?.list;
+        state.jobs.results = payload.results;
       })
       .addCase(fetchJobs.rejected, (state, { payload }) => {
         state.jobs.isInitialized = true;

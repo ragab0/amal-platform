@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Card Styles */
+
+/* Section & Card Styles */
+.admin-panel .admin-section {
+  @apply container px-6 mx-auto;
+}
+.admin-panel .admin-card {
+  @apply px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800;
+}
+
+/* Table styles */
+.admin-panel table {
+  @apply w-full;
+}
+.admin-panel table thead tr {
+  @apply text-xs font-semibold tracking-wide text-right text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800;
+}
+.admin-panel table th,
+.admin-panel table td {
+  @apply px-4 py-3;
+}
+.admin-panel table tbody {
+  @apply bg-white divide-y dark:divide-gray-700 dark:bg-gray-800;
+}
+.admin-panel table tbody tr {
+  @apply text-gray-700 dark:text-gray-400;
+}
+
+/* Form Styles */
+.admin-panel input:not(.form-error),
+.admin-panel textarea,
+.admin-panel select,
+.admin-panel .form-select-button {
+  border-color: transparent;
+  @apply bg-gray-700  text-gray-400 border-gray-600 hover:border-gray-500;
+}
+
+.admin-panel input.form-error {
+  @apply bg-gray-700;
+}
+
+/* Button Styles */
+.admin-panel .admin-btn-primary {
+  @apply px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-black focus:outline-none focus:ring-2;
+}
+
+.admin-panel .admin-btn-secondary {
+  @apply px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400;
+}
+
+.admin-panel .admin-btn-danger {
+  @apply px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500;
+}
+
+/* Animation Classes */
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+.slide-out-right {
+  animation: slideOutRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
