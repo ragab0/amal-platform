@@ -21,7 +21,7 @@ export default function SearchForm() {
   return (
     <form
       onSubmit={handleSubmit(submitHandler)}
-      className="flex gap-[70px] w-full"
+      className="flex max-lg:flex-col gap-x-[70px] gap-y-[10px] w-full"
     >
       <div className="relative flex-grow">
         <FormInput
@@ -45,7 +45,10 @@ export default function SearchForm() {
           spaceBlock={false}
         />
       </div>
-      <button type="submit" className="btn-secondary w-[300px] rounded-[6px] ">
+      <button
+        type="submit"
+        className="min-w-[25%] btn-secondary max-lg:w-full rounded-[6px] "
+      >
         بحث
       </button>
     </form>

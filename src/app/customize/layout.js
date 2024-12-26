@@ -33,7 +33,7 @@ export default function Layout({ children }) {
     <div className="bg-second">
       <Navbar />
       <SubNavbar />
-      <main className="grid grid-cols-[auto_1fr_auto] gap-4 bg-inherit">
+      <main className="flex flex-col-reverse xl:grid xl:grid-cols-[1fr_2fr_1fr] gap-4 bg-inherit">
         <section className="bg-white">
           <ResumeActions />
         </section>

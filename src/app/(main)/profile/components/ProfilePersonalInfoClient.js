@@ -45,7 +45,7 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
   return (
     <>
       <header
-        className="flex justify-between items-center mb-[100px]"
+        className="flex max-md:flex-col gap-y-4 justify-between items-center mb-[100px]"
         style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
       >
         <FadeInUp>{children}</FadeInUp>
@@ -63,7 +63,7 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
               onClick={
                 isEditing ? handleSubmit(onSubmit) : () => setIsEditing(true)
               }
-              className="btn-primary"
+              className="btn-primary max-md:py-3 max-md:px-6"
             >
               {isEditing ? "حفظ" : "تعديل الملف الشخصي"}
             </button>
@@ -79,7 +79,7 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
           <FadeInUp
             key={input.name}
             delay={0.6 + index * 0.2}
-            className={index < 2 ? "w-[calc(50%-10px)]" : "w-full"}
+            className={index < 2 ? "md:w-[calc(50%-10px)] w-full" : "w-full"}
           >
             <FormInput
               label={input.label}

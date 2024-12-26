@@ -38,7 +38,7 @@ export default function NavBtns() {
   // </button>
 
   return (
-    <div className="flex justify-center max-md:flex-col-reverse gap-[60px] mt-[60px] mb-[120px] clear-both">
+    <div className="flex justify-center max-md:flex-col-reverse gap-x-[60px] gap-y-2 mt-[60px] mb-[120px] clear-both">
       <button
         type="button"
         className={`btn-secondary-outline mx-0 min-w-[200px] max-md:w-full

@@ -13,7 +13,7 @@ export default function ProfileMenu({ menuItems }) {
         <Link
           key={item.id}
           href={item.href}
-          className={`block text-xl mb-6 cursor-pointer hover:text-main transition-colors ${
+          className={`text-large block mb-6 cursor-pointer hover:text-main transition-colors ${
             pathname === item.href ? "text-main font-bold" : "font-medium"
           }`}
         >

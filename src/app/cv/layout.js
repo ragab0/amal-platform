@@ -16,9 +16,13 @@ export const metadata = {
 
 export default function CVLayout({ children }) {
   return (
-    <div className="cv-layout flex w-full gap-y-4 gap-x-10 bg-gray-50">
+    <div className="cv-layout flex max-lg:flex-col w-full gap-4 bg-gray-50 max-lg:pb-[50px]">
       {/* side one */}
-      <aside className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-main py-10 overflow-y-auto">
+      <aside
+        className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-main py-10 overflow-y-auto
+      max-xl:fixed z-10
+      "
+      >
         <div>
           <div className="flex justify-center mb-14">
             <Logo />
@@ -28,12 +32,12 @@ export default function CVLayout({ children }) {
       </aside>
       <CVDataProvider>
         {/* main content of current page */}
-        <main className="flex-1">
+        <main className="flex-1 px-5">
           {children}
           <NavBtns />
         </main>
         {/* third side */}
-        <section className="flex-1 sticky top-4 h-[calc(100vh-4rem)] p-5 ps-0">
+        <section className="flex-1 sticky top-4 h-[calc(100vh-4rem)] p-5 max-lg:min-h-[750px] max-lg:grid">
           <ResumeBar />
         </section>
       </CVDataProvider>

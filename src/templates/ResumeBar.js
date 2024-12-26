@@ -8,7 +8,7 @@ export default function ResumeBar() {
 
   return (
     <div className="resume-bar h-full">
-      <div className="w-full h-full rounded-lg shadow-sm mb-4">
+      <div className="w-full h-full rounded-lg shadow-md mb-4">
         <PDFViewer width="100%" height="100%" className="rounded-lg">
           <Template1 data={myCV} />
         </PDFViewer>

@@ -49,7 +49,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
   return (
     <>
       <header
-        className="flex justify-between items-center mb-[100px]"
+        className="flex max-md:flex-col gap-y-4 justify-between items-center mb-[100px]"
         style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
       >
         <FadeInUp>{children}</FadeInUp>
@@ -69,7 +69,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
                   ? handleSubmit(submitHandler)
                   : () => setIsEditing(true)
               }
-              className="btn-primary"
+              className="btn-primary max-md:py-3 max-md:px-6"
             >
               {isEditing ? "حفظ" : "تعديل معلومات الحساب"}
             </button>

@@ -17,13 +17,11 @@ export default function ProfileLayout({ children }) {
           <h1 className="heading-big">الإعدادات</h1>
         </FadeInUp>
       </header>
-      <div className="flex gap-[50px] p-8">
+      <div className="flex max-lg:flex-col gap-[50px] p-8">
         {/* First Side - Profile Overview */}
-        <FadeInUp className="w-[25%] shadow-[6px_6px_20px_#00000029] border border-[#E6E6E6] rounded-[8px] px-6 py-10">
+        <FadeInUp className="lg:w-[25%] shadow-sm border border-[#E6E6E6] rounded-[8px] px-6 py-10">
           <FadeInUp delay={0.2}>
-            <h2 className="text-[32px] font-bold text-[#9D94A8] mb-10">
-              الملف الشخصي
-            </h2>
+            <h2 className="heading-sub-small mb-10">الملف الشخصي</h2>
           </FadeInUp>
           <FadeInUp delay={0.4}>
             <ProfileImg />
@@ -36,7 +34,7 @@ export default function ProfileLayout({ children }) {
           </FadeInUp>
         </FadeInUp>
         {/* Second Side - Dynamic Side */}
-        <FadeInUp className="flex-1 bg-white shadow-[7px_7px_20px_#00000029] border border-[#E6E6E6] rounded-[8px] px-16 py-10">
+        <FadeInUp className="flex-1 bg-white shadow-sm border border-[#E6E6E6] rounded-[8px] px-4 md:px-16 py-10">
           <FadeInUp delay={1}>{children}</FadeInUp>
         </FadeInUp>
       </div>

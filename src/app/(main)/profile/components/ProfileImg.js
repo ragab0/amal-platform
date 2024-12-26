@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Modal from "@/components/modals/ConfirmModal";
 
@@ -46,7 +46,7 @@ export default function ProfileImg() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="relative mx-auto w-[218px] h-[218px] bg-[#33D38E] bg-opacity-25 rounded-full flex items-center justify-center mb-4 group">
+      <div className="relative mx-auto h-[150px] xl:h-[218px] aspect-square bg-[#33D38E] bg-opacity-25 rounded-full flex items-center justify-center mb-4 group">
         {profileImage || pendingImage ? (
           <div
             className="absolute inset-0 rounded-full overflow-hidden group"

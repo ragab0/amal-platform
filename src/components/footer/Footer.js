@@ -1,3 +1,4 @@
+import "./Footer.css";
 import Link from "next/link";
 import CcMasterCardIco from "@/assets/icons/CcMasterCardIco";
 import CcPaypalIco from "@/assets/icons/CcPaypalIco";
@@ -6,8 +7,8 @@ import FFacebookIco from "@/assets/icons/FFacebookIco";
 import FInstaIco from "@/assets/icons/FInstaIco";
 import FTwitterIco from "@/assets/icons/FTwitterIco";
 import FLinkedinIco from "@/assets/icons/FLinkedinIco";
-import CopyrightIco from "@/assets/icons/CopyrightIco";
 import LogoIco from "@/assets/icons/LogoIco";
+// import CopyrightIco from "@/assets/icons/CopyrightIco";
 
 const footerLinks = [
   { title: "من نحن", href: "/about" },
@@ -39,13 +40,13 @@ export default function Footer() {
     <footer className="w-full">
       <div className="bg-second pt-16 pb-40">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 max-md:text-center max-md:content-center md:grid-cols-2 lg:grid-cols-3 gap-8 gap-y-32">
             {/* First Column */}
-            <div className="flex flex-col">
-              <div className="w-[151px] h-[150px] mb-8">
+            <div className="flex flex-col max-md:items-center">
+              <Link href="/" className="mb-8">
                 <LogoIco className="text-white" />
-              </div>
-              <h3 className="text-white text-[22px] font-medium mb-8">
+              </Link>
+              <h3 className="heading-h3 text-white  font-medium mb-8">
                 واجهتك لإنشاء سيرتك الذاتية
               </h3>
               <ul className="flex flex-col gap-[30px]">
@@ -63,10 +64,8 @@ export default function Footer() {
             </div>
 
             {/* Second Column */}
-            <div className="flex flex-col">
-              <h2 className="text-white text-[40px] font-bold mb-8">
-                التواصــــل
-              </h2>
+            <div className="flex flex-col max-md:items-center">
+              <h2 className="heading-sub text-white mb-8">التواصــــل</h2>
               <ul className="flex flex-col gap-[30px] mb-12">
                 {contactLinks.map((link, index) => (
                   <li key={index}>
@@ -79,7 +78,7 @@ export default function Footer() {
                   </li>
                 ))}
               </ul>
-              <h3 className="text-white text-[24px] font-medium mb-8">
+              <h3 className="heading-h3 text-white  font-medium mb-8">
                 تابعنا على منصات التواصل الاجتماعي
               </h3>
               <div className="flex gap-4">
@@ -96,14 +95,12 @@ export default function Footer() {
             </div>
 
             {/* Third Column */}
-            <div className="flex flex-col">
-              <h2 className="text-white text-[40px] font-bold mb-8">
-                وسائــــل الدفع
-              </h2>
+            <div className="flex flex-col max-md:items-center">
+              <h2 className="heading-sub text-white mb-8">وسائــــل الدفع</h2>
               <div className="flex gap-6">
                 {paymentIcons.map(({ Icon }, index) => (
                   <div key={index} className="flex items-center justify-center">
-                    <Icon />
+                    <Icon className="max-sm: w-[70px] h-auto" />
                   </div>
                 ))}
               </div>
@@ -115,8 +112,10 @@ export default function Footer() {
       {/* Copyright Section */}
       <div className="bg-main py-5">
         <div className="container mx-auto px-4">
-          <p className="text-white text-[22px] text-center flex items-center justify-center gap-2">
-            <CopyrightIco />
+          <p className="text-white text-[22px] text-center ">
+            <span className="font-bold text-3xl leading-[0] align-middle">
+              &copy;
+            </span>{" "}
             حقوق النشر محفوظة لدى عمل
           </p>
         </div>

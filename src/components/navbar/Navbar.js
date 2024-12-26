@@ -1,4 +1,5 @@
 "use client";
+import "./Navbar.css";
 import { useState } from "react";
 import { FaUserCircle } from "react-icons/fa";
 import { useAppSelector } from "@/hooks/ReduxHooks";
@@ -12,9 +13,11 @@ import Image from "next/image";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, isAuthenticated, loading } = useAppSelector(
-    (state) => state.auth
-  );
+  const {
+    user = {},
+    isAuthenticated,
+    loading,
+  } = useAppSelector((state) => state.auth);
 
   const AuthButtonsSkeleton = () => (
     <>
@@ -28,15 +31,27 @@ export default function Navbar() {
       <div className="container mx-auto px-4 py-[10px] flex gap-2 items-center justify-between">
         {/* Logo */}
         <div className="flex-shrink-0">
-          <Logo isLittle={true} />
+          {user.role === "admin" ? (
+            <Link
+              href="/admin"
+              className="outline-bottom-hover text-white font-bold text-[1.25rem] flex items-center gap-1 py-2"
+            >
+              <FaUserCircle />
+              لوحة التحكم
+            </Link>
+          ) : (
+            <Logo isLittle={true} />
+          )}
         </div>
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center justify-center flex-1">
-          {navLinks.map((link) => (
+        <div className="navbar-items hidden lg:flex items-center justify-center flex-1">
+          {navLinks.map((link, i) => (
             <Link
-              key={link.name}
+              key={i}
               href={link.href}
-              className="mx-4 text-white hover:text-gray-200 transition-colors text-lg"
+              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 text-white hover:opacity-90 transition-all duration-300 text-lg
+                ${i === 0 ? "outline-bottom" : ""}
+                `}
             >
               {link.name}
             </Link>
@@ -88,8 +103,8 @@ export default function Navbar() {
                 <div className="absolute left-0 pt-2">
                   <div className="rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
                     <ul className="py-1">
-                      {userMenuItems.map((item) => (
-                        <li key={item.id}>
+                      {userMenuItems.map((item, i) => (
+                        <li key={i}>
                           <Link
                             href={item.href}
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -137,13 +152,13 @@ export default function Navbar() {
       </div>
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden absolute top-full left-0 w-full bg-main border-t border-white/20 text-white">
+        <div className="lg:hidden z-[1000] absolute top-full left-0 w-full bg-main border-t border-white/20 text-white">
           <div className="px-4 py-2">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="block py-2  hover:text-gray-200 transition-colors  text-lg "
+                className="block py-2 hover:text-gray-200 transition-colors text-lg "
               >
                 {link.name}
               </Link>

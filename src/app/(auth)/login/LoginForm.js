@@ -72,8 +72,8 @@ export default function LoginForm() {
             </button>
           </form>
         </div>
+        <AuthSocialOptions pageName="login" />
       </div>
-      <AuthSocialOptions pageName="login" />
     </>
   );
 }

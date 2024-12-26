@@ -16,10 +16,9 @@ import {
 
 const initialState = {
   user: {},
-  isAuthenticated: false,
+  isAuthenticated: true,
   loading: false,
   error: null,
-  verifyPyaload: {},
 };
 
 const authSlice = createSlice({

@@ -93,18 +93,20 @@ export default function HomePage() {
       </section>
       <section className="container mx-auto px-4">
         <Banner title="انطلق في تصميم سيرتك الذاتية المميزة !وأجعل فرصك أقوى">
-          <div className="grid sm:grid-cols-2 gap-1 mx-auto">
+          <div className="flex-shrink-0 grid grid-cols-2 gap-1 mx-auto">
             {cvTemplates.map((template, index) => (
               <div
                 key={index}
-                className={`w-[170px] h-[240px] border-2 border-white rounded-[4px] overflow-hidden`}
+                className={`max-w-[170px] max-h-[240px] border-2 border-white rounded-[4px] overflow-hidden`}
               >
-                <Image
-                  src={template.src}
-                  alt={template.alt}
-                  width={170}
-                  height={240}
-                />
+                {template.src && (
+                  <Image
+                    src={template.src}
+                    alt={template.alt}
+                    width={170}
+                    height={240}
+                  />
+                )}
               </div>
             ))}
           </div>

@@ -6,8 +6,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const NODE_ENV = process.env.NODE_ENV;
 
 export async function getInitialAuthState() {
-  console.log("1111111111111");
-
   const cookieStore = await cookies();
   try {
     const token = cookieStore.get("jwt")?.value;
@@ -48,6 +46,6 @@ export async function getInitialAuthState() {
       },
     };
   } finally {
-    console.log("EEEEEEEEEEEEEEEEEEe");
+    console.log("EEEEEEEEEEEEEEEEEEe Failed to fetch data on server");
   }
 }

@@ -1,11 +1,13 @@
 import { lastJobs } from "@/assets/data/homeData";
 import Office from "@/assets/icons/Office";
+import Link from "next/link";
 
 export default function LastJobs() {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-10">
+    <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-10">
       {lastJobs.map(({ jobName, companyName, location, desc }, i) => (
-        <article
+        <Link
+          href="#"
           key={i}
           className="p-4 pb-8 border rounded-2xl text-neutral-6 !leading-relaxed"
         >
@@ -18,7 +20,7 @@ export default function LastJobs() {
             </div>
           </div>
           <p className="md:text-xl !leading-relaxed font-medium">{desc}</p>
-        </article>
+        </Link>
       ))}
     </div>
   );

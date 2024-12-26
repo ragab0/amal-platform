@@ -1,0 +1,8 @@
+.outline-bottom-hover:hover,
+.outline-bottom {
+  @apply relative transition-all duration-300;
+}
+.outline-bottom-hover:hover::after,
+.outline-bottom::after {
+  @apply content-[''] absolute bottom-[12px] left-0 h-[8px] w-full bg-green-300/50 transition-all;
+}

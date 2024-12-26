@@ -83,7 +83,10 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="container px-6 mx-auto">
+    <div
+      className="container px-6 mx-auto"
+      style={{ pointerEvents: "none", opacity: 0.5 }}
+    >
       <h2 className="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200">
         إدارة التقييمات
       </h2>

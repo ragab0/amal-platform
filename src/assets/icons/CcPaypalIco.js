@@ -6,6 +6,7 @@ export default function CcPaypalIco(props) {
       height="60"
       fill="none"
       viewBox="0 0 90 60"
+      {...props}
     >
       <path
         fill="#fff"

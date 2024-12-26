@@ -8,6 +8,7 @@ export const navLinks = [
 ];
 
 export const userMenuItems = [
-  { id: 1, href: "/profile", label: "الملف الشخصي" },
-  { id: 2, href: "/cv", label: "السيرة الذاتية" },
+  { href: "/profile", label: "الملف الشخصي" },
+  { href: "/cv", label: "السيرة الذاتية" },
+  { href: "/customize", label: "تخصيص السيرة الذاتية" },
 ];
