@@ -1,28 +1,19 @@
 import { NextResponse } from "next/server";
 
 export const authRoutes = {
-  public: [
-    "/login",
-    "/signup",
-    "/forgotPassword",
-    "/resetPassword",
-    // "/auth/callback",
-  ],
+  public: ["/login", "/signup", "/forgotPassword", "/resetPassword"], // "/auth/callback",
   protected: ["/profile", "/cv", "/customize", "/notifications", "/dashboard"],
 };
 
 export function middleware(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("jwt")?.value;
-
   function matchesPath(paths, currentPath) {
     return paths.some((path) => currentPath.startsWith(path));
   }
 
   const isPublicPath = matchesPath(authRoutes.public, pathname);
   const isProtectedPath = matchesPath(authRoutes.protected, pathname);
-
-  console.log("MIDDLEWAREEEE TOKEN:", token);
 
   if (isProtectedPath && !token) {
     const loginUrl = new URL("/login", request.url);

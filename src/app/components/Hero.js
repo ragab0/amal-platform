@@ -4,7 +4,14 @@ import Image from "next/image";
 export default function Hero() {
   return (
     <div className="grid md:grid-cols-2 md:gap-[50px] pt-[75px]">
-      <Image alt="Hero Image" src={HeroImg} width={646} height={586} />
+      <Image
+        alt="Hero Image"
+        src={HeroImg}
+        width={646}
+        height={586}
+        className="w-full max-w-[646px] mx-auto"
+        priority
+      />
       <div className="flex flex-col justify-start mt-10">
         <h1 className="heading-section-name">منصة عمل</h1>
         <h2 className="heading-sub mb-[50px] text-center max-w-lg mx-auto leading-tight font-bold">

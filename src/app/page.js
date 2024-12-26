@@ -105,6 +105,7 @@ export default function HomePage() {
                     alt={template.alt}
                     width={170}
                     height={240}
+                    className="w-auto"
                   />
                 )}
               </div>

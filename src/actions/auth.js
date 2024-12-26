@@ -5,7 +5,10 @@ import { cookies } from "next/headers";
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const NODE_ENV = process.env.NODE_ENV;
 
+// Using React cache to memoize the auth state
 export async function getInitialAuthState() {
+  console.log("INSIDE SERVER AUTH");
+
   const cookieStore = await cookies();
   try {
     const token = cookieStore.get("jwt")?.value;
@@ -37,6 +40,8 @@ export async function getInitialAuthState() {
       },
     };
   } catch (error) {
+    console.log("Failed to get initial data", error);
+
     return {
       auth: {
         user: {},
@@ -45,7 +50,5 @@ export async function getInitialAuthState() {
         error: error.response?.data?.result || null,
       },
     };
-  } finally {
-    console.log("EEEEEEEEEEEEEEEEEEe Failed to fetch data on server");
   }
 }

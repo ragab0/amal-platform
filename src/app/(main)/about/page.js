@@ -47,6 +47,7 @@ export default function AboutPage() {
               alt="About Banner"
               width={540}
               height={540}
+              className="w-auto"
             />
           </Banner>
         </div>

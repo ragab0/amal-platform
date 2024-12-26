@@ -4,6 +4,7 @@ import { Cairo } from "next/font/google";
 import { getInitialAuthState } from "@/actions/auth";
 import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
+import LoadingWrapper from "@/components/LoadingWrapper";
 
 const cairo = Cairo({
   subsets: ["arabic"],
@@ -74,20 +75,22 @@ export default async function RootLayout({ children }) {
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
-          <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-            toastClassName="font-normal"
-          />
-          {children}
+          <LoadingWrapper>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+              toastClassName="font-normal"
+            />
+            {children}
+          </LoadingWrapper>
         </StoreProvider>
       </body>
     </html>
