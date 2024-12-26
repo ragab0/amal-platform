@@ -16,7 +16,7 @@ import {
 
 const initialState = {
   user: {},
-  isAuthenticated: true,
+  isAuthenticated: false,
   loading: false,
   error: null,
 };

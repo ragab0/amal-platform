@@ -100,7 +100,7 @@ export default function Navbar() {
                     <FaUserCircle className="h-14 w-14" />
                   )}
                 </button>
-                <div className="absolute left-0 pt-2">
+                <div className="absolute left-0 pt-2 z-50">
                   <div className="rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
                     <ul className="py-1">
                       {userMenuItems.map((item, i) => (
