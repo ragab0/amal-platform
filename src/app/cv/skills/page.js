@@ -1,368 +1,256 @@
 "use client";
-import { useRef, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { motion, AnimatePresence } from "framer-motion";
-import { v4 as uuidv4 } from "uuid";
-import { skillsSchema } from "@/validations/skills";
-import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
-import FormInput from "@/components/formInput/FormInput";
+import DraftEditor from "../components/draft/DraftEditor";
 import FormSelect from "@/components/formSelect/FormSelect";
-import DeleteIcon from "@/assets/icons/DeleteIcon";
-import EditIcon from "@/assets/icons/EditIcon";
+import FormInput from "@/components/formInput/FormInput";
+import ActionButtons from "@/components/buttons/ActionButtons";
+import AddButton from "@/components/buttons/AddButton";
+import { useForm, useFieldArray } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { updateCV } from "@/store/features/cvs/cvsThunks";
+import { toast } from "react-toastify";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { skillsSchema } from "@/validations/cv/skillsSchema";
+import { AnimatePresence } from "framer-motion";
+import { SkillCvPreviewCard } from "@/components/motion/MotionWrappers";
 
-const languageLevels = ["مبتدئ", "متوسط", "متقدم", "محترف"];
+const defaultSkills = {
+  description: "",
+  interests: "",
+  languages: [{}, {}],
+  softSkills: [{}, {}],
+};
 
-export default function Skills() {
-  const [skills, setSkills] = useState([]);
-  const [editingId, setEditingId] = useState(null);
-  const [showForm, setShowForm] = useState(true);
-  const pageRef = useRef(null);
+const defaultSkillsOptions = [
+  { name: "", levelText: "خبير", levelPercentage: 100 },
+  { name: "", levelText: "متقدم", levelPercentage: 80 },
+  { name: "", levelText: "متوسط", levelPercentage: 60 },
+  { name: "", levelText: "مبتدئ", levelPercentage: 40 },
+  { name: "", levelText: "معرفة سطحية", levelPercentage: 20 },
+  { name: "", levelText: "أخري", levelPercentage: 0 },
+];
+
+export default function SkillsPage() {
+  const dispatch = useAppDispatch();
+  const {
+    myCV: { allSkills = {} },
+    loading,
+  } = useAppSelector((state) => state.cvs);
 
   const {
-    register,
-    handleSubmit,
-    reset,
     control,
+    handleSubmit,
+    getValues,
+    register,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(skillsSchema),
     defaultValues: {
-      languages: [],
-      otherSkills: [],
+      description: allSkills.description || defaultSkills.description,
+      interests: allSkills.interests || defaultSkills.interests,
+      languages: allSkills.languages?.length
+        ? allSkills.languages
+        : defaultSkills.languages,
+      softSkills: allSkills.softSkills?.length
+        ? allSkills.softSkills
+        : defaultSkills.softSkills,
     },
   });
 
   const {
     fields: languageFields,
     append: appendLanguage,
+    insert: insertLanguage,
     remove: removeLanguage,
+    move: moveLanguage,
   } = useFieldArray({
     control,
     name: "languages",
   });
 
   const {
-    fields: otherSkillFields,
-    append: appendOtherSkill,
-    remove: removeOtherSkill,
+    fields: softSkillFields,
+    append: appendSoftSkill,
+    insert: insertSoftSkill,
+    remove: removeSoftSkill,
+    move: moveSoftSkill,
   } = useFieldArray({
     control,
-    name: "otherSkills",
+    name: "softSkills",
   });
 
-  function onSubmit(data) {
-    if (editingId) {
-      setSkills(
-        skills.map((skill) =>
-          skill.id === editingId ? { ...data, id: editingId } : skill
-        )
-      );
-      setEditingId(null);
+  async function onSubmit(data) {
+    // Handle percentage values based on selected skill level
+    const processSkills = (skills) =>
+      skills.map((skill) => {
+        const level = defaultSkillsOptions.find(
+          (l) => l.levelText === skill.levelText
+        );
+        return {
+          ...skill,
+          levelPercentage: level?.levelPercentage || 100,
+        };
+      });
+
+    const processedData = {
+      ...data,
+      languages: processSkills(data.languages),
+      softSkills: processSkills(data.softSkills),
+    };
+
+    const { payload, error } = await dispatch(
+      updateCV({
+        allSkills: processedData,
+      })
+    );
+
+    if (!error && payload?.status === "success") {
+      toast.success("تم حفظ المهارات بنجاح");
     } else {
-      setSkills([...skills, { ...data, id: uuidv4() }]);
-    }
-    reset();
-    setShowForm(false);
-  }
-
-  function handleDelete(id) {
-    setSkills(skills.filter((skill) => skill.id !== id));
-    if (skills.length === 1) {
-      setTimeout(() => {
-        setShowForm(true);
-      }, 300);
+      toast.error("فشل حفظ المهارات");
     }
   }
 
-  function handleEdit(skill) {
-    setEditingId(skill.id);
-    reset(skill);
-    setShowForm(true);
-  }
+  const handleCopy = (index, fieldName, insert) => {
+    const values = getValues(fieldName);
+    const targetValue = values[index];
 
-  function handleCancel() {
-    setEditingId(null);
-    reset();
-    setShowForm(false);
-  }
+    const copiedValue = {
+      ...targetValue,
+      name: targetValue.name || "",
+      levelText: targetValue.levelText || defaultSkillsOptions[0].levelText,
+      levelPercentage: targetValue.levelPercentage || 100,
+    };
+
+    insert(index + 1, copiedValue, { shouldFocus: true });
+  };
+
+  const handleMove = (index, direction, fieldName, move) => {
+    const values = getValues(fieldName);
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+
+    if (
+      (direction === "up" && index > 0) ||
+      (direction === "down" && index < values.length - 1)
+    ) {
+      move(index, newIndex);
+    }
+  };
+
+  const renderSkillField = (key, index, fieldName, remove, insert, move) => {
+    const currentValues = getValues(fieldName);
+    const currentSkill = currentValues[index];
+    const currentLevelText = currentSkill?.levelText || "";
+
+    return (
+      <SkillCvPreviewCard key={key}>
+        <FormInput
+          label={"الاسم"}
+          name={`${fieldName}.${index}.name`}
+          register={register}
+          error={errors[fieldName]?.[index]?.name?.message}
+          spaceBlock={false}
+        />
+        <FormSelect
+          label={"المستوى"}
+          name={`${fieldName}.${index}.levelText`}
+          register={register}
+          spaceBlock={false}
+          options={defaultSkillsOptions.map((option) => option.levelText)}
+          defaultOption={currentLevelText || "اختر المستوى"}
+        />
+        <ActionButtons
+          onDelete={() => remove(index)}
+          onCopy={() => handleCopy(index, fieldName, insert)}
+          onMoveDown={() => handleMove(index, "down", fieldName, move)}
+          onMoveUp={() => handleMove(index, "up", fieldName, move)}
+          isTwoColsNoEdit={true}
+          isFirst={index === 0}
+          isLast={index === getValues(fieldName).length - 1}
+        />
+      </SkillCvPreviewCard>
+    );
+  };
 
   return (
-    <div
-      className="flex flex-col items-center w-full max-w-[800px] mx-auto pointer-events-none opacity-30"
-      ref={pageRef}
-      // style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
-    >
-      <h1 className="heading-big mt">المهـــــــــــــــــارات</h1>
+    <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
+      <h1 className="heading-big">المهـــــــــــــــــارات</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
+        {/* Description Fields */}
+        <div className="space-y-8">
+          <DraftEditor
+            title="الوصف العام"
+            name="description"
+            control={control}
+            error={errors.description?.message}
+            placeholder="اكتب وصفاً عاماً عن مهاراتك..."
+          />
+          <DraftEditor
+            title="الاهتمامات"
+            name="interests"
+            control={control}
+            error={errors.interests?.message}
+            placeholder="اكتب عن اهتماماتك..."
+          />
+        </div>
+        {/* Separator */}
+        <div className="w-full h-px bg-gray-200 space-8"></div>
+        {/* Skills Fields */}
+        <div className="space-y-8">
+          {/* Languages */}
+          <div className="space-y-4">
+            <h3 className="heading-h3 font-bold text-center text-second">
+              اللغـــــــــــات
+            </h3>
+            <AnimatePresence mode="sync">
+              {languageFields.map((field, index) =>
+                renderSkillField(
+                  field.id,
+                  index,
+                  "languages",
+                  removeLanguage,
+                  insertLanguage,
+                  moveLanguage
+                )
+              )}
+            </AnimatePresence>
+            <AddButton
+              text="اضافة لغة جديدة"
+              onClick={() => appendLanguage({})}
+              isLight={true}
+              className=" relative z-0"
+            />
+          </div>
 
-      <AnimatePresence mode="wait">
-        {/* Skills Form */}
-        {showForm || skills.length === 0 ? (
-          <motion.div
-            key="form"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="w-full"
-          >
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="w-full space-y-8"
-            >
-              {/* Description field */}
-              <MarkdownEditor
-                must={true}
-                label="الوصف"
-                name="description"
-                control={control}
-                error={errors.description?.message}
-                placeholder="اكتب وصفاً عن مهاراتك..."
-              />
-
-              {/* Languages Section */}
-              <div className="space-y-4">
-                <h3 className="heading-h3 font-semibold">اللغــــــــات</h3>
-                <div className="space-y-4">
-                  {languageFields.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="grid grid-cols-2 gap-[10%] items-end"
-                    >
-                      <FormInput
-                        must={true}
-                        label="اللغة"
-                        name={`languages.${index}.language`}
-                        register={register}
-                        error={errors.languages?.[index]?.language?.message}
-                      />
-                      <div className="flex gap-4">
-                        <FormSelect
-                          must={true}
-                          label="المستوى"
-                          name={`languages.${index}.level`}
-                          register={register}
-                          error={errors.languages?.[index]?.level?.message}
-                          options={languageLevels}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeLanguage(index)}
-                          className="text-text hover:text-red-500 transition-colors h-[50px]"
-                        >
-                          <DeleteIcon />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => appendLanguage({ language: "", level: "" })}
-                  className="btn-secondary-outline w-full"
-                >
-                  إضافة لغة
-                </button>
-              </div>
-
-              {/* Interests Section */}
-              <div className="space-y-4">
-                <MarkdownEditor
-                  label="الاهتمامات"
-                  name="interests"
-                  control={control}
-                  error={errors.interests?.message}
-                  placeholder="اكتب عن اهتماماتك..."
-                />
-              </div>
-
-              {/* Other Skills Section */}
-              <div className="space-y-4">
-                <h3 className="heading-h3 font-semibold">مهــــارات أخرى</h3>
-                <div className="space-y-4">
-                  {otherSkillFields.map((field, index) => (
-                    <div
-                      key={field.id}
-                      className="grid grid-cols-2 gap-[10%] items-end"
-                    >
-                      <FormInput
-                        must={true}
-                        label="المهارة"
-                        name={`otherSkills.${index}.skill`}
-                        register={register}
-                        error={errors.otherSkills?.[index]?.skill?.message}
-                      />
-                      <div className="flex gap-4">
-                        <FormSelect
-                          must={true}
-                          label="المستوى"
-                          name={`otherSkills.${index}.level`}
-                          register={register}
-                          error={errors.otherSkills?.[index]?.level?.message}
-                          options={languageLevels}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeOtherSkill(index)}
-                          className="text-text hover:text-red-500 transition-colors h-[50px]"
-                        >
-                          <DeleteIcon />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => appendOtherSkill({ skill: "", level: "" })}
-                  className="btn-secondary-outline w-full"
-                >
-                  إضافة مهارة
-                </button>
-              </div>
-
-              {/* Form Actions */}
-              <div className="flex justify-center gap-4">
-                <button type="submit" className="btn-secondary w-full">
-                  {editingId ? "تحديث المهارات" : "إضافة المهارات"}
-                </button>
-                {skills.length > 0 && !editingId && (
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn-secondary-outline w-full"
-                  >
-                    إلغاء
-                  </button>
-                )}
-                {editingId && (
-                  <button
-                    type="button"
-                    onClick={handleCancel}
-                    className="btn-secondary-outline w-full"
-                  >
-                    إلغاء
-                  </button>
-                )}
-              </div>
-            </form>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="cards"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="w-full"
-          >
-            <div className="w-full space-y-6">
-              <AnimatePresence>
-                {skills.map((skill, index) => (
-                  <motion.div
-                    key={skill.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-                    className="bg-white border border-text rounded-[6px] p-[24px_40px]"
-                  >
-                    {/* Header */}
-                    <div className="flex justify-between items-center mb-3 pb-5 border-b border-text">
-                      <h3 className="heading-h3 font-semibold">المهارات</h3>
-                      <div className="flex items-center gap-4">
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ duration: 0.2 }}
-                          onClick={() => handleDelete(skill.id)}
-                          className="text-text hover:text-red-500 transition-colors"
-                        >
-                          <DeleteIcon />
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.1 }}
-                          transition={{ duration: 0.2 }}
-                          onClick={() => handleEdit(skill)}
-                          className="text-text hover:text-green-500 transition-colors"
-                        >
-                          <EditIcon />
-                        </motion.button>
-                      </div>
-                    </div>
-
-                    {/* Info */}
-                    <div className="space-y-6">
-                      <div>
-                        <h4 className="heading-h4 font-semibold mb-2">الوصف</h4>
-                        <MDPreview source={skill.description} />
-                      </div>
-
-                      {/* Languages */}
-                      {skill.languages?.length > 0 && (
-                        <div>
-                          <h4 className="heading-h4 font-semibold mb-2">
-                            اللغات
-                          </h4>
-                          <div className="space-y-2">
-                            {skill.languages.map((lang, idx) => (
-                              <div
-                                key={idx}
-                                className="flex justify-between text-text"
-                              >
-                                <span>{lang.language}</span>
-                                <span>{lang.level}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Interests */}
-                      <div>
-                        <h4 className="heading-h4 font-semibold mb-2">
-                          الاهتمامات
-                        </h4>
-                        <MDPreview source={skill.interests} />
-                      </div>
-
-                      {/* Other Skills */}
-                      {skill.otherSkills?.length > 0 && (
-                        <div>
-                          <h4 className="heading-h4 font-semibold mb-2">
-                            مهارات أخرى
-                          </h4>
-                          <div className="space-y-2">
-                            {skill.otherSkills.map((other, idx) => (
-                              <div
-                                key={idx}
-                                className="flex justify-between text-text"
-                              >
-                                <span>{other.skill}</span>
-                                <span>{other.level}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </div>
-
-            {/* Add Skills Button */}
-            <button
-              onClick={() => {
-                setEditingId(null);
-                reset();
-                setShowForm(true);
-              }}
-              className="btn-secondary w-full mt-8"
-            >
-              إضافة مهارات جديدة
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {/* Soft Skills */}
+          <div className="space-y-4">
+            <h3 className="heading-h3 font-bold text-center text-second">
+              المهارات الشخصية
+            </h3>
+            <AnimatePresence mode="sync">
+              {softSkillFields.map((field, index) =>
+                renderSkillField(
+                  field.id,
+                  index,
+                  "softSkills",
+                  removeSoftSkill,
+                  insertSoftSkill,
+                  moveSoftSkill
+                )
+              )}
+            </AnimatePresence>
+            <AddButton
+              text="اضافة مهارة جديدة"
+              onClick={() => appendSoftSkill({})}
+              isLight={true}
+              className=" relative z-0"
+            />
+          </div>
+        </div>
+        {/* Submit Button */}
+        <button type="submit" className="btn-primary w-full !mt-16 block">
+          حفظ المهارات
+        </button>
+      </form>
     </div>
   );
 }

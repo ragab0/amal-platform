@@ -7,6 +7,8 @@ import Skills from "@/assets/icons/sidebar/SkillsIcon";
 import Education from "@/assets/icons/sidebar/EducationIcon";
 import About from "@/assets/icons/sidebar/AboutIcon";
 import References from "@/assets/icons/sidebar/ReferencesIcon";
+import { FaBook, FaCertificate } from "react-icons/fa";
+import { RiOrganizationChart, Book } from "@remixicon/react";
 
 // import the icons in client-side and text on the server-side for better SEO;
 const icons = {
@@ -15,6 +17,8 @@ const icons = {
   Skills,
   Education,
   About,
+  Courses: FaCertificate,
+  VolunteerWork: RiOrganizationChart,
   References,
 };
 

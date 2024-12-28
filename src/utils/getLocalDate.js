@@ -5,6 +5,10 @@
  */
 export default function getLocalDate(date) {
   if (!date) return undefined;
-  const d = new Date(date);
-  return d.toISOString().split('T')[0];
+  try {
+    const d = new Date(date);
+    return d.toISOString().split("T")[0];
+  } catch (error) {
+    return null;
+  }
 }

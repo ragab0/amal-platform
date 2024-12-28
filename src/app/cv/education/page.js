@@ -3,17 +3,19 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { educationSchema } from "@/validations/education";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
+import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 import FormInput from "@/components/formInput/FormInput";
 import FormSelect from "@/components/formSelect/FormSelect";
-import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
-import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
+import DraftEditor from "../components/draft/DraftEditor";
+import DraftPreview from "../components/draft/DraftPreview";
+import getLocalDate from "@/utils/getLocalDate";
 
 const degreeOptions = [
   "دكتوراه",
@@ -58,12 +60,42 @@ export default function Education() {
 
   function handleEdit(edu) {
     setEditingId(edu._id);
-    reset(edu);
+    reset({
+      ...edu,
+      graduationDate: getLocalDate(edu.graduationDate),
+    });
   }
 
   function handleCancel() {
     setEditingId(null);
     reset();
+  }
+
+  function handleCopy(education) {
+    const newEducation = { ...education, _id: undefined };
+    const updatedEducations = [
+      ...educations.slice(0, educations.indexOf(education) + 1),
+      newEducation,
+      ...educations.slice(educations.indexOf(education) + 1),
+    ];
+
+    dispatch(updateCV({ educations: updatedEducations }));
+  }
+
+  function handleMove(direction, currentIndex) {
+    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    if (
+      (direction === "up" && currentIndex > 0) ||
+      (direction === "down" && currentIndex < educations.length - 1)
+    ) {
+      const updatedEducations = [...educations];
+      const temp = updatedEducations[currentIndex];
+      updatedEducations[currentIndex] = updatedEducations[newIndex];
+      updatedEducations[newIndex] = temp;
+
+      dispatch(updateCV({ educations: updatedEducations }));
+    }
   }
 
   async function onSubmit(data) {
@@ -103,12 +135,12 @@ export default function Education() {
       ref={pageRef}
       style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
-      <h1 className="heading-big">التعليــــم والمؤهلات</h1>
+      <h1 className="heading-big">التعليـم والمؤهلات</h1>
       {!showForm && (
         <>
           {/* Educations Cards */}
           <div className="w-full space-y-6">
-            <AnimatePresence>
+            <AnimatePresence mode="sync">
               {educations.map((edu, index) => (
                 <HoverCvPreviewCard key={edu._id} index={index}>
                   {/* Header */}
@@ -117,6 +149,11 @@ export default function Education() {
                     <ActionButtons
                       onEdit={() => handleEdit(edu)}
                       onDelete={() => handleDelete(edu._id)}
+                      onCopy={() => handleCopy(edu)}
+                      onMoveUp={() => handleMove("up", index)}
+                      onMoveDown={() => handleMove("down", index)}
+                      isFirst={index === 0}
+                      isLast={index === educations.length - 1}
                     />
                   </div>
 
@@ -139,8 +176,11 @@ export default function Education() {
                       </time>
                     </div>
                     {edu.description && (
-                      <div className="mt-6 text-text" data-color-mode="light">
-                        <MDPreview source={edu.description} />
+                      <div className="mt-6 text-text">
+                        <DraftPreview
+                          title="وصف المؤهل العلمي"
+                          source={edu.description}
+                        />
                       </div>
                     )}
                   </div>
@@ -199,6 +239,15 @@ export default function Education() {
               label="الدرجة العلمية"
               name="degree"
               options={degreeOptions}
+              defaultOption={
+                console.log(
+                  "EEEEEEEEEee",
+                  editingId,
+                  educations.find((edu) => edu._id === editingId)
+                ) || editingId
+                  ? educations.find((edu) => edu._id === editingId)?.degree
+                  : "اختر..."
+              }
               register={register}
               error={errors.degree?.message}
             />
@@ -213,8 +262,8 @@ export default function Education() {
           </div>
 
           {/* Description field */}
-          <MarkdownEditor
-            label="الوصف"
+          <DraftEditor
+            title="وصف المؤهل العلمي"
             name="description"
             control={control}
             error={errors.description?.message}

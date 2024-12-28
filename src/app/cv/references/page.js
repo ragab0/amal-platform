@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
 import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
+import { numberToArabicOrdinal } from "@/utils/arabicOrdinals";
 import FormInput from "@/components/formInput/FormInput";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormActions from "@/components/buttons/FormActions";
@@ -55,6 +56,33 @@ export default function References() {
     reset();
   }
 
+  function handleCopy(reference) {
+    const newReference = { ...reference, _id: undefined };
+    const updatedReferences = [
+      ...references.slice(0, references.indexOf(reference) + 1),
+      newReference,
+      ...references.slice(references.indexOf(reference) + 1),
+    ];
+
+    dispatch(updateCV({ references: updatedReferences }));
+  }
+
+  function handleMove(direction, currentIndex) {
+    const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
+
+    if (
+      (direction === "up" && currentIndex > 0) ||
+      (direction === "down" && currentIndex < references.length - 1)
+    ) {
+      const updatedReferences = [...references];
+      const temp = updatedReferences[currentIndex];
+      updatedReferences[currentIndex] = updatedReferences[newIndex];
+      updatedReferences[newIndex] = temp;
+
+      dispatch(updateCV({ references: updatedReferences }));
+    }
+  }
+
   async function onSubmit(data) {
     let updatedReferences;
     if (editingId) {
@@ -92,16 +120,24 @@ export default function References() {
       <Demand />
       {!showForm && (
         <>
+          {/* References Cards */}
           <div className="w-full space-y-6">
-            <AnimatePresence>
+            <AnimatePresence mode="sync">
               {references.map((ref, index) => (
                 <HoverCvPreviewCard key={ref._id} index={index}>
                   {/* Header */}
                   <div className="flex justify-between items-center mb-3 pb-5 border-b border-text">
-                    <h3 className="heading-h3 font-semibold">المرجع</h3>
+                    <h3 className="heading-h3 font-semibold">
+                      المرجع {numberToArabicOrdinal(index + 1)}
+                    </h3>
                     <ActionButtons
                       onEdit={() => handleEdit(ref)}
                       onDelete={() => handleDelete(ref._id)}
+                      onCopy={() => handleCopy(ref)}
+                      onMoveUp={() => handleMove("up", index)}
+                      onMoveDown={() => handleMove("down", index)}
+                      isFirst={index === 0}
+                      isLast={index === references.length - 1}
                     />
                   </div>
 
@@ -118,6 +154,7 @@ export default function References() {
                     <h4 className="heading-h4">{ref.email}</h4>
                     <h4 className="heading-h4">{ref.phone}</h4>
                   </div>
+                  {/* <DraftPreview title="وصف المرجع" source={ref.description} /> */}
                 </HoverCvPreviewCard>
               ))}
             </AnimatePresence>
@@ -167,6 +204,14 @@ export default function References() {
               error={errors.phone?.message}
             />
           </div>
+          {/* Description */}
+          {/* <DraftEditor
+            title="وصف المرجع"
+            name={"description"}
+            control={control}
+            error={errors.description?.message}
+            placeholder="اكتب وصف المرجع هنا..."
+          /> */}
 
           {/* Form Actions */}
           <FormActions

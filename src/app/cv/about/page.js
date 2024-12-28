@@ -4,7 +4,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
-import MarkdownEditor, { MDPreview } from "../components/MarkdownEditor";
+import DraftEditor from "../components/draft/DraftEditor";
+import DraftPreview from "../components/draft/DraftPreview";
 import FormActions from "@/components/buttons/FormActions";
 
 export default function AboutPage() {
@@ -16,10 +17,10 @@ export default function AboutPage() {
   const [isEditing, setIsEditing] = useState(false);
 
   const {
-    control,
     handleSubmit,
     formState: { errors },
     reset,
+    control,
   } = useForm({
     defaultValues: {
       description: personalInfo.description || "",
@@ -38,11 +39,15 @@ export default function AboutPage() {
 
     if (!error && payload?.status === "success") {
       setIsEditing(false);
-      reset();
       toast.success("تم حفظ الوصف بنجاح");
     } else {
       toast.error("فشل حفظ الوصف الشخصي");
     }
+  }
+
+  function handleCancel() {
+    setIsEditing(false);
+    reset();
   }
 
   return (
@@ -52,16 +57,16 @@ export default function AboutPage() {
     >
       <h1 className="heading-big mb-[120px]">الوصــف الشخصي</h1>
       {isEditing ? (
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
-          <MarkdownEditor
-            label="الوصف الشخصي"
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
+          <DraftEditor
+            title="الوصف الشخصي"
             name="description"
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفك الشخصي هنا..."
           />
           <FormActions
-            onCancel={() => setIsEditing(false)}
+            onCancel={handleCancel}
             submitText="حفظ"
             cancelText="إلغاء"
             className="w-full"
@@ -70,7 +75,11 @@ export default function AboutPage() {
         </form>
       ) : (
         <>
-          <MDPreview source={personalInfo.description} />
+          <DraftPreview
+            title="الوصف الشخصي"
+            source={personalInfo.description}
+            inContainer={true}
+          />
           <button
             type="button"
             onClick={() => setIsEditing(true)}

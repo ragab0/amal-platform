@@ -28,6 +28,16 @@ export const sidebarData = [
     icon: "About",
   },
   {
+    name: "الدورات التدريبية",
+    href: "/cv/courses",
+    icon: "Courses",
+  },
+  {
+    name: "العمل التطوعي",
+    href: "/cv/volunteering",
+    icon: "VolunteerWork",
+  },
+  {
     name: "المراجع",
     href: "/cv/references",
     icon: "References",

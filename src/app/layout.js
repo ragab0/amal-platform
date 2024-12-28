@@ -7,7 +7,7 @@ import StoreProvider from "@/providers/ReduxProvider";
 import LoadingWrapper from "@/components/LoadingWrapper";
 
 const cairo = Cairo({
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   variable: "--font-cairo",
   display: "swap",
   weight: ["300", "400", "500", "600", "700", "800", "900"],

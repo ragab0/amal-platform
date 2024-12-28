@@ -2,8 +2,8 @@
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { experienceSchema } from "@/validations/experience";
-import { motion, AnimatePresence, delay } from "framer-motion";
+import { coursesSchema } from "@/validations/cv/coursesSchema";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
@@ -17,12 +17,12 @@ import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
 
-export default function Experience() {
+export default function Courses() {
   const dispatch = useAppDispatch();
   const [editingId, setEditingId] = useState(null);
   const pageRef = useRef(null);
   const {
-    myCV: { experiences = [] },
+    myCV: { courses = [] },
     loading,
   } = useAppSelector((state) => state.cvs);
 
@@ -33,30 +33,28 @@ export default function Experience() {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(experienceSchema),
+    resolver: yupResolver(coursesSchema),
   });
 
   async function handleDelete(targetId) {
-    const updatedExperiences = experiences.filter(
-      (exp) => exp._id !== targetId
-    );
+    const updatedCourses = courses.filter((course) => course._id !== targetId);
     const { payload, error } = await dispatch(
-      updateCV({ experiences: updatedExperiences })
+      updateCV({ courses: updatedCourses })
     );
 
     if (!error && payload?.status === "success") {
-      toast.success("تم حذف الخبرة بنجاح");
+      toast.success("تم حذف الدورة بنجاح");
     } else {
-      toast.error("فشل حذف الخبرة");
+      toast.error("فشل حذف الدورة");
     }
   }
 
-  function handleEdit(experience) {
-    setEditingId(experience._id);
+  function handleEdit(course) {
+    setEditingId(course._id);
     reset({
-      ...experience,
-      startDate: getLocalDate(experience.startDate),
-      endDate: getLocalDate(experience.endDate),
+      ...course,
+      startDate: getLocalDate(course.startDate),
+      endDate: getLocalDate(course.endDate),
     });
   }
 
@@ -66,32 +64,32 @@ export default function Experience() {
   }
 
   async function onSubmit(data) {
-    let updatedExperiences;
+    let updatedCourses;
     if (editingId) {
-      updatedExperiences = experiences.map((exp) =>
-        exp._id === editingId ? { ...exp, ...data } : exp
+      updatedCourses = courses.map((course) =>
+        course._id === editingId ? { ...course, ...data } : course
       );
     } else {
-      updatedExperiences = [...experiences, { ...data, _id: undefined }];
+      updatedCourses = [...courses, data];
     }
 
     const { payload, error } = await dispatch(
-      updateCV({ experiences: updatedExperiences })
+      updateCV({ courses: updatedCourses })
     );
 
     if (!error && payload?.status === "success") {
       setEditingId(null);
       reset();
       toast.success(
-        editingId ? "تم تحديث الخبرة بنجاح" : "تمت إضافة الخبرة بنجاح"
+        editingId ? "تم تحديث الدورة بنجاح" : "تمت إضافة الدورة بنجاح"
       );
     } else {
-      toast.error(editingId ? "فشل تحديث الخبرة" : "فشل إضافة الخبرة");
+      toast.error("فشل حفظ الدورة");
     }
   }
 
-  function handleDescriptionClick(exp) {
-    handleEdit(exp);
+  function handleDescriptionClick(course) {
+    handleEdit(course);
     setTimeout(() => {
       const t = pageRef.current.querySelector("textarea");
       t?.focus();
@@ -99,15 +97,15 @@ export default function Experience() {
     }, 100);
   }
 
-  function handleCopy(experience) {
-    const newExperience = { ...experience, _id: undefined };
-    const updatedExperiences = [
-      ...experiences.slice(0, experiences.indexOf(experience) + 1),
-      newExperience,
-      ...experiences.slice(experiences.indexOf(experience) + 1),
+  function handleCopy(course) {
+    const newCourse = { ...course, _id: undefined };
+    const updatedCourses = [
+      ...courses.slice(0, courses.indexOf(course) + 1),
+      newCourse,
+      ...courses.slice(courses.indexOf(course) + 1),
     ];
 
-    dispatch(updateCV({ experiences: updatedExperiences }));
+    dispatch(updateCV({ courses: updatedCourses }));
   }
 
   function handleMove(direction, currentIndex) {
@@ -115,18 +113,18 @@ export default function Experience() {
 
     if (
       (direction === "up" && currentIndex > 0) ||
-      (direction === "down" && currentIndex < experiences.length - 1)
+      (direction === "down" && currentIndex < courses.length - 1)
     ) {
-      const updatedExperiences = [...experiences];
-      const temp = updatedExperiences[currentIndex];
-      updatedExperiences[currentIndex] = updatedExperiences[newIndex];
-      updatedExperiences[newIndex] = temp;
+      const updatedCourses = [...courses];
+      const temp = updatedCourses[currentIndex];
+      updatedCourses[currentIndex] = updatedCourses[newIndex];
+      updatedCourses[newIndex] = temp;
 
-      dispatch(updateCV({ experiences: updatedExperiences }));
+      dispatch(updateCV({ courses: updatedCourses }));
     }
   }
 
-  const showForm = experiences.length === 0 || editingId !== null;
+  const showForm = courses.length === 0 || editingId !== null;
 
   return (
     <div
@@ -134,60 +132,57 @@ export default function Experience() {
       ref={pageRef}
       style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
-      <h1 className="heading-big">الخبرات المهنية</h1>
+      <h1 className="heading-big">الدورات التدريبية</h1>
       {!showForm && (
         <>
-          {/* Experiences Cards */}
+          {/* Courses Cards */}
           <div className="w-full space-y-6">
             <AnimatePresence mode="sync">
-              {experiences.map((exp, index) => (
-                <HoverCvPreviewCard key={exp._id} index={index}>
+              {courses.map((course, index) => (
+                <HoverCvPreviewCard key={course._id} index={index}>
                   {/* Header */}
                   <div className="flex justify-between items-center mb-3">
                     <div className="flex gap-4 items-center">
                       <h3 className="heading-h3 font-semibold">
-                        {exp.jobTitle}
+                        {course.courseName}
                       </h3>
-                      <h4 className="heading-h4">{exp.company}</h4>
+                      <h4 className="heading-h4">{course.instituteName}</h4>
                     </div>
                     <ActionButtons
-                      onDelete={() => handleDelete(exp._id)}
-                      onEdit={() => handleEdit(exp)}
-                      onCopy={() => handleCopy(exp)}
+                      onDelete={() => handleDelete(course._id)}
+                      onEdit={() => handleEdit(course)}
+                      onCopy={() => handleCopy(course)}
                       onMoveUp={() => handleMove("up", index)}
                       onMoveDown={() => handleMove("down", index)}
                       isFirst={index === 0}
-                      isLast={index === experiences.length - 1}
+                      isLast={index === courses.length - 1}
                     />
                   </div>
 
                   {/* Info */}
                   <div className="pb-5 border-b border-text">
                     <div className="flex items-center gap-4 text-text">
-                      <h4 className="heading-h4">
-                        {exp.city}، {exp.country}
-                      </h4>
                       <time>
-                        {exp.startDate && getLocalDate(exp.startDate)}{" "}
+                        {course.startDate && getLocalDate(course.startDate)}{" "}
                         <span className="mx-2">-</span>
-                        {exp.endDate && getLocalDate(exp.endDate)}
+                        {course.endDate && getLocalDate(course.endDate)}
                       </time>
                     </div>
                   </div>
 
                   {/* Description or Add Details Button */}
-                  {exp.description ? (
+                  {course.description ? (
                     <div className="mt-6 text-text">
                       <DraftPreview
-                        title="وصف الوظيفة"
-                        source={exp.description}
+                        title="وصف الدورة"
+                        source={course.description}
                       />
                     </div>
                   ) : (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.2 }}
-                      onClick={() => handleDescriptionClick(exp)}
+                      onClick={() => handleDescriptionClick(course)}
                       className="flex items-center justify-center mx-auto gap-2 mt-6 text-text0"
                     >
                       <MoreIcon className="w-7 h-7 p-2 bg-text text-white rounded-full" />
@@ -199,54 +194,36 @@ export default function Experience() {
             </AnimatePresence>
           </div>
 
-          {/* Add Experience Button */}
+          {/* Add Course Button */}
           <AddButton
             onClick={() => setEditingId(0)}
-            text="إضافة خبرة مهنية جديدة"
+            text="إضافة دورة تدريبية جديدة"
           />
         </>
       )}
 
-      {/* Experience Form */}
+      {/* Course Form */}
       {showForm && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
           {/* Single column fields */}
           <div className="space-y-8">
             <FormInput
               must={true}
-              label="اسم الوظيفة"
-              name="jobTitle"
+              label="اسم الدورة"
+              name="courseName"
               register={register}
-              error={errors.jobTitle?.message}
+              error={errors.courseName?.message}
             />
             <FormInput
               must={true}
-              label="الشركة"
-              name="company"
+              label="المعهد/المؤسسة"
+              name="instituteName"
               register={register}
-              error={errors.company?.message}
+              error={errors.instituteName?.message}
             />
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
-            <FormInput
-              must={true}
-              label="المدينة"
-              name="city"
-              register={register}
-              error={errors.city?.message}
-              spaceBlock={false}
-            />
-            <FormInput
-              must={true}
-              label="الدولة"
-              name="country"
-              register={register}
-              error={errors.country?.message}
-              spaceBlock={false}
-            />
-          </div>
           <div className="grid grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
@@ -273,15 +250,15 @@ export default function Experience() {
             name="description"
             control={control}
             error={errors.description?.message}
-            placeholder="اكتب وصفاً مختصراً عن دورك ومسؤولياتك..."
+            placeholder="اكتب وصفاً مختصراً عن الدورة..."
           />
 
           {/* Form Actions */}
           <FormActions
             editingId={editingId}
             onCancel={handleCancel}
-            showCancelButton={experiences.length > 0}
-            submitText={editingId ? "تحديث الخبرة المهنية" : "إضافة خبرة مهنية"}
+            showCancelButton={courses.length > 0}
+            submitText={editingId ? "تحديث الدورة التدريبية" : "إضافة دورة تدريبية"}
           />
         </form>
       )}

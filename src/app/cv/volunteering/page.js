@@ -2,8 +2,8 @@
 import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { experienceSchema } from "@/validations/experience";
-import { motion, AnimatePresence, delay } from "framer-motion";
+import { volunteeringSchema } from "@/validations/cv/volunteeringSchema";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
@@ -17,12 +17,12 @@ import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
 
-export default function Experience() {
+export default function Volunteering() {
   const dispatch = useAppDispatch();
   const [editingId, setEditingId] = useState(null);
   const pageRef = useRef(null);
   const {
-    myCV: { experiences = [] },
+    myCV: { volunteers = [] },
     loading,
   } = useAppSelector((state) => state.cvs);
 
@@ -33,30 +33,30 @@ export default function Experience() {
     control,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(experienceSchema),
+    resolver: yupResolver(volunteeringSchema),
   });
 
   async function handleDelete(targetId) {
-    const updatedExperiences = experiences.filter(
-      (exp) => exp._id !== targetId
+    const updatedVolunteers = volunteers.filter(
+      (volunteer) => volunteer._id !== targetId
     );
     const { payload, error } = await dispatch(
-      updateCV({ experiences: updatedExperiences })
+      updateCV({ volunteers: updatedVolunteers })
     );
 
     if (!error && payload?.status === "success") {
-      toast.success("تم حذف الخبرة بنجاح");
+      toast.success("تم حذف العمل التطوعي بنجاح");
     } else {
-      toast.error("فشل حذف الخبرة");
+      toast.error("فشل حذف العمل التطوعي");
     }
   }
 
-  function handleEdit(experience) {
-    setEditingId(experience._id);
+  function handleEdit(volunteer) {
+    setEditingId(volunteer._id);
     reset({
-      ...experience,
-      startDate: getLocalDate(experience.startDate),
-      endDate: getLocalDate(experience.endDate),
+      ...volunteer,
+      startDate: getLocalDate(volunteer.startDate),
+      endDate: getLocalDate(volunteer.endDate),
     });
   }
 
@@ -66,32 +66,34 @@ export default function Experience() {
   }
 
   async function onSubmit(data) {
-    let updatedExperiences;
+    let updatedVolunteers;
     if (editingId) {
-      updatedExperiences = experiences.map((exp) =>
-        exp._id === editingId ? { ...exp, ...data } : exp
+      updatedVolunteers = volunteers.map((volunteer) =>
+        volunteer._id === editingId ? { ...volunteer, ...data } : volunteer
       );
     } else {
-      updatedExperiences = [...experiences, { ...data, _id: undefined }];
+      updatedVolunteers = [...volunteers, data];
     }
 
     const { payload, error } = await dispatch(
-      updateCV({ experiences: updatedExperiences })
+      updateCV({ volunteers: updatedVolunteers })
     );
 
     if (!error && payload?.status === "success") {
       setEditingId(null);
       reset();
       toast.success(
-        editingId ? "تم تحديث الخبرة بنجاح" : "تمت إضافة الخبرة بنجاح"
+        editingId
+          ? "تم تحديث العمل التطوعي بنجاح"
+          : "تمت إضافة العمل التطوعي بنجاح"
       );
     } else {
-      toast.error(editingId ? "فشل تحديث الخبرة" : "فشل إضافة الخبرة");
+      toast.error("فشل حفظ العمل التطوعي");
     }
   }
 
-  function handleDescriptionClick(exp) {
-    handleEdit(exp);
+  function handleDescriptionClick(volunteer) {
+    handleEdit(volunteer);
     setTimeout(() => {
       const t = pageRef.current.querySelector("textarea");
       t?.focus();
@@ -99,15 +101,15 @@ export default function Experience() {
     }, 100);
   }
 
-  function handleCopy(experience) {
-    const newExperience = { ...experience, _id: undefined };
-    const updatedExperiences = [
-      ...experiences.slice(0, experiences.indexOf(experience) + 1),
-      newExperience,
-      ...experiences.slice(experiences.indexOf(experience) + 1),
+  function handleCopy(volunteer) {
+    const newVolunteer = { ...volunteer, _id: undefined };
+    const updatedVolunteers = [
+      ...volunteers.slice(0, volunteers.indexOf(volunteer) + 1),
+      newVolunteer,
+      ...volunteers.slice(volunteers.indexOf(volunteer) + 1),
     ];
 
-    dispatch(updateCV({ experiences: updatedExperiences }));
+    dispatch(updateCV({ volunteers: updatedVolunteers }));
   }
 
   function handleMove(direction, currentIndex) {
@@ -115,18 +117,18 @@ export default function Experience() {
 
     if (
       (direction === "up" && currentIndex > 0) ||
-      (direction === "down" && currentIndex < experiences.length - 1)
+      (direction === "down" && currentIndex < volunteers.length - 1)
     ) {
-      const updatedExperiences = [...experiences];
-      const temp = updatedExperiences[currentIndex];
-      updatedExperiences[currentIndex] = updatedExperiences[newIndex];
-      updatedExperiences[newIndex] = temp;
+      const updatedVolunteers = [...volunteers];
+      const temp = updatedVolunteers[currentIndex];
+      updatedVolunteers[currentIndex] = updatedVolunteers[newIndex];
+      updatedVolunteers[newIndex] = temp;
 
-      dispatch(updateCV({ experiences: updatedExperiences }));
+      dispatch(updateCV({ volunteers: updatedVolunteers }));
     }
   }
 
-  const showForm = experiences.length === 0 || editingId !== null;
+  const showForm = volunteers.length === 0 || editingId !== null;
 
   return (
     <div
@@ -134,60 +136,54 @@ export default function Experience() {
       ref={pageRef}
       style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
     >
-      <h1 className="heading-big">الخبرات المهنية</h1>
+      <h1 className="heading-big">الأعمال التطوعية</h1>
       {!showForm && (
         <>
-          {/* Experiences Cards */}
+          {/* Volunteers Cards */}
           <div className="w-full space-y-6">
             <AnimatePresence mode="sync">
-              {experiences.map((exp, index) => (
-                <HoverCvPreviewCard key={exp._id} index={index}>
+              {volunteers.map((volunteer, index) => (
+                <HoverCvPreviewCard key={volunteer._id} index={index}>
                   {/* Header */}
                   <div className="flex justify-between items-center mb-3">
-                    <div className="flex gap-4 items-center">
-                      <h3 className="heading-h3 font-semibold">
-                        {exp.jobTitle}
-                      </h3>
-                      <h4 className="heading-h4">{exp.company}</h4>
-                    </div>
+                    <h3 className="heading-h3 font-semibold">
+                      {volunteer.title}
+                    </h3>
                     <ActionButtons
-                      onDelete={() => handleDelete(exp._id)}
-                      onEdit={() => handleEdit(exp)}
-                      onCopy={() => handleCopy(exp)}
+                      onDelete={() => handleDelete(volunteer._id)}
+                      onEdit={() => handleEdit(volunteer)}
+                      onCopy={() => handleCopy(volunteer)}
                       onMoveUp={() => handleMove("up", index)}
                       onMoveDown={() => handleMove("down", index)}
                       isFirst={index === 0}
-                      isLast={index === experiences.length - 1}
+                      isLast={index === volunteers.length - 1}
                     />
                   </div>
 
                   {/* Info */}
                   <div className="pb-5 border-b border-text">
                     <div className="flex items-center gap-4 text-text">
-                      <h4 className="heading-h4">
-                        {exp.city}، {exp.country}
-                      </h4>
                       <time>
-                        {exp.startDate && getLocalDate(exp.startDate)}{" "}
+                        {volunteer.startDate && getLocalDate(volunteer.startDate)}{" "}
                         <span className="mx-2">-</span>
-                        {exp.endDate && getLocalDate(exp.endDate)}
+                        {volunteer.endDate && getLocalDate(volunteer.endDate)}
                       </time>
                     </div>
                   </div>
 
                   {/* Description or Add Details Button */}
-                  {exp.description ? (
+                  {volunteer.description ? (
                     <div className="mt-6 text-text">
                       <DraftPreview
-                        title="وصف الوظيفة"
-                        source={exp.description}
+                        title="وصف العمل التطوعي"
+                        source={volunteer.description}
                       />
                     </div>
                   ) : (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 0.2 }}
-                      onClick={() => handleDescriptionClick(exp)}
+                      onClick={() => handleDescriptionClick(volunteer)}
                       className="flex items-center justify-center mx-auto gap-2 mt-6 text-text0"
                     >
                       <MoreIcon className="w-7 h-7 p-2 bg-text text-white rounded-full" />
@@ -199,54 +195,29 @@ export default function Experience() {
             </AnimatePresence>
           </div>
 
-          {/* Add Experience Button */}
+          {/* Add Volunteer Button */}
           <AddButton
             onClick={() => setEditingId(0)}
-            text="إضافة خبرة مهنية جديدة"
+            text="إضافة عمل تطوعي جديد"
           />
         </>
       )}
 
-      {/* Experience Form */}
+      {/* Volunteer Form */}
       {showForm && (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
           {/* Single column fields */}
           <div className="space-y-8">
             <FormInput
               must={true}
-              label="اسم الوظيفة"
-              name="jobTitle"
+              label="عنوان العمل التطوعي"
+              name="title"
               register={register}
-              error={errors.jobTitle?.message}
-            />
-            <FormInput
-              must={true}
-              label="الشركة"
-              name="company"
-              register={register}
-              error={errors.company?.message}
+              error={errors.title?.message}
             />
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
-            <FormInput
-              must={true}
-              label="المدينة"
-              name="city"
-              register={register}
-              error={errors.city?.message}
-              spaceBlock={false}
-            />
-            <FormInput
-              must={true}
-              label="الدولة"
-              name="country"
-              register={register}
-              error={errors.country?.message}
-              spaceBlock={false}
-            />
-          </div>
           <div className="grid grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
@@ -273,15 +244,17 @@ export default function Experience() {
             name="description"
             control={control}
             error={errors.description?.message}
-            placeholder="اكتب وصفاً مختصراً عن دورك ومسؤولياتك..."
+            placeholder="اكتب وصفاً مختصراً عن العمل التطوعي..."
           />
 
           {/* Form Actions */}
           <FormActions
             editingId={editingId}
             onCancel={handleCancel}
-            showCancelButton={experiences.length > 0}
-            submitText={editingId ? "تحديث الخبرة المهنية" : "إضافة خبرة مهنية"}
+            showCancelButton={volunteers.length > 0}
+            submitText={
+              editingId ? "تحديث العمل التطوعي" : "إضافة عمل تطوعي جديد"
+            }
           />
         </form>
       )}

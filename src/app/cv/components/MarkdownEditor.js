@@ -11,15 +11,16 @@ const MDEditor = dynamic(
   { ssr: false }
 );
 
-export const MDPreview = dynamic(
-  () =>
-    import("@uiw/react-markdown-preview").then((mod) => (
-      <div data-color-mode="light" className="w-full">
-        {mod.default}
-      </div>
-    )),
-  { ssr: false }
-);
+export const MDPreview = () => {};
+// dynamic(
+//   () =>
+//     import("@uiw/react-markdown-preview").then((mod) => (
+//       <div data-color-mode="light" className="w-full">
+//         {mod.default}
+//       </div>
+//     )),
+//   { ssr: false }
+// );
 
 const MarkdownEditor = ({
   label,
