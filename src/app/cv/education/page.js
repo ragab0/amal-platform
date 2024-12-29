@@ -16,6 +16,7 @@ import AddButton from "@/components/buttons/AddButton";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
+import AddDescriptionBtn from "../components/AddDescriptionBtn";
 
 const degreeOptions = [
   "دكتوراه",
@@ -39,6 +40,7 @@ export default function Education() {
     register,
     handleSubmit,
     reset,
+    watch,
     control,
     formState: { errors },
   } = useForm({
@@ -175,13 +177,19 @@ export default function Education() {
                           new Date(edu.graduationDate).toLocaleDateString("ar")}
                       </time>
                     </div>
-                    {edu.description && (
+                    {edu.description ? (
                       <div className="mt-6 text-text">
                         <DraftPreview
                           title="وصف المؤهل العلمي"
                           source={edu.description}
                         />
                       </div>
+                    ) : (
+                      <AddDescriptionBtn
+                        pageRef={pageRef}
+                        handleEdit={handleEdit}
+                        item={edu}
+                      />
                     )}
                   </div>
                 </HoverCvPreviewCard>
@@ -268,6 +276,17 @@ export default function Education() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفاً مختصراً عن دراستك"
+            aiPrompt={{
+              type: "education",
+              data: {
+                field: watch("field"),
+                city: watch("city"),
+                country: watch("country"),
+                degree: watch("degree"),
+                graduationDate: watch("graduationDate"),
+                institute: watch("institute"),
+              },
+            }}
           />
 
           {/* Form Actions */}

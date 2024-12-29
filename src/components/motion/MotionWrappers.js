@@ -107,20 +107,19 @@ export function HoverCvPreviewCard({ children, index }) {
   );
 }
 
-export function SkillCvPreviewCard({ children, key }) {
+export function SkillCvPreviewCard({ children }) {
   return (
     <motion.div
-    layout
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    transition={{
-      layout: { duration: 0.5, type: "spring" },
-      opacity: { duration: 0.3 },
-      y: { duration: 0.3, delay: 0.05 },
-    }}
-    key={key}
-    className="grid grid-cols-[1fr_1fr_auto] gap-4 items-start"
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{
+        layout: { duration: 0.5, type: "spring" },
+        opacity: { duration: 0.3 },
+        y: { duration: 0.3, delay: 0.05 },
+      }}
+      className="grid grid-cols-[1fr_1fr_auto] gap-4 items-start"
     >
       {children}
     </motion.div>

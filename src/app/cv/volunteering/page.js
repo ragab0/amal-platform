@@ -16,6 +16,7 @@ import MoreIcon from "@/assets/icons/MoreIcon";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
+import AddDescriptionBtn from "../components/AddDescriptionBtn";
 
 export default function Volunteering() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ export default function Volunteering() {
     register,
     handleSubmit,
     reset,
+    watch,
     control,
     formState: { errors },
   } = useForm({
@@ -164,7 +166,8 @@ export default function Volunteering() {
                   <div className="pb-5 border-b border-text">
                     <div className="flex items-center gap-4 text-text">
                       <time>
-                        {volunteer.startDate && getLocalDate(volunteer.startDate)}{" "}
+                        {volunteer.startDate &&
+                          getLocalDate(volunteer.startDate)}{" "}
                         <span className="mx-2">-</span>
                         {volunteer.endDate && getLocalDate(volunteer.endDate)}
                       </time>
@@ -180,15 +183,11 @@ export default function Volunteering() {
                       />
                     </div>
                   ) : (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                      onClick={() => handleDescriptionClick(volunteer)}
-                      className="flex items-center justify-center mx-auto gap-2 mt-6 text-text0"
-                    >
-                      <MoreIcon className="w-7 h-7 p-2 bg-text text-white rounded-full" />
-                      إضافة وصف
-                    </motion.button>
+                    <AddDescriptionBtn
+                      pageRef={pageRef}
+                      handleEdit={handleEdit}
+                      item={volunteer}
+                    />
                   )}
                 </HoverCvPreviewCard>
               ))}
@@ -245,6 +244,14 @@ export default function Volunteering() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفاً مختصراً عن العمل التطوعي..."
+            aiPrompt={{
+              type: "volunteering",
+              data: {
+                title: watch("title"),
+                startDate: watch("startDate"),
+                endDate: watch("endDate"),
+              },
+            }}
           />
 
           {/* Form Actions */}

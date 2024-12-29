@@ -3,19 +3,22 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { coursesSchema } from "@/validations/cv/coursesSchema";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
-import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
+import {
+  HoverButton,
+  HoverCvPreviewCard,
+} from "@/components/motion/MotionWrappers";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
-import MoreIcon from "@/assets/icons/MoreIcon";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
+import AddDescriptionBtn from "../components/AddDescriptionBtn";
 
 export default function Courses() {
   const dispatch = useAppDispatch();
@@ -30,6 +33,7 @@ export default function Courses() {
     register,
     handleSubmit,
     reset,
+    watch,
     control,
     formState: { errors },
   } = useForm({
@@ -86,15 +90,6 @@ export default function Courses() {
     } else {
       toast.error("فشل حفظ الدورة");
     }
-  }
-
-  function handleDescriptionClick(course) {
-    handleEdit(course);
-    setTimeout(() => {
-      const t = pageRef.current.querySelector("textarea");
-      t?.focus();
-      t?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
   }
 
   function handleCopy(course) {
@@ -172,22 +167,18 @@ export default function Courses() {
 
                   {/* Description or Add Details Button */}
                   {course.description ? (
-                    <div className="mt-6 text-text">
+                    <div className="mt-32 text-text">
                       <DraftPreview
                         title="وصف الدورة"
                         source={course.description}
                       />
                     </div>
                   ) : (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                      onClick={() => handleDescriptionClick(course)}
-                      className="flex items-center justify-center mx-auto gap-2 mt-6 text-text0"
-                    >
-                      <MoreIcon className="w-7 h-7 p-2 bg-text text-white rounded-full" />
-                      إضافة وصف
-                    </motion.button>
+                    <AddDescriptionBtn
+                      pageRef={pageRef}
+                      handleEdit={handleEdit}
+                      item={course}
+                    />
                   )}
                 </HoverCvPreviewCard>
               ))}
@@ -251,6 +242,15 @@ export default function Courses() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفاً مختصراً عن الدورة..."
+            aiPrompt={{
+              type: "course",
+              data: {
+                courseName: watch("courseName"),
+                instituteName: watch("instituteName"),
+                startDate: watch("startDate"),
+                endDate: watch("endDate"),
+              },
+            }}
           />
 
           {/* Form Actions */}
@@ -258,7 +258,9 @@ export default function Courses() {
             editingId={editingId}
             onCancel={handleCancel}
             showCancelButton={courses.length > 0}
-            submitText={editingId ? "تحديث الدورة التدريبية" : "إضافة دورة تدريبية"}
+            submitText={
+              editingId ? "تحديث الدورة التدريبية" : "إضافة دورة تدريبية"
+            }
           />
         </form>
       )}

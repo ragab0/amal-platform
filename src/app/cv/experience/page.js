@@ -16,6 +16,7 @@ import MoreIcon from "@/assets/icons/MoreIcon";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
+import AddDescriptionBtn from "../components/AddDescriptionBtn";
 
 export default function Experience() {
   const dispatch = useAppDispatch();
@@ -30,6 +31,7 @@ export default function Experience() {
     register,
     handleSubmit,
     reset,
+    watch,
     control,
     formState: { errors },
   } = useForm({
@@ -184,15 +186,11 @@ export default function Experience() {
                       />
                     </div>
                   ) : (
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                      onClick={() => handleDescriptionClick(exp)}
-                      className="flex items-center justify-center mx-auto gap-2 mt-6 text-text0"
-                    >
-                      <MoreIcon className="w-7 h-7 p-2 bg-text text-white rounded-full" />
-                      إضافة وصف
-                    </motion.button>
+                    <AddDescriptionBtn
+                      pageRef={pageRef}
+                      handleEdit={handleEdit}
+                      item={ex}
+                    />
                   )}
                 </HoverCvPreviewCard>
               ))}
@@ -274,6 +272,17 @@ export default function Experience() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفاً مختصراً عن دورك ومسؤولياتك..."
+            aiPrompt={{
+              type: "experience",
+              data: {
+                jobTitle: watch("jobTitle"),
+                company: watch("company"),
+                city: watch("city"),
+                country: watch("country"),
+                startDate: watch("startDate"),
+                endDate: watch("endDate"),
+              },
+            }}
           />
 
           {/* Form Actions */}

@@ -7,7 +7,6 @@ import {
   FiBold,
   FiItalic,
   FiUnderline,
-  FiLink,
   FiList,
   FiAlignLeft,
 } from "react-icons/fi";
@@ -19,8 +18,17 @@ import {
   convertToRaw,
   convertFromRaw,
 } from "draft-js";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { generateDescription } from "@/store/features/ai/aiThunks";
+import { toast } from "react-toastify";
+import { markdownToDraft } from "markdown-draft-js";
 
 const TEMP_ADVICE = `أنا مطور برمجيات متحمس مع خبرة 5 سنوات في تطوير تطبيقات الويب. متخصص في React وNode.js، مع سجل حافل في تقديم حلول مبتكرة وعالية الأداء. شغوف بالتعلم المستمر وتحسين مهاراتي التقنية.`;
+const TEMP_RES = {
+  status: "success",
+  result:
+    "**مدير مبيعات | New horizons | القاهرة، مصر**\n\n*   قيادة وتوجيه فريق المبيعات لتحقيق الأهداف البيعية وتجاوزها.\n*   تطوير وتنفيذ استراتيجيات المبيعات الفعالة لزيادة الحصة السوقية والإيرادات.\n*   بناء علاقات قوية مع العملاء الرئيسيين والحفاظ عليها.\n*   تحليل اتجاهات السوق وتحديد الفرص الجديدة للنمو.\n*   إعداد تقارير دورية عن أداء المبيعات وتقديم التوصيات اللازمة.\n*   إدارة عمليات البيع من البداية إلى النهاية، بما في ذلك إعداد العروض والتفاوض وإتمام الصفقات.\n*   تدريب وتطوير فريق المبيعات لضمان تحقيق أعلى مستويات الأداء.\n",
+};
 
 export default function DraftEditor({
   title,
@@ -28,46 +36,76 @@ export default function DraftEditor({
   control,
   error,
   placeholder,
+  aiPrompt,
 }) {
+  const dispatch = useAppDispatch();
   const editorRef = useRef(null);
+  const { loading, isInitialized } = useAppSelector((state) => state.ai);
 
-  const handleKeyCommand = (command, editorState, { setEditorState }) => {
+  function handleKeyCommand(command, editorState, { setEditorState }) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
       return "handled";
     }
     return "not-handled";
-  };
+  }
 
-  const toggleInlineStyle = (style, editorState, setEditorState) => {
+  function toggleInlineStyle(style, editorState, setEditorState) {
     setEditorState(RichUtils.toggleInlineStyle(editorState, style));
-  };
+  }
 
-  const toggleBlockType = (blockType, editorState, setEditorState) => {
+  function toggleBlockType(blockType, editorState, setEditorState) {
     setEditorState(RichUtils.toggleBlockType(editorState, blockType));
-  };
+  }
 
-  const fillWithAdvice = (setEditorState) => {
-    const contentState = ContentState.createFromText(TEMP_ADVICE);
-    setEditorState(EditorState.createWithContent(contentState));
-  };
+  async function fillWithAdvice(setEditorState) {
+    const { payload, error } = await dispatch(generateDescription(aiPrompt));
+    if (error) {
+      return;
+      return toast.error("فشل توليد الوصف");
+    }
 
-  const ToolbarButton = ({ icon: Icon, onClick, isActive, testId }) => (
-    <button
-      type="button"
-      data-testid={testId}
-      onClick={onClick}
-      className={`p-2 rounded hover:bg-gray-100 ${
-        isActive ? "text-blue-600" : ""
-      }`}
-    >
-      <Icon size={16} />
-    </button>
-  );
+    try {
+      const draftRaw = markdownToDraft(payload.result);
+      const contentState = convertFromRaw(draftRaw);
+      setEditorState(EditorState.createWithContent(contentState));
+    } catch (_) {
+      console.log("Failed to convert markdown to draft");
+      const contentState = ContentState.createFromText(
+        payload.result?.replaceAll("*", "")
+      );
+      setEditorState(EditorState.createWithContent(contentState));
+    }
+  }
+
+  function ToolbarButton({ icon: Icon, onClick, isActive, testId }) {
+    return (
+      <button
+        type="button"
+        data-testid={testId}
+        onClick={onClick}
+        className={`p-2 rounded hover:bg-gray-100 ${
+          isActive ? "text-blue-600" : ""
+        }`}
+      >
+        <Icon size={16} />
+      </button>
+    );
+  }
 
   return (
-    <div className="draft-editor">
+    <div
+      className="draft-editor"
+      style={
+        !isInitialized || loading
+          ? {
+              opacity: ".5",
+              pointerEvents: "none",
+            }
+          : {}
+      }
+    >
       <h3 className="heading-h3 mb-5">{title}</h3>
       <Controller
         name={name}
@@ -167,7 +205,15 @@ export default function DraftEditor({
                     onClick={() => fillWithAdvice(handleEditorChange)}
                   >
                     <IoSparklesOutline size={14} />
-                    <span className="text-xs">نصـــــــائح</span>
+
+                    {!isInitialized || loading ? (
+                      <span
+                        className="text-xs animate-spin h-4 w-4 border-2 border-r-main rounded-full"
+                        title="جاري التوليد"
+                      ></span>
+                    ) : (
+                      <span className="text-xs">نصـــــــائح</span>
+                    )}
                   </button>
                 </div>
               </div>
