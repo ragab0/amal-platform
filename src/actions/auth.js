@@ -28,6 +28,7 @@ export async function getInitialAuthState() {
         Cookie: `jwt=${token}`,
         "Content-Type": "application/json",
       },
+      withCredentials: true,
       timeout: NODE_ENV === "development" ? 1000 : 8000,
     });
 
