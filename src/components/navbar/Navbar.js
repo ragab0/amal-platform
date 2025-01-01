@@ -5,26 +5,16 @@ import { FaUserCircle } from "react-icons/fa";
 import { useAppSelector } from "@/hooks/ReduxHooks";
 import { HiMenu, HiX } from "react-icons/hi";
 import { navLinks, userMenuItems } from "@/assets/data/navbar";
-import NotificationIco from "@/assets/icons/NotificationIco";
 import Logo from "../logo/Logo";
 import Link from "next/link";
-import LogoutButton from "../buttons/LogoutButton";
-import Image from "next/image";
+import NotificationBadge from "../notifications/NotificationBadge";
+import User from "./components/User";
+import UserMenu from "./components/UserMenu";
+import DropdownMenu from "../drobDown/DropdownMenu";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const {
-    user = {},
-    isAuthenticated,
-    loading,
-  } = useAppSelector((state) => state.auth);
-
-  const AuthButtonsSkeleton = () => (
-    <>
-      <div className="h-8 w-24 bg-gray-300 animate-pulse rounded"></div>
-      <div className="h-10 w-28 bg-gray-300 animate-pulse rounded-lg"></div>
-    </>
-  );
+  const { user = {}, isAuthenticated } = useAppSelector((state) => state.auth);
 
   return (
     <nav className="relative bg-main">
@@ -57,99 +47,46 @@ export default function Navbar() {
             </Link>
           ))}
         </div>
-        {/* User Section */}
-        <div className="hidden lg:flex gap-6 items-center space-x-4">
-          {loading ? (
-            <AuthButtonsSkeleton />
-          ) : isAuthenticated ? (
-            <>
-              {/* Notification Icon */}
-              <div className="relative">
-                <Link
-                  href="/notifications"
-                  className="bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-90"
-                >
-                  <NotificationIco className="w-10 h-10 p-2" />
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                    3
-                  </span>
-                </Link>
-              </div>
+        {isAuthenticated ? (
+          <>
+            {/* User Section */}
+            <div className="hidden lg:flex gap-6 items-center space-x-4">
+              {/* Notifications */}
+              <NotificationBadge />
               {/* User Profile */}
-              <div className="relative group">
-                <button className="flex items-center text-white gap-4 ">
-                  <div className="flex flex-col justify-center text-center">
-                    <span className="mr-2">
-                      {user.fname && user.lname
-                        ? `${user.fname} ${user.lname}`
-                        : "UnNamed!"}
-                    </span>
-                    <span className="text-sm">
-                      {user.email || "saleh@amal.com"}
-                    </span>
-                  </div>
-                  {user.photo ? (
-                    <Image
-                      src={user.photo}
-                      alt="User"
-                      width={40}
-                      height={40}
-                      className="w-14 h-14 rounded-full"
-                    />
-                  ) : (
-                    <FaUserCircle className="h-14 w-14" />
-                  )}
-                </button>
-                <div className="absolute left-0 pt-2 z-50">
-                  <div className="rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
-                    <ul className="py-1">
-                      {userMenuItems.map((item, i) => (
-                        <li key={i}>
-                          <Link
-                            href={item.href}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          >
-                            {item.label}
-                          </Link>
-                        </li>
-                      ))}
-                      <li>
-                        <LogoutButton className="block w-full text-right px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" />
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              <Link
-                href="/login"
-                className="text-white hover:text-gray-200 transition-colors"
-              >
-                تسجيل الدخول
-              </Link>
-              <Link
-                href="/signup"
-                className="bg-white text-main px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                إنشاء حساب
-              </Link>
-            </>
-          )}
-        </div>
-        {/* Mobile Menu Button */}
-        <button
-          className="lg:hidden text-white"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? (
-            <HiX className="w-8 h-8" />
-          ) : (
-            <HiMenu className="w-8 h-8" />
-          )}
-        </button>
+              <DropdownMenu menuClassName="py-2" trigger={<User user={user} />}>
+                <UserMenu userMenuItems={userMenuItems} />
+              </DropdownMenu>
+            </div>
+          </>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="text-white hover:text-gray-200 px-4 py-2 transition-colors"
+            >
+              تسجيل الدخول
+            </Link>
+            <Link
+              href="/signup"
+              className="text-main bg-white hover:bg-gray-100 px-4 py-2 rounded-lg transition-colors"
+            >
+              إنشاء حساب
+            </Link>
+          </>
+        )}
       </div>
+      {/* Mobile Menu Button */}
+      <button
+        className="lg:hidden text-white"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        {isMenuOpen ? (
+          <HiX className="w-8 h-8" />
+        ) : (
+          <HiMenu className="w-8 h-8" />
+        )}
+      </button>
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden z-[1000] absolute top-full left-0 w-full bg-main border-t border-white/20 text-white">

@@ -5,6 +5,7 @@ import { getInitialAuthState } from "@/actions/auth";
 import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
 import LoadingWrapper from "@/components/LoadingWrapper";
+import NotificationInitializer from "@/components/notifications/NotificationInitializer";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -76,6 +77,7 @@ export default async function RootLayout({ children }) {
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
           <LoadingWrapper>
+            <NotificationInitializer />
             <ToastContainer
               position="top-right"
               autoClose={5000}

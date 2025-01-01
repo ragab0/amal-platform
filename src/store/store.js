@@ -4,6 +4,8 @@ import cvsReducer from "./features/cvs/cvsSlice";
 import reviewsReducer from "./features/reviews/reviewsSlice";
 import adminReducer from "./features/admin/adminSlice";
 import aiReducer from "./features/ai/aiSlice";
+import chatReducer from "./features/chat/chatSlice";
+import notificationsReducer from "./features/notifications/notificationsSlice";
 import logger from "redux-logger";
 
 // create a redux store INSTACE per each request INSTEAD of defining it as a global ONCE;
@@ -16,12 +18,16 @@ export function makeStore(preloadedState = {}) {
       reviews: reviewsReducer,
       admin: adminReducer,
       ai: aiReducer,
+      chat: chatReducer,
+      notifications: notificationsReducer,
     },
     preloadedState,
     middleware: function (getDefaultMiddles) {
-      return process.env.NODE_ENV === "development"
-        ? getDefaultMiddles().concat(logger)
-        : getDefaultMiddles();
+      const middlewares = getDefaultMiddles();
+      if (process.env.NODE_ENV === "development") {
+        middlewares.push(logger);
+      }
+      return middlewares;
     },
   });
 }

@@ -19,6 +19,7 @@ export async function getInitialAuthState() {
           isAuthenticated: false,
           loading: false,
           error: null,
+          TOKEN: null,
         },
       };
     }
@@ -29,8 +30,11 @@ export async function getInitialAuthState() {
         "Content-Type": "application/json",
       },
       withCredentials: true,
-      timeout: NODE_ENV === "development" ? 1000 : 8000,
+      credentials: "include",
+      timeout: NODE_ENV === "development" ? 2000 : 8000,
     });
+
+    console.log("TOKEN TO SAVE in LOCALSTORAGE HAS BEEN CAME !!");
 
     return {
       auth: {
@@ -38,17 +42,18 @@ export async function getInitialAuthState() {
         isAuthenticated: true,
         loading: false,
         error: null,
+        TOKEN: token,
       },
     };
   } catch (error) {
     console.log("Failed to get initial data", error);
-
     return {
       auth: {
         user: {},
         isAuthenticated: false,
         loading: false,
         error: error.response?.data?.result || null,
+        TOKEN: null,
       },
     };
   }
