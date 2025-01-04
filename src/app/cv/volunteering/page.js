@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { volunteeringSchema } from "@/validations/cv/volunteeringSchema";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
@@ -12,7 +12,6 @@ import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
-import MoreIcon from "@/assets/icons/MoreIcon";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
@@ -92,15 +91,6 @@ export default function Volunteering() {
     } else {
       toast.error("فشل حفظ العمل التطوعي");
     }
-  }
-
-  function handleDescriptionClick(volunteer) {
-    handleEdit(volunteer);
-    setTimeout(() => {
-      const t = pageRef.current.querySelector("textarea");
-      t?.focus();
-      t?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
   }
 
   function handleCopy(volunteer) {
@@ -217,7 +207,7 @@ export default function Volunteering() {
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="تاريخ البداية"

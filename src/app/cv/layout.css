@@ -1,5 +1,7 @@
 .cv-layout h1 {
   @apply mt-[60px] mb-[80px];
+  word-break: break-word;
+  word-wrap: break-word;
 }
 
 /* PDF viewer styles */

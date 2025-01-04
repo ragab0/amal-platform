@@ -187,7 +187,7 @@ export default function References() {
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="البريد الالكتروني"

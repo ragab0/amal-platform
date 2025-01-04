@@ -27,7 +27,6 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
   });
 
   async function onSubmit(data) {
-    console.log(data);
     const { payload, error } = await dispatch(updateProfileBasicInfo(data));
     if (!error && payload?.status === "success") {
       toast.success("تم تحديث المعلومات الشخصية بنجاح");

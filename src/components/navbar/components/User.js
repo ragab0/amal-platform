@@ -5,7 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 export default function User({ user }) {
   return (
     <button className="flex items-center text-white gap-4 ">
-      <div className="flex flex-col justify-center text-center">
+      <div className="hidden lg:flex flex-col justify-center text-center">
         <span className="mr-2">
           {user.fname && user.lname
             ? `${user.fname} ${user.lname}`

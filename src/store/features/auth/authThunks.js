@@ -41,25 +41,11 @@ export const logout = createAsyncThunk(
   }
 );
 
-// export const checkAuth = createAsyncThunk(
-//   "auth/checkAuth",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await myAxios.get("/auth/is-login");
-//       return response.data;
-//     } catch (error) {
-//       return rejectWithValue(error.response?.data || {});
-//     }
-//   }
-// );
-
 export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
-  async (tokenStr, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await myAxios.post("/auth/is-login", {
-        TOKEN: tokenStr,
-      });
+      const response = await myAxios.get("/auth/is-login");
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});

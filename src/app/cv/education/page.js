@@ -227,7 +227,7 @@ export default function Education() {
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="المدينة"
@@ -248,11 +248,7 @@ export default function Education() {
               name="degree"
               options={degreeOptions}
               defaultOption={
-                console.log(
-                  "EEEEEEEEEee",
-                  editingId,
-                  educations.find((edu) => edu._id === editingId)
-                ) || editingId
+                editingId
                   ? educations.find((edu) => edu._id === editingId)?.degree
                   : "اختر..."
               }

@@ -77,19 +77,19 @@
   /* buttons */
   .btn-secondary {
     @apply p-3 rounded-sm max-md:w-full text-lg md:text-xl text-white bg-second text-center
-    hover:bg-second-pale transition-colors mr-auto disabled:opacity-50 disabled:cursor-not-allowed;
+    hover:bg-second-pale transition-all mr-auto disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary-outline {
     @apply p-3 rounded-sm max-md:w-full text-lg md:text-xl text-second border-2 border-second text-center
-    hover:bg-second hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    hover:bg-second hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-glass {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3  text-center
-    rounded-sm bg-pink-light hover:opacity-90 transition-colors text-lg md:text-xl;
+    rounded-sm bg-pink-light hover:opacity-90 transition-all text-lg md:text-xl;
   }
   .btn-primary {
     @apply bg-main text-white hover:bg-main-pale text-center inline-block
-      text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-md hover:bg-opacity-90 transition-all duration-300;
+    text-lg md:text-xl px-6 sm:px-8 py-3 sm:py-4 rounded-md hover:bg-opacity-90 transition-all duration-300;
   }
 }
 

@@ -5,7 +5,7 @@ export default function FormActions({
   submitText,
 }) {
   return (
-    <div className="flex justify-center gap-4">
+    <div className="flex max-md:flex-col justify-center gap-4">
       <button type="submit" className="btn-secondary w-full">
         {submitText}
       </button>

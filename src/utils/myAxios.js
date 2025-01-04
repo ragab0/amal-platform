@@ -47,6 +47,10 @@ myAxios.interceptors.response.use(
         error.message = "طلب غير صالح.";
         toast.error(error.message);
         break;
+      case 429:
+        error.message = response.data;
+        toast.error(error.message);
+        break;
       case 500:
         error.message = "حدث خطأ في الخادم. يرجى المحاولة مرة أخرى لاحقًا.";
         toast.error(error.message);

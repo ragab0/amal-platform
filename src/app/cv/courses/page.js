@@ -7,10 +7,7 @@ import { AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
-import {
-  HoverButton,
-  HoverCvPreviewCard,
-} from "@/components/motion/MotionWrappers";
+import { HoverCvPreviewCard } from "@/components/motion/MotionWrappers";
 import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
@@ -167,7 +164,7 @@ export default function Courses() {
 
                   {/* Description or Add Details Button */}
                   {course.description ? (
-                    <div className="mt-32 text-text">
+                    <div className="text-text">
                       <DraftPreview
                         title="وصف الدورة"
                         source={course.description}
@@ -215,7 +212,7 @@ export default function Courses() {
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="تاريخ البداية"

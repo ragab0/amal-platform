@@ -18,7 +18,22 @@ export default function Navbar() {
 
   return (
     <nav className="relative bg-main">
-      <div className="container mx-auto px-4 py-[10px] flex gap-2 items-center justify-between">
+      <div
+        className={`container mx-auto px-4 py-[10px] flex ${
+          isAuthenticated ? "" : "max-lg:flex-row-reverse"
+        } gap-2 items-center justify-between`}
+      >
+        {/* Mobile Menu Button */}
+        <button
+          className="lg:hidden text-white"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? (
+            <HiX className="w-8 h-8" />
+          ) : (
+            <HiMenu className="w-8 h-8" />
+          )}
+        </button>
         {/* Logo */}
         <div className="flex-shrink-0">
           {user.role === "admin" ? (
@@ -50,20 +65,18 @@ export default function Navbar() {
         {isAuthenticated ? (
           <>
             {/* User Section */}
-            <div className="hidden lg:flex gap-6 items-center space-x-4">
-              {/* Notifications */}
+            <div className="flex lg:gap-6 items-center space-x-4">
               <NotificationBadge />
-              {/* User Profile */}
               <DropdownMenu menuClassName="py-2" trigger={<User user={user} />}>
                 <UserMenu userMenuItems={userMenuItems} />
               </DropdownMenu>
             </div>
           </>
         ) : (
-          <>
+          <div className="max-lg:hidden">
             <Link
               href="/login"
-              className="text-white hover:text-gray-200 px-4 py-2 transition-colors"
+              className=" text-white hover:text-gray-200 px-4 py-2 transition-colors"
             >
               تسجيل الدخول
             </Link>
@@ -73,21 +86,10 @@ export default function Navbar() {
             >
               إنشاء حساب
             </Link>
-          </>
+          </div>
         )}
       </div>
-      {/* Mobile Menu Button */}
-      <button
-        className="lg:hidden text-white"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        {isMenuOpen ? (
-          <HiX className="w-8 h-8" />
-        ) : (
-          <HiMenu className="w-8 h-8" />
-        )}
-      </button>
-      {/* Mobile Menu */}
+
       {isMenuOpen && (
         <div className="lg:hidden z-[1000] absolute top-full left-0 w-full bg-main border-t border-white/20 text-white">
           <div className="px-4 py-2">

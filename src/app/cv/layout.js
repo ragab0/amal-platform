@@ -1,7 +1,6 @@
 import "./layout.css";
 import { Sidebar } from "./components/Sidebar";
 import { sidebarData } from "@/assets/data/sidebarData";
-import Logo from "@/components/logo/Logo";
 import ResumeBar from "../../templates/ResumeBar";
 import NavBtns from "./components/NavBtns";
 import CVDataProvider from "./components/CVDataProvider";
@@ -16,31 +15,23 @@ export const metadata = {
 
 export default function CVLayout({ children }) {
   return (
-    <div className="cv-layout flex max-lg:flex-col w-full gap-4 bg-gray-50 max-lg:pb-[50px]">
+    <div className="cv-layout flex w-full bg-gray-50 max-lg:pb-[50px]">
       {/* side one */}
-      <aside
-        className="sticky top-0 w-fit min-w-[300px] h-[calc(100vh-0rem)] bg-main py-10 overflow-y-auto
-      max-xl:fixed z-10
-      "
-      >
-        <div>
-          <div className="flex justify-center mb-14">
-            <Logo />
-          </div>
-          <Sidebar items={sidebarData} />
-        </div>
-      </aside>
-      <CVDataProvider>
-        {/* main content of current page */}
-        <main className="flex-1 px-5">
-          {children}
-          <NavBtns />
-        </main>
-        {/* third side */}
-        <section className="flex-1 sticky top-4 h-[calc(100vh-4rem)] p-5 max-lg:min-h-[750px] max-lg:grid">
-          <ResumeBar />
-        </section>
-      </CVDataProvider>
+      <Sidebar items={sidebarData} />
+      {/* side two */}
+      <div className="flex-1 flex max-lg:flex-col">
+        <CVDataProvider>
+          {/* main content of current page */}
+          <main className="flex-1 px-5">
+            {children}
+            <NavBtns />
+          </main>
+          {/* third side */}
+          <section className="flex-1 sticky top-4 h-[calc(100vh-4rem)] p-5 max-lg:min-h-[750px] max-lg:grid">
+            <ResumeBar />
+          </section>
+        </CVDataProvider>
+      </div>
     </div>
   );
 }

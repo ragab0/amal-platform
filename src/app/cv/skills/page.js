@@ -172,8 +172,11 @@ export default function SkillsPage() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[800px] mx-auto">
-      <h1 className="heading-big">المهـــــــــــــــــارات</h1>
+    <div
+      className="flex flex-col items-center w-full max-w-[800px] mx-auto"
+      style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
+    >
+      <h1 className="heading-big">المهــــــــــــــارات</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-8">
         {/* Description Fields */}
         <div className="space-y-8">
@@ -183,6 +186,13 @@ export default function SkillsPage() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفاً عاماً عن مهاراتك..."
+            aiPrompt={{
+              type: "skillsGeneralDesc",
+              data: {
+                languageFields,
+                softSkillFields,
+              },
+            }}
           />
           <DraftEditor
             title="الاهتمامات"
@@ -190,6 +200,13 @@ export default function SkillsPage() {
             control={control}
             error={errors.interests?.message}
             placeholder="اكتب عن اهتماماتك..."
+            aiPrompt={{
+              type: "interests",
+              data: {
+                languageFields,
+                softSkillFields,
+              },
+            }}
           />
         </div>
         {/* Separator */}

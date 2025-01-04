@@ -3,6 +3,10 @@ import "draft-js/dist/Draft.css";
 import { useState, useRef } from "react";
 import { IoSparklesOutline } from "react-icons/io5";
 import { Controller } from "react-hook-form";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { generateDescription } from "@/store/features/ai/aiThunks";
+import { toast } from "react-toastify";
+import { markdownToDraft } from "markdown-draft-js";
 import {
   FiBold,
   FiItalic,
@@ -18,10 +22,6 @@ import {
   convertToRaw,
   convertFromRaw,
 } from "draft-js";
-import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
-import { generateDescription } from "@/store/features/ai/aiThunks";
-import { toast } from "react-toastify";
-import { markdownToDraft } from "markdown-draft-js";
 
 const TEMP_ADVICE = `أنا مطور برمجيات متحمس مع خبرة 5 سنوات في تطوير تطبيقات الويب. متخصص في React وNode.js، مع سجل حافل في تقديم حلول مبتكرة وعالية الأداء. شغوف بالتعلم المستمر وتحسين مهاراتي التقنية.`;
 const TEMP_RES = {
@@ -40,7 +40,7 @@ export default function DraftEditor({
 }) {
   const dispatch = useAppDispatch();
   const editorRef = useRef(null);
-  const { loading, isInitialized } = useAppSelector((state) => state.ai);
+  const { loading } = useAppSelector((state) => state.ai);
 
   function handleKeyCommand(command, editorState, { setEditorState }) {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -71,7 +71,7 @@ export default function DraftEditor({
       const contentState = convertFromRaw(draftRaw);
       setEditorState(EditorState.createWithContent(contentState));
     } catch (_) {
-      console.log("Failed to convert markdown to draft");
+      console.log("Failed to convert the generated markdown to draft");
       const contentState = ContentState.createFromText(
         payload.result?.replaceAll("*", "")
       );
@@ -98,7 +98,7 @@ export default function DraftEditor({
     <div
       className="draft-editor"
       style={
-        !isInitialized || loading
+        loading
           ? {
               opacity: ".5",
               pointerEvents: "none",
@@ -135,7 +135,7 @@ export default function DraftEditor({
           return (
             <div className="border border-text rounded-md overflow-hidden">
               {/* Toolbar */}
-              <div className="flex items-center gap-1 p-2 border-b border-text">
+              <div className="flex items-center gap-1 p-2 border-b border-text overflow-auto">
                 <div className="flex items-center">
                   <ToolbarButton
                     icon={FiAlignLeft}
@@ -206,7 +206,7 @@ export default function DraftEditor({
                   >
                     <IoSparklesOutline size={14} />
 
-                    {!isInitialized || loading ? (
+                    {loading ? (
                       <span
                         className="text-xs animate-spin h-4 w-4 border-2 border-r-main rounded-full"
                         title="جاري التوليد"

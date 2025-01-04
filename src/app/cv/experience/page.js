@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { experienceSchema } from "@/validations/experience";
-import { motion, AnimatePresence, delay } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { updateCV } from "@/store/features/cvs/cvsThunks";
 import { toast } from "react-toastify";
@@ -12,7 +12,6 @@ import FormActions from "@/components/buttons/FormActions";
 import AddButton from "@/components/buttons/AddButton";
 import ActionButtons from "@/components/buttons/ActionButtons";
 import FormInput from "@/components/formInput/FormInput";
-import MoreIcon from "@/assets/icons/MoreIcon";
 import DraftEditor from "../components/draft/DraftEditor";
 import DraftPreview from "../components/draft/DraftPreview";
 import getLocalDate from "@/utils/getLocalDate";
@@ -92,23 +91,14 @@ export default function Experience() {
     }
   }
 
-  function handleDescriptionClick(exp) {
-    handleEdit(exp);
-    setTimeout(() => {
-      const t = pageRef.current.querySelector("textarea");
-      t?.focus();
-      t?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
-  }
-
   function handleCopy(experience) {
     const newExperience = { ...experience, _id: undefined };
-    const updatedExperiences = [
-      ...experiences.slice(0, experiences.indexOf(experience) + 1),
-      newExperience,
-      ...experiences.slice(experiences.indexOf(experience) + 1),
-    ];
-
+    const updatedExperiences = [...experiences];
+    updatedExperiences.splice(
+      experiences.indexOf(experience) + 1,
+      0,
+      newExperience
+    );
     dispatch(updateCV({ experiences: updatedExperiences }));
   }
 
@@ -120,7 +110,7 @@ export default function Experience() {
       (direction === "down" && currentIndex < experiences.length - 1)
     ) {
       const updatedExperiences = [...experiences];
-      const temp = updatedExperiences[currentIndex];
+      const temp = { ...updatedExperiences[currentIndex] };
       updatedExperiences[currentIndex] = updatedExperiences[newIndex];
       updatedExperiences[newIndex] = temp;
 
@@ -189,7 +179,7 @@ export default function Experience() {
                     <AddDescriptionBtn
                       pageRef={pageRef}
                       handleEdit={handleEdit}
-                      item={ex}
+                      item={exp}
                     />
                   )}
                 </HoverCvPreviewCard>
@@ -227,7 +217,7 @@ export default function Experience() {
           </div>
 
           {/* Two column fields */}
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="المدينة"
@@ -245,7 +235,7 @@ export default function Experience() {
               spaceBlock={false}
             />
           </div>
-          <div className="grid grid-cols-2 gap-[10%]">
+          <div className="grid sm:grid-cols-2 gap-[10%]">
             <FormInput
               must={true}
               label="تاريخ البداية"

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { fetchRooms } from "@/store/features/chat/chatThunks";
 import { setCurrentRoom } from "@/store/features/chat/chatSlice";
+import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 
 const ChatRoomsList = () => {
   const dispatch = useAppDispatch();
@@ -13,11 +14,7 @@ const ChatRoomsList = () => {
   }, [dispatch]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-main"></div>
-      </div>
-    );
+    return <YoungCircleLoader isHFull={true} />;
   }
 
   return (
@@ -43,9 +40,7 @@ const ChatRoomsList = () => {
                   </span>
                 )}
               </div>
-              <p className="text-sm truncate mt-1">
-                {room.lastMessage}
-              </p>
+              <p className="text-sm truncate mt-1">{room.lastMessage}</p>
             </button>
           ))}
         </div>

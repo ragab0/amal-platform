@@ -4,6 +4,12 @@ import CairoMedium from "@/app/fonts/cairo/Cairo-Medium.ttf";
 import CairoSemiBold from "@/app/fonts/cairo/Cairo-SemiBold.ttf";
 import CairoBold from "@/app/fonts/cairo/Cairo-Bold.ttf";
 
+const rtl = {
+  flexDirection: "row-reverse",
+  textAlign: "right",
+  direction: "rtl",
+};
+
 // Register font for different weights
 Font.register({
   family: "Cairo",
@@ -13,29 +19,47 @@ Font.register({
       fontWeight: 400,
     },
     {
+      src: CairoRegular,
+      fontWeight: 400,
+      fontStyle: "italic",
+    },
+    {
       src: CairoMedium,
       fontWeight: 500,
+    },
+    {
+      src: CairoMedium,
+      fontWeight: 500,
+      fontStyle: "italic",
     },
     {
       src: CairoSemiBold,
       fontWeight: 600,
     },
     {
+      src: CairoSemiBold,
+      fontWeight: 600,
+      fontStyle: "italic",
+    },
+    {
       src: CairoBold,
       fontWeight: 700,
+    },
+    {
+      src: CairoBold,
+      fontWeight: 700,
+      fontStyle: "italic",
     },
   ],
 });
 
 export const styles = StyleSheet.create({
   page: {
-    flexDirection: "row-reverse",
+    ...rtl,
     backgroundColor: "white",
     fontFamily: "Cairo",
     padding: 0,
     margin: 0,
-    direction: "rtl",
-    textAlign: "right",
   },
   mainContent: {
     width: "70%",
@@ -43,13 +67,12 @@ export const styles = StyleSheet.create({
   },
   sideSection: {
     width: "30%",
-    display: "flex",
     flexDirection: "column",
     backgroundColor: "#3f6184",
   },
   section: {
     paddingHorizontal: 12,
-    marginBottom: 25,
+    marginBottom: 20,
   },
   sidebarSection: {
     paddingBottom: 50,
@@ -58,8 +81,9 @@ export const styles = StyleSheet.create({
     marginBottom: 0,
   },
 
-  // Section Titles && items && lists
+  // Section Titles
   sectionTitle: {
+    ...rtl,
     color: "#6b7f94",
     marginBottom: 5,
     borderBottom: "2px solid #6b7f94",
@@ -67,39 +91,53 @@ export const styles = StyleSheet.create({
     fontWeight: 700,
   },
   sidebarTitle: {
-    color: "white",
+    ...rtl,
     textAlign: "center",
+    color: "white",
     paddingVertical: "10 5",
     marginBottom: 0,
     fontSize: 15,
     fontWeight: 700,
   },
-  listItem: {
-    position: "relative",
-    display: "flex",
-    flexDirection: "row-reverse",
+
+  // Description section && its list items styles
+  description: {
+    color: "#333",
   },
+  item: {
+    ...rtl,
+    gap: 5,
+  },
+  itemBullet: {
+    ...rtl,
+    fontSize: 12,
+    color: "#6b7f94",
+  },
+  itemIcon: {
+    width: 12,
+    height: 12,
+    marginTop: 4,
+  },
+  itemText: {
+    ...rtl,
+    flex: 1,
+    fontSize: 11,
+    color: "#333",
+  },
+
   itemTitle: {
+    ...rtl,
     fontSize: 11,
   },
   itemSubtitle: {
+    ...rtl,
     fontSize: 12,
     color: "#666",
   },
   itemDate: {
+    ...rtl,
     fontSize: 11,
     color: "#888",
-    marginTop: "-5px",
-  },
-  bullet: {
-    marginLeft: 5,
-    fontSize: 12,
-    color: "white",
-  },
-  description: {
-    lineHeight: 1.6,
-    fontSize: 11,
-    color: "#333",
   },
 
   // 01] Logo
@@ -116,40 +154,19 @@ export const styles = StyleSheet.create({
   },
 
   // 02] Contact Info
-  contactItem: {
-    display: "flex",
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    gap: 5,
-    fontSize: 12,
-    color: "white",
-  },
-  contactIcon: {
-    width: 16,
-    height: 16,
-    color: "white",
-  },
   contactText: {
+    ...rtl,
     fontSize: 11,
     color: "white",
     lineHeight: 1.6,
   },
 
   // 03] Languages
-  languageItem: {
-    display: "flex !important",
-    flexDirection: "row-reverse",
-    alignItems: "center",
-    gap: 10,
-  },
-  languageItemName: {
-    flexShrink: 0,
-  },
   languageBar: {
+    ...rtl,
     flex: 1,
     height: 10,
     backgroundColor: "rgba(255, 255, 255, 0.2)",
-    marginTop: 5,
   },
   languageLevel: {
     width: "100%",
@@ -157,18 +174,9 @@ export const styles = StyleSheet.create({
     backgroundColor: "white",
   },
 
-  // 04] Volunteer Work
-  volunteerList: {
-    marginRight: 10,
-  },
-  volunteerSubItem: {
-    fontSize: 10,
-    marginTop: 2,
-    color: "white",
-  },
-
   // 01) Name;
   name: {
+    ...rtl,
     textAlign: "center",
     color: "#5b7d97",
     fontSize: 20,
@@ -176,20 +184,11 @@ export const styles = StyleSheet.create({
     fontWeight: 700,
   },
   title: {
+    ...rtl,
     textAlign: "center",
     color: "#5b7d97",
     fontSize: 12,
     marginBottom: 20,
     fontWeight: 500,
-  },
-
-  // 02) Objective;
-  // 03) Education;
-  // 04) Experience
-  // 05) Courses;
-  // 06) Personal Skills;
-  experienceItem: {
-    marginBottom: 15,
-    fontSize: 12,
   },
 });

@@ -10,7 +10,7 @@ export default function AddButton({
     <button
       type="button"
       onClick={onClick}
-      className={`btn-secondary w-full flex items-center justify-center gap-2 mt-8 text-xl ${
+      className={`btn-secondary w-full flex items-center justify-center gap-2 mt-8 text-lg md:text-xl ${
         isLight ? "bg-text text-white hover:bg-text-stroke" : ""
       } ${className}`}
     >

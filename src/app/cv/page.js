@@ -73,7 +73,7 @@ export default function PersonalDetails() {
         </div>
 
         {/* Two column fields */}
-        <div className="grid grid-cols-2 gap-[10%]">
+        <div className="grid sm:grid-cols-2 gap-[10%]">
           <FormInput
             label="المدينة"
             name="city"
@@ -117,7 +117,7 @@ export default function PersonalDetails() {
                   opacity: { duration: 0.15 },
                   layout: { duration: 0.2 },
                 }}
-                className="grid grid-cols-2 gap-[10%] gap-y-8 mt-8"
+                className="grid sm:grid-cols-2 gap-[10%] gap-y-8 mt-8"
               >
                 <FormInput
                   label="تاريخ الميلاد"

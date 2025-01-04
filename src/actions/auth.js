@@ -7,8 +7,6 @@ const NODE_ENV = process.env.NODE_ENV;
 
 // Using React cache to memoize the auth state
 export async function getInitialAuthState() {
-  console.log("INSIDE SERVER AUTH");
-
   const cookieStore = await cookies();
   try {
     const token = cookieStore.get("jwt")?.value;
@@ -19,7 +17,6 @@ export async function getInitialAuthState() {
           isAuthenticated: false,
           loading: false,
           error: null,
-          TOKEN: null,
         },
       };
     }
@@ -34,15 +31,12 @@ export async function getInitialAuthState() {
       timeout: NODE_ENV === "development" ? 2000 : 8000,
     });
 
-    console.log("TOKEN TO SAVE in LOCALSTORAGE HAS BEEN CAME !!");
-
     return {
       auth: {
         user: response.data.result || {},
         isAuthenticated: true,
         loading: false,
         error: null,
-        TOKEN: token,
       },
     };
   } catch (error) {
@@ -53,7 +47,6 @@ export async function getInitialAuthState() {
         isAuthenticated: false,
         loading: false,
         error: error.response?.data?.result || null,
-        TOKEN: null,
       },
     };
   }

@@ -111,7 +111,6 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={() => {
-            console.log("delete account");
             setShowDeleteModal(false);
           }}
           title="تنبيـــه"

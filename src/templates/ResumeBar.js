@@ -2,15 +2,21 @@
 import { PDFViewer } from "@react-pdf/renderer";
 import { useAppSelector } from "@/hooks/ReduxHooks";
 import Template1 from "./temp/Template1";
+import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 
 export default function ResumeBar() {
-  const { myCV } = useAppSelector((state) => state.cvs);
+  const { myCV, loading, isInitialized } = useAppSelector((state) => state.cvs);
+
+  if (!isInitialized || loading) {
+    return <YoungCircleLoader isHFull={true} isBig={true} />;
+  }
 
   return (
     <div className="resume-bar h-full">
       <div className="w-full h-full rounded-lg shadow-md mb-4">
-        <PDFViewer width="100%" height="100%" className="rounded-lg">
-          {/* <Template1 data={myCV} /> */}
+        <PDFViewer width="100%" height="100%" className={`rounded-lg`}>
+          {/* ${loading ? "pointer-events-none opacity-10 animate-pulse" : ""} */}
+          <Template1 data={myCV} />
         </PDFViewer>
       </div>
       <h3 className="text-second text-center heading-h3 underline hover:opacity-70 cursor-pointer">
