@@ -4,8 +4,8 @@ import { Cairo } from "next/font/google";
 import { getInitialAuthState } from "@/actions/auth";
 import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
-import LoadingWrapper from "@/components/LoadingWrapper";
-import NotificationInitializer from "@/components/notifications/NotificationInitializer";
+import LoadingWrapper from "@/providers/LoadingWrapper";
+import SocketNotificationInitializer from "@/providers/SocketNotificationInitializer";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -77,7 +77,7 @@ export default async function RootLayout({ children }) {
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
           <LoadingWrapper>
-            <NotificationInitializer />
+            <SocketNotificationInitializer />
             <ToastContainer
               position="top-right"
               autoClose={5000}

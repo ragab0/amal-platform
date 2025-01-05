@@ -1,32 +1,46 @@
 import { io } from "socket.io-client";
 
+const parsedUrl = new URL(process.env.NEXT_PUBLIC_API_URL).origin;
+
 class SocketService {
   constructor() {
     this.socket = null;
     this.listeners = new Map();
+    this.currentRoom = null;
   }
 
+  // Connect & Disconnect
   connect() {
     if (!this.socket) {
-      this.socket = io(process.env.NEXT_PUBLIC_API_URL, {
+      this.socket = io(parsedUrl, {
         withCredentials: true,
+        transports: ["websocket"],
         autoConnect: true,
-        reconnection: true,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        reconnectionAttempts: 5,
+        reconnection: false,
       });
 
       this.socket.on("connect", () => {
         console.log("Socket connected:", this.socket.id);
       });
 
-      this.socket.on("connect_error", (error) => {
-        console.log("Socket connection error:", error);
+      this.socket.on("new_message", function (msg) {
+        console.log("new_message", msg);
       });
 
       this.socket.on("disconnect", (reason) => {
         console.log("Socket disconnected:", reason);
+      });
+
+      this.socket.on("connect_error", (error) => {
+        console.log("Socket connection error:", error);
+      });
+
+      this.socket.on("error_message", (error) => {
+        console.log("Socket error message:", error);
+      });
+
+      this.socket.on("error", (error) => {
+        console.log("Socket error:", error);
       });
     }
     return this.socket;
@@ -34,69 +48,62 @@ class SocketService {
 
   disconnect() {
     if (this.socket) {
+      if (this.currentRoom) {
+        this.leaveCurrentRoom();
+      }
       this.socket.disconnect();
       this.socket = null;
+      this.currentRoom = null;
     }
   }
 
-  // Join a room
+  // // Room Management
   joinRoom(roomId) {
-    if (this.socket) {
-      this.socket.emit("join_room", { roomId });
-    }
+    if (!this.socket) return;
+    console.log("JOOOOOOOOOOOOING ROOM");
+
+    this.socket.emit("join_room", { roomId });
   }
 
-  // Leave a room
   leaveRoom(roomId) {
-    if (this.socket) {
-      this.socket.emit("leave_room", { roomId });
-    }
+    if (!this.socket || !this.currentRoom) return;
+    this.socket.emit("leave_room", { roomId });
   }
 
-  // Send a message
-  sendMessage(roomId, message) {
-    if (this.socket) {
-      this.socket.emit("message", { roomId, message });
-    }
+  // Message & Status Management
+  sendMessage(roomId, msgData) {
+    if (!this.socket || !roomId) return;
+    this.socket.emit("message", {
+      roomId,
+      msgData,
+    });
   }
 
-  // Send typing status
-  sendTyping(roomId, isTyping) {
-    if (this.socket) {
-      this.socket.emit("typing", { roomId, isTyping });
-    }
+  sendStartTyping(roomId, isTyping) {
+    if (!this.socket || !roomId) return;
+    this.socket.emit("start_typing", {
+      roomId,
+      isTyping,
+      isAdmin: this.isAdmin,
+    });
   }
 
-  // GLOBAL Add event listener
-  on(event, callback) {
-    if (this.socket) {
-      this.socket.on(event, callback);
-      // Store the callback for cleanup
-      if (!this.listeners.has(event)) {
-        this.listeners.set(event, new Set());
-      }
-      this.listeners.get(event).add(callback);
-    }
+  sendStopTyping(roomId) {
+    if (!this.socket || !roomId) return;
+    this.socket.emit("stop_typing", {
+      roomId,
+    });
   }
 
-  // GLOBAL Remove event listener
-  off(event, callback) {
-    if (this.socket) {
-      this.socket.off(event, callback);
-      // Remove from stored listeners
-      if (this.listeners.has(event)) {
-        this.listeners.get(event).delete(callback);
-      }
-    }
-  }
+  // sendTyping(roomId, isTyping) {
+  //   if (!this.socket || !roomId) return;
 
-  // GLOBAL Remove all listeners for an event
-  removeAllListeners(event) {
-    if (this.socket) {
-      this.socket.removeAllListeners(event);
-      this.listeners.delete(event);
-    }
-  }
+  //   this.socket.emit("typing", {
+  //     roomId,
+  //     isTyping,
+  //     isAdmin: this.isAdmin
+  //   });
+  // }
 }
 
 // Our only singleton instance;

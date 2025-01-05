@@ -19,7 +19,10 @@ export default function NotificationBadge() {
   );
 
   return (
-    <DropdownMenu menuWrapperCls="right-0 w-80" trigger={notificationTrigger}>
+    <DropdownMenu
+      menuWrapperCls="xl:right-0 w-max"
+      trigger={notificationTrigger}
+    >
       <NotificationList />
     </DropdownMenu>
   );

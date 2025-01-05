@@ -6,8 +6,15 @@ import ChatRoomsList from "./chat/ChatRoomsList";
 
 export default function SupportClient() {
   const { user } = useAppSelector((state) => state.auth);
+  const { room: { result: currentRoom = {} } = {} } = useAppSelector(
+    (state) => state.support
+  );
   const isAdmin = user?.role === "admin";
   const [showRoomList, setShowRoomList] = useState(true);
+
+  function handleClick() {
+    setShowRoomList(!showRoomList);
+  }
 
   if (isAdmin) {
     return (
@@ -16,28 +23,32 @@ export default function SupportClient() {
           {/* Mobile Toggle */}
           <button
             className="lg:hidden w-full p-2 bg-main text-white rounded-lg mb-4"
-            onClick={() => setShowRoomList(!showRoomList)}
+            onClick={handleClick}
           >
-            {showRoomList ? "Show Chat" : "Show Rooms"}
+            {showRoomList ? "رؤية المحادثة" : "الرجوع الى المحادثات"}
           </button>
 
           {/* Rooms List - Hidden on mobile when chat is shown */}
-          <div
-            className={`${
-              showRoomList ? "block" : "hidden"
-            } lg:block lg:col-span-4 bg-white rounded-lg shadow`}
-          >
-            <ChatRoomsList />
-          </div>
+          {isAdmin && (
+            <div
+              className={`${
+                showRoomList ? "block" : "hidden"
+              } lg:block lg:col-span-4 rounded-lg border border-b-neutral-300 shadow`}
+            >
+              <ChatRoomsList />
+            </div>
+          )}
 
           {/* Chat Room - Hidden on mobile when room list is shown */}
-          <div
-            className={`${
-              showRoomList ? "hidden" : "block"
-            } lg:block lg:col-span-8 bg-white rounded-lg shadow`}
-          >
-            <ChatRoom isAdmin={true} />
-          </div>
+          {Boolean([!isAdmin, isAdmin && currentRoom._id].find(Boolean)) && (
+            <div
+              className={`${
+                showRoomList ? "hidden" : "block"
+              } lg:block lg:col-span-8 rounded-lg border border-b-neutral-300 shadow`}
+            >
+              <ChatRoom isAdmin={true} />
+            </div>
+          )}
         </div>
       </div>
     );
@@ -45,7 +56,7 @@ export default function SupportClient() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="max-w-4xl mx-auto bg-white rounded-lg shadow">
+      <div className="max-w-4xl mx-auto rounded-lg border border-neutral-300 shadow">
         <ChatRoom isAdmin={false} />
       </div>
     </div>

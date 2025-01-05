@@ -4,12 +4,13 @@ export default function YoungCircleLoader({
   isHFull = false,
   isWFull = false,
   isBig = false,
+  className = "",
 }) {
   return (
     <div
       className={`flex items-center justify-center ${isHFull ? "h-full" : ""} ${
         isWFull ? "w-full" : ""
-      }`}
+      } ${className}`}
     >
       <div
         className={`animate-spin rounded-full border-main ${

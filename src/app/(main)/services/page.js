@@ -46,6 +46,7 @@ const services = [
     ],
     to: "#",
     btnText: "شراء الآن",
+    price: "3$",
   },
   {
     title: "حزمة بريميوم",
@@ -56,6 +57,7 @@ const services = [
     ],
     to: "#",
     btnText: "شراء الآن",
+    price: "8$",
   },
 ];
 
@@ -78,10 +80,13 @@ export default function ServicesPage() {
             key={index}
             className="flex flex-col bg-pink border-[3px] border-second rounded-t-xl w-full max-w-[500px] mx-auto h-full"
           >
-            <HoverHeader className="bg-second flex items-center justify-center rounded-t-lg">
-              <h3 className="heading-sub font-me text-white my-[40px]">
+            <HoverHeader className="bg-second flex flex-col py-10 gap-4 items-center justify-center rounded-t-lg">
+              <h3 className="heading-sub font-me text-white">
                 {service.title}
               </h3>
+              <h4 className="heading-sub font-me text-white">
+                {service.price || "0$"}
+              </h4>
             </HoverHeader>
             <ul className="py-[100px] px-[50px] border-b border-second space-y-6 list-disc h-full text-lg">
               {service.items.map((item, itemIndex) => (

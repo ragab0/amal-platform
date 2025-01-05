@@ -49,12 +49,13 @@ export default function Navbar() {
           )}
         </div>
         {/* Desktop Navigation */}
-        <div className="navbar-items hidden lg:flex items-center justify-center flex-1">
+        <div className="navbar-items hidden lg:flex items-center justify-center">
           {navLinks.map((link, i) => (
             <Link
               key={i}
               href={link.href}
-              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 text-white hover:opacity-90 transition-all duration-300 text-lg
+              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 text-white hover:opacity-90 transition-all 
+                duration-300 text-lg
                 ${i === 0 ? "outline-bottom" : ""}
                 `}
             >
@@ -65,7 +66,7 @@ export default function Navbar() {
         {isAuthenticated ? (
           <>
             {/* User Section */}
-            <div className="flex lg:gap-6 items-center space-x-4">
+            <div className="flex xl:gap-6 items-center space-x-4">
               <NotificationBadge />
               <DropdownMenu menuClassName="py-2" trigger={<User user={user} />}>
                 <UserMenu userMenuItems={userMenuItems} />

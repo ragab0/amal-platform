@@ -13,7 +13,7 @@ export default function DropdownMenu({
         className={`absolute top-full z-[101] left-0 hidden group-hover:block ${menuWrapperCls} min-w-max`}
       >
         <div
-          className={`mt-3 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 ${menuClassName}`}
+          className={`mt-3 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 max-w-[200px] ${menuClassName}`}
         >
           {children}
         </div>

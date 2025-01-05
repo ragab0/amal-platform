@@ -58,6 +58,13 @@ export default function PersonalDetails() {
           />
           <FormInput
             must={true}
+            label="المسمى الوظيفي"
+            name="headline"
+            register={register}
+            error={errors.headline?.message}
+          />
+          <FormInput
+            must={true}
             label="البريد الإلكتروني"
             name="email"
             register={register}

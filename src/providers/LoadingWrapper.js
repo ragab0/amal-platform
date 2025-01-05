@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import CircleLoader from "./loaders/CircleLoader";
+import CircleLoader from "../components/loaders/CircleLoader";
 
 export default function LoadingWrapper({ children }) {
   const [isLoading, setIsLoading] = useState(true);

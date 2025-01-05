@@ -1,93 +1,122 @@
 "use client";
+import "./ChatRoom.css";
+import socketService from "@/services/socketService";
+import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
-import { addMessage } from "@/store/features/chat/chatSlice";
-import { BsEmojiSmile, BsPaperclip, BsSend } from "react-icons/bs";
 import { useForm } from "react-hook-form";
-import socketService from "@/services/socketService";
+import { BsEmojiSmile, BsPaperclip, BsSend } from "react-icons/bs";
+import { fetchRoom } from "@/store/features/support/supportThunks";
+import { addMessage } from "@/store/features/support/supportSlice";
+import { useState } from "react";
 
-const ChatRoom = ({ isAdmin = false }) => {
-  const messagesEndRef = useRef(null);
+const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
+  const bodyRef = useRef(null);
   const dispatch = useAppDispatch();
+  const [isTyping, setIsTyping] = useState(null);
+  const [isTypingSent, setIsTypingSent] = useState(null);
   const {
-    currentRoom = {},
-    messages,
-    isTyping,
-  } = useAppSelector((state) => state.chat);
+    user: { _id: userId },
+  } = useAppSelector((state) => state.auth);
+  const {
+    room: { result: currentRoom = {}, isInitialized, loading },
+  } = useAppSelector((state) => state.support);
 
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
+  const msg = watch("message", "");
 
+  // Initialize socket with user type
   useEffect(() => {
-    // Connect to socket when component mounts
-    const socket = socketService.connect();
-
-    // Set up event listeners
-    socket.on("message_received", (data) => {
-      dispatch(addMessage({ roomId: data.roomId, message: data.message }));
-    });
-
-    socket.on("typing_status", (data) => {
-      // Handle typing status
-      console.log("Typing status:", data);
-    });
-
-    // Join room if we have a current room
-    if (currentRoom?.id) {
-      socketService.joinRoom(currentRoom.id);
+    if (isAdmin) {
+      dispatch(fetchRoom(currentRoom._id));
+      socketService.joinRoom(currentRoom._id);
+    } else {
+      dispatch(fetchRoom("mine"));
     }
 
-    // Cleanup function
-    return () => {
-      if (currentRoom?.id) {
-        socketService.leaveRoom(currentRoom.id);
+    socketService.socket.on("new_message", (message) => {
+      dispatch(addMessage(message));
+    });
+
+    socketService.socket.on("user_started_typing", function ({ userId: uI }) {
+      if (userId !== uI) {
+        setIsTyping(true);
       }
-      socketService.removeAllListeners("message_received");
-      socketService.removeAllListeners("typing_status");
+    });
+
+    socketService.socket.on("user_stopped_typing", function ({ userId: uI }) {
+      if (userId !== uI) {
+        setIsTyping(false);
+      }
+    });
+
+    return function () {
+      socketService.leaveRoom(currentRoom._id);
+      socketService.socket.removeListener("new_message");
+      socketService.socket.removeListener("user_started_typing");
+      socketService.socket.removeListener("user_stopped_typing");
+      socketService.sendStopTyping(currentRoom._id);
     };
-  }, [currentRoom?.id, dispatch]);
+  }, [dispatch, currentRoom._id, isAdmin]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  useEffect(
+    function () {
+      if (!currentRoom?._id) return;
+      const isTyping = msg.length > 0;
+      console.log(msg, isTyping, isTypingSent);
 
+      if (isTyping) {
+        if (isTypingSent) return;
+        socketService.sendStartTyping(currentRoom._id, isTyping);
+        setIsTypingSent(true);
+      } else {
+        socketService.sendStopTyping(currentRoom._id);
+        setIsTypingSent(false);
+      }
+
+      return function () {
+        setIsTypingSent(false);
+      };
+    },
+    [msg]
+  );
+
+  // Scroll to bottom on new messages
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    bodyRef.current?.scrollTo({
+      behavior: "smooth",
+      top: bodyRef.current.scrollHeight,
+    });
+  }, [currentRoom?.messages]);
 
   const onSubmit = (data) => {
-    if (!data.message.trim()) return;
+    console.log(data);
 
-    const newMessage = {
-      id: Date.now(),
+    socketService.sendMessage(currentRoom._id, {
       text: data.message,
-      sender: isAdmin ? "admin" : "user",
-      timestamp: new Date().toISOString(),
-    };
-
-    // Send message through socket
-    socketService.sendMessage(currentRoom?.id, newMessage);
-
-    // Optimistically add message to UI
-    dispatch(addMessage({ roomId: currentRoom?.id, message: newMessage }));
+    });
     reset();
   };
 
   const renderMessages = () => {
-    const roomMessages = messages[currentRoom?.id] || [];
+    const allMessages = [...(currentRoom?.messages || [])];
+
     let lastDate = null;
 
-    return roomMessages.map((message) => {
-      const date = new Date(message.timestamp);
+    return allMessages.map((message) => {
+      const date = new Date(message.createdAt);
       const showDate = !lastDate || !isSameDay(lastDate, date);
       lastDate = date;
+      const isSentByMe = message.sender === userId;
 
       return (
-        <div key={message.id}>
+        <div key={message._id}>
           {showDate && (
             <div className="flex items-center justify-center my-4">
               <div className="px-4 py-1 text-sm text-gray-500 bg-gray-100 rounded-full">
@@ -97,18 +126,26 @@ const ChatRoom = ({ isAdmin = false }) => {
           )}
           <div
             className={`flex ${
-              message.sender === "user" ? "justify-end" : "justify-start"
-            } mb-2`}
+              isSentByMe ? "justify-start" : "justify-end"
+            } mb-2 rtl`}
           >
             <div
               className={`max-w-[70%] ${
-                message.sender === "user"
-                  ? "bg-main text-white rounded-tr-lg rounded-tl-lg rounded-bl-lg"
-                  : "bg-[#F6F6F6] text-[#B7B1B1] rounded-tr-lg rounded-tl-lg rounded-br-lg"
-              } p-3`}
+                isSentByMe
+                  ? "bg-emerald-600 text-white rounded-tr-lg rounded-tl-lg rounded-bl-lg"
+                  : "bg-[#F6F6F6] text-gray-700 rounded-tr-lg rounded-tl-lg rounded-br-lg"
+              } p-3 relative`}
             >
               <p>{message.text}</p>
-              <p className="text-xs text-text mt-1">{formatTime(date)}</p>
+              <p
+                className={`text-xs mt-1 ${
+                  isSentByMe ? "text-emerald-100" : "text-gray-500"
+                }`}
+              >
+                {formatTime(date)}
+                {/* {isPending && " (جاري الإرسال...)"} */}
+                {/* {isFailed && " (فشل الإرسال)"} */}
+              </p>
             </div>
           </div>
         </div>
@@ -116,59 +153,61 @@ const ChatRoom = ({ isAdmin = false }) => {
     });
   };
 
-  return (
-    <div className="flex flex-col min-h-[600px]">
-      {isAdmin && (
-        <>
-          <div className="p-4 border-b">
-            <h2 className="text-xl font-semibold">
-              Chat with {currentRoom ? `Room ${currentRoom.id}` : "Support"}
-            </h2>
-          </div>
-          <hr className="w-full" />
-        </>
-      )}
+  if (!isInitialized || loading) {
+    return (
+      <YoungCircleLoader
+        isHFull={true}
+        isBig={true}
+        className="min-h-[600px]"
+      />
+    );
+  }
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {renderMessages()}
-        {isTyping && (
-          <div className="flex items-center space-x-2 text-gray-500">
-            <div className="flex space-x-1">
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></div>
-            </div>
-            <span>Typing...</span>
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+  return (
+    <div className="flex flex-col h-[600px]">
+      <div className="p-4 border-b border-b-neutral-300">
+        <h2 className="text-xl font-semibold">تحدث مع الدعم</h2>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="border-t p-4">
-        <div className="flex items-center space-x-4">
+      <div className="flex-1 p-4 overflow-y-auto" ref={bodyRef}>
+        {renderMessages()}
+        {isTyping && (
+          <div className="typing-indicator">
+            <div className="dot"></div>
+            <div className="dot"></div>
+            <div className="dot"></div>
+          </div>
+        )}
+      </div>
+
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="border-t border-t-neutral-300 p-4"
+      >
+        <div className="flex items-center gap-2">
           <input
             {...register("message")}
-            className="flex-1 p-4 border rounded-lg focus:outline-none focus:border-main"
-            placeholder="Type your message..."
+            className="flex-1 p-3 border rounded-lg focus:outline-none focus:border-main"
+            placeholder="اكتب رسالتك..."
           />
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center">
             <button
               type="button"
-              className="w-[45px] h-[45px] flex items-center justify-center text-gray-500 hover:text-main"
+              className="py-3 px-2 flex items-center justify-center text-gray-500 hover:text-main"
             >
               <BsEmojiSmile size={24} />
             </button>
             <button
               type="button"
-              className="w-[45px] h-[45px] flex items-center justify-center text-gray-500 hover:text-main"
+              className="py-3 px-2 flex items-center justify-center text-gray-500 hover:text-main"
             >
               <BsPaperclip size={24} />
             </button>
             <button
               type="submit"
-              className="w-[45px] h-[45px] flex items-center justify-center text-white bg-main rounded-lg hover:bg-opacity-90"
+              className="p-2 ms-2 text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
             >
-              <BsSend size={20} />
+              <BsSend size={24} />
             </button>
           </div>
         </div>
@@ -186,7 +225,7 @@ const isSameDay = (date1, date2) => {
 };
 
 const formatDate = (date) => {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("ar-EG", {
     weekday: "long",
     year: "numeric",
     month: "long",
@@ -195,7 +234,7 @@ const formatDate = (date) => {
 };
 
 const formatTime = (date) => {
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat("ar-EG", {
     hour: "numeric",
     minute: "numeric",
     hour12: true,

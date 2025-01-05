@@ -4,7 +4,7 @@ import cvsReducer from "./features/cvs/cvsSlice";
 import reviewsReducer from "./features/reviews/reviewsSlice";
 import adminReducer from "./features/admin/adminSlice";
 import aiReducer from "./features/ai/aiSlice";
-import chatReducer from "./features/chat/chatSlice";
+import supportReducer from "./features/support/supportSlice";
 import notificationsReducer from "./features/notifications/notificationsSlice";
 import logger from "redux-logger";
 
@@ -18,8 +18,8 @@ export function makeStore(preloadedState = {}) {
       reviews: reviewsReducer,
       admin: adminReducer,
       ai: aiReducer,
-      chat: chatReducer,
       notifications: notificationsReducer,
+      support: supportReducer,
     },
     preloadedState,
     middleware: function (getDefaultMiddles) {
