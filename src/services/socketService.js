@@ -79,12 +79,10 @@ class SocketService {
     });
   }
 
-  sendStartTyping(roomId, isTyping) {
+  sendStartTyping(roomId) {
     if (!this.socket || !roomId) return;
     this.socket.emit("start_typing", {
       roomId,
-      isTyping,
-      isAdmin: this.isAdmin,
     });
   }
 

@@ -1,5 +1,6 @@
-import { FadeInUp, HoverCard } from "@/components/motion/MotionWrappers";
-import NotificationBadge from "@/components/notifications/NotificationBadge";
+import "./page.css";
+import { FadeInUp } from "@/components/motion/MotionWrappers";
+import NotificationList from "@/components/notifications/NotificationList";
 
 export const metadata = {
   title: "الإشعارات | منصة عمل",
@@ -13,13 +14,13 @@ export const metadata = {
 
 export default function NotificationsPage() {
   return (
-    <div className="container mx-auto px-4 pb-[250px]">
+    <div className="notifications-page container mx-auto px-4 pb-[250px]">
       <div className="text-center my-[160px]">
         <FadeInUp>
           <h1 className="heading-big">الإشعارات</h1>
         </FadeInUp>
       </div>
-      <NotificationBadge />
+      <NotificationList isPage={true} />
     </div>
   );
 }
