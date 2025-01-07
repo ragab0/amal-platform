@@ -30,7 +30,9 @@ const authSlice = createSlice({
     },
     resetAuth: () => initialState,
     setUserReview: (state, { payload }) => {
-      state.user.review = payload;
+      console.log("############", payload);
+
+      state.user.myReview = payload;
     },
   },
   extraReducers: (builder) => {

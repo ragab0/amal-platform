@@ -8,8 +8,6 @@ import {
 } from "./reviewsThunks";
 
 const initialState = {
-  // User's personal review
-  myReview: {},
   // All reviews with pagination
   reviews: [],
   totalPages: 0,
@@ -41,7 +39,6 @@ const reviewsSlice = createSlice({
       })
       .addCase(createReview.fulfilled, (state, action) => {
         state.loading = false;
-        state.myReview = action.payload.result;
       })
       .addCase(createReview.rejected, (state, action) => {
         state.loading = false;
@@ -55,7 +52,6 @@ const reviewsSlice = createSlice({
       })
       .addCase(getMyReview.fulfilled, (state, action) => {
         state.loading = false;
-        state.myReview = action.payload.result;
       })
       .addCase(getMyReview.rejected, (state, action) => {
         state.loading = false;
@@ -69,7 +65,6 @@ const reviewsSlice = createSlice({
       })
       .addCase(updateReview.fulfilled, (state, action) => {
         state.loading = false;
-        state.myReview = action.payload.result;
       })
       .addCase(updateReview.rejected, (state, action) => {
         state.loading = false;
@@ -83,7 +78,6 @@ const reviewsSlice = createSlice({
       })
       .addCase(deleteReview.fulfilled, (state) => {
         state.loading = false;
-        state.myReview = {};
       })
       .addCase(deleteReview.rejected, (state, action) => {
         state.loading = false;
@@ -109,5 +103,6 @@ const reviewsSlice = createSlice({
   },
 });
 
-export const { clearError, resetReviews, setCurrentPage } = reviewsSlice.actions;
+export const { clearError, resetReviews, setCurrentPage } =
+  reviewsSlice.actions;
 export default reviewsSlice.reducer;

@@ -28,7 +28,7 @@ export async function getInitialAuthState() {
       },
       withCredentials: true,
       credentials: "include",
-      timeout: NODE_ENV === "development" ? 2000 : 20000,
+      timeout: NODE_ENV === "development" ? 8000 : 20000,
     });
 
     return {
