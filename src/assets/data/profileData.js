@@ -58,4 +58,9 @@ export const menuItems = [
     label: "معلومات الحساب",
     href: "/profile/account",
   },
+  {
+    id: "review",
+    label: "تقييمي",
+    href: "/profile/review",
+  },
 ];

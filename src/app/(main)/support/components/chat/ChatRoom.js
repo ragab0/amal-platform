@@ -14,9 +14,8 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
   const bodyRef = useRef(null);
   const dispatch = useAppDispatch();
   const [isTyping, setIsTyping] = useState(null);
-  const [isTypingSent, setIsTypingSent] = useState(null);
   const {
-    user: { _id: userId },
+    user: { _id },
   } = useAppSelector((state) => state.auth);
   const {
     room: { result: currentRoom = {}, isInitialized, loading },
@@ -27,7 +26,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { isValid },
   } = useForm();
   const msg = watch("message", "");
 
@@ -40,27 +39,33 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
       dispatch(fetchRoom("mine"));
     }
 
-    socketService.socket.on("new_message", (message) => {
+    socketService.socket?.on("new_message", (message) => {
       dispatch(addMessage(message));
     });
 
-    socketService.socket.on("user_started_typing", function ({ userId: uI }) {
-      if (userId !== uI) {
-        setIsTyping(true);
+    socketService.socket?.on(
+      "user_started_typing",
+      function ({ userId, roomId }) {
+        if (_id !== userId && roomId === currentRoom._id) {
+          setIsTyping(true);
+        }
       }
-    });
+    );
 
-    socketService.socket.on("user_stopped_typing", function ({ userId: uI }) {
-      if (userId !== uI) {
-        setIsTyping(false);
+    socketService.socket?.on(
+      "user_stopped_typing",
+      function ({ userId, roomId }) {
+        if (_id !== userId && roomId === currentRoom._id) {
+          setIsTyping(false);
+        }
       }
-    });
+    );
 
     return function () {
       socketService.leaveRoom(currentRoom._id);
-      socketService.socket.removeListener("new_message");
-      socketService.socket.removeListener("user_started_typing");
-      socketService.socket.removeListener("user_stopped_typing");
+      socketService.socket?.removeListener("new_message");
+      socketService.socket?.removeListener("user_started_typing");
+      socketService.socket?.removeListener("user_stopped_typing");
       socketService.sendStopTyping(currentRoom._id);
     };
   }, [dispatch, currentRoom._id, isAdmin]);
@@ -68,24 +73,22 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
   useEffect(
     function () {
       if (!currentRoom?._id) return;
-      const isTyping = msg.length > 0;
-      console.log(msg, isTyping, isTypingSent);
 
-      if (isTyping) {
-        if (isTypingSent) return;
-        socketService.sendStartTyping(currentRoom._id, isTyping);
-        setIsTypingSent(true);
+      const hasMessage = msg.trim().length > 0;
+
+      if (hasMessage) {
+        socketService.sendStartTyping(currentRoom._id);
       } else {
         socketService.sendStopTyping(currentRoom._id);
-        setIsTypingSent(false);
       }
-
-      return function () {
-        setIsTypingSent(false);
-      };
     },
-    [msg]
+    [msg, currentRoom._id]
   );
+
+  // Reset typing state when changing rooms
+  useEffect(() => {
+    socketService.sendStopTyping(currentRoom._id);
+  }, [currentRoom._id]);
 
   // Scroll to bottom on new messages
   useEffect(() => {
@@ -113,7 +116,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
       const date = new Date(message.createdAt);
       const showDate = !lastDate || !isSameDay(lastDate, date);
       lastDate = date;
-      const isSentByMe = message.sender === userId;
+      const isSentByMe = message.sender === _id;
 
       return (
         <div key={message._id}>
@@ -206,6 +209,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
             <button
               type="submit"
               className="p-2 ms-2 text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
+              disabled={!isValid}
             >
               <BsSend size={24} />
             </button>

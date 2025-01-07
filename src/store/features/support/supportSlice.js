@@ -26,8 +26,17 @@ const supportSlice = createSlice({
     addMessage: (state, { payload }) => {
       state.room.result.messages.push(payload);
     },
+    setRoomsLastMsg: (state, { payload }) => {
+      const i = state.allRooms.list.findIndex((r) => r._id === payload.room);
+      if (i > -1) {
+        state.allRooms.list[i].lastMessage = payload;
+      }
+    },
     setRooms: (state, { payload }) => {
       state.allRooms.list = payload;
+    },
+    setRoomsLoading: (state, { payload }) => {
+      state.allRooms.loading = payload;
     },
     setCurrentRoomId: (state, { payload: { roomId } }) => {
       if (roomId === state.room.result._id) return;
@@ -85,6 +94,8 @@ export const {
   setMessages,
   addMessage,
   setRooms,
+  setRoomsLastMsg,
+  setRoomsLoading,
   setCurrentRoomId,
   setTyping,
   setLoading,

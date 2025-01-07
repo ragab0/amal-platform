@@ -1,7 +1,7 @@
 import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 import { Cairo } from "next/font/google";
-import { getInitialAuthState } from "@/actions/auth";
+import { getInitialAuthState } from "@/components/actions/auth";
 import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
 import LoadingWrapper from "@/providers/LoadingWrapper";

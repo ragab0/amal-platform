@@ -1,11 +1,12 @@
 "use client";
+import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
+import socketService from "@/services/socketService";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
-import { fetchAllRooms } from "@/store/features/support/supportThunks";
-import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 import {
-  setCurrentRoom,
   setCurrentRoomId,
+  setRoomsLastMsg,
+  setRooms,
 } from "@/store/features/support/supportSlice";
 
 export default function ChatRoomsList() {
@@ -16,7 +17,19 @@ export default function ChatRoomsList() {
   } = useAppSelector((state) => state.support);
 
   useEffect(() => {
-    dispatch(fetchAllRooms());
+    const socket = socketService.connect();
+    socket.emit("get_room_list");
+    socket.on("room_list_updated", function (list) {
+      dispatch(setRooms(list));
+    });
+    socket.on("rooms_last_msg_updated", function (updatedMsg) {
+      dispatch(setRoomsLastMsg(updatedMsg));
+    });
+
+    // Cleanup listeners on unmount
+    return () => {
+      socket.off("rooms_last_msg_updated");
+    };
   }, [dispatch]);
 
   const handleRoomChange = (roomId) => {
@@ -45,6 +58,7 @@ export default function ChatRoomsList() {
             >
               <div className="flex items-center justify-between">
                 <span>{`${room.user?.fname} ${room.user?.lname} | ${room.user?.email}`}</span>
+
                 {room.unreadCount > 0 && (
                   <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
                     {room.unreadCount}

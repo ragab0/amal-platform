@@ -5,7 +5,7 @@ export const createReview = createAsyncThunk(
   "reviews/create",
   async (reviewData, { rejectWithValue }) => {
     try {
-      const response = await myAxios.post("/reviews/mine", reviewData);
+      const response = await myAxios.post("/reviews", reviewData);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});
@@ -15,9 +15,9 @@ export const createReview = createAsyncThunk(
 
 export const getMyReview = createAsyncThunk(
   "reviews/getMine",
-  async (_, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      const response = await myAxios.get("/reviews/mine");
+      const response = await myAxios.get(`/reviews/${id}`);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});
@@ -29,7 +29,10 @@ export const updateReview = createAsyncThunk(
   "reviews/update",
   async (reviewData, { rejectWithValue }) => {
     try {
-      const response = await myAxios.put("/reviews/mine", reviewData);
+      const response = await myAxios.put(
+        `/reviews/${reviewData._id}`,
+        reviewData
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});
@@ -39,9 +42,9 @@ export const updateReview = createAsyncThunk(
 
 export const deleteReview = createAsyncThunk(
   "reviews/delete",
-  async (_, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
-      await myAxios.delete("/reviews/mine");
+      await myAxios.delete(`/reviews/${id}`);
       return null;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});
