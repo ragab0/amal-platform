@@ -70,12 +70,12 @@ export const metadata = {
 
 export default async function RootLayout({ children }) {
   // Get initial auth state server-side
-  const preloadedState = await getInitialAuthState();
+  // const preloadedState = await getInitialAuthState();
 
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
-        <StoreProvider preloadedState={preloadedState}>
+        <StoreProvider>
           <LoadingWrapper>
             <SocketNotificationInitializer />
             <ToastContainer
