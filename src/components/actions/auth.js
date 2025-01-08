@@ -11,6 +11,8 @@ export async function getInitialAuthState() {
   try {
     const token = cookieStore.get("jwt")?.value;
     if (!token) {
+      console.log("NO INITIAL TOKEN.........");
+
       return {
         auth: {
           user: {},
@@ -20,6 +22,8 @@ export async function getInitialAuthState() {
         },
       };
     }
+
+    console.log("INITIAL TOKEN IS........:", token);
 
     const response = await axios.get(`${API_URL}/auth/is-login`, {
       headers: {
