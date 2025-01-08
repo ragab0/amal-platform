@@ -12,6 +12,8 @@ export function middleware(request) {
     return paths.some((path) => currentPath.startsWith(path));
   }
 
+  console.log("############ MIDDLEware (pathname && token):", pathname, token);
+
   const isPublicPath = matchesPath(authRoutes.public, pathname);
   const isProtectedPath = matchesPath(authRoutes.protected, pathname);
 
