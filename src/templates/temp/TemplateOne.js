@@ -1,9 +1,11 @@
 "use client";
 import getLocalDate from "@/utils/getLocalDate";
-import { styles } from "./Styles";
+import { styles } from "./TemplateOneStyles";
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import { draftToPdfText } from "@/utils/draftToPdfText";
 import { personalIcons } from "./components/personalIcons";
+
+function checkSelect(fieldKey, value) {}
 
 function getDate(date) {
   if (!date) return "";
@@ -24,7 +26,7 @@ function getLocation(country, city) {
   }
 }
 
-export default function Template1({ data = {} }) {
+export default function Template1({ data = {}, isCustomizeable = false }) {
   const {
     personalInfo = {},
     volunteers = [],
@@ -32,19 +34,8 @@ export default function Template1({ data = {} }) {
     educations = [],
     experiences = [],
     courses = [],
-    // references = [],
   } = data;
-  const {
-    // description = "",
-    // interests = "",
-    // otherSkills = [],
-    languages = [],
-    softSkills = [],
-  } = allSkills;
-
-  // const experiences = experiencesFull.map((exp) => ({
-  //   description: exp.description,
-  // }));
+  const { languages = [], softSkills = [] } = allSkills;
 
   const ourPersonalInfo = [...personalIcons]
     .map(([k, v], i) => ({

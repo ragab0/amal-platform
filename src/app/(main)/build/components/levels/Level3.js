@@ -67,6 +67,11 @@ export default function Level3({ errors, setValue, watch }) {
           type="submit"
           disabled={!selectedTemplate}
           className="btn-build-main mt-12 !px-8 !py-4 w-full sm:w-auto mx-auto block"
+          onClick={() => {
+            // redirect to cv page;
+            window.location.href = "/cv";
+          }}
+          title="انشاء السيرة الذاتية"
         >
           إنشاء السيرة الذاتية
         </button>

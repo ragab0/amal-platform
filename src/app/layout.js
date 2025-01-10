@@ -69,6 +69,15 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  return (
+    <html lang="ar" dir="rtl">
+      <body>
+        <div className="w-screen h-screen flex justify-center items-center">
+          مغلق للصيانة
+        </div>
+      </body>
+    </html>
+  );
   // Get initial auth state server-side
   const preloadedState = await getInitialAuthState();
 

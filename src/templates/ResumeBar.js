@@ -1,7 +1,7 @@
 "use client";
 import { PDFViewer } from "@react-pdf/renderer";
 import { useAppSelector } from "@/hooks/ReduxHooks";
-import Template1 from "./temp/Template1";
+import Template1 from "./temp/TemplateOne";
 import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 
 export default function ResumeBar() {

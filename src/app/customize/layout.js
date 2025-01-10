@@ -2,7 +2,7 @@ import Navbar from "@/components/navbar/Navbar";
 import SubNavbar from "./components/SubNavbar";
 import ResumeActions from "./components/ResumeActions";
 import ResumeBar from "../../templates/ResumeBar";
-import Loading from "./loading.js";
+import { templateOneCustomizeOptions } from "@/templates/temp/TemplateOneCustomizeData";
 
 export const metadata = {
   title: "تخصيص السيرة الذاتية | منصة عمل",
@@ -33,7 +33,9 @@ export default function Layout({ children }) {
       <SubNavbar />
       <main className="flex flex-col-reverse xl:grid xl:grid-cols-[1fr_2fr_1fr] gap-4 bg-inherit">
         <section className="bg-white">
-          <ResumeActions />
+          <ResumeActions
+            templateCustomizeOptions={templateOneCustomizeOptions}
+          />
         </section>
         <section className="sticky top-4 left-0 overflow-hidden">
           <ResumeBar />
