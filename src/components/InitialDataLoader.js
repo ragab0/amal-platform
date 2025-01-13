@@ -26,7 +26,8 @@ export default function InitialDataLoader({ children, initialError }) {
             عذراً، حدث خطأ أثناء تحميل البيانات
           </h2>
           <p className="text-gray-600">
-            يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى
+            {initialError.message ||
+              " يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى"}
           </p>
           <button
             onClick={handleRetry}

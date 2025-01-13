@@ -1,3 +1,5 @@
+import AppStore from "@/assets/icons/AppStore";
+import PlayStore from "@/assets/icons/PlayStore";
 import AppImg from "@/assets/imgs/iPhone.png";
 import Image from "next/image";
 
@@ -10,11 +12,17 @@ export default function OurApp() {
           يمكنك تحميل تطبيقنا من المتاجر الرسمية
         </h2>
         <div className="flex gap-[6%] justify-center flex-wrap gap-y-4">
-          <button className="btn-secondary btn-secondary-makePurple rounded-[10px] ms-0 w-fit px-6 py-3 font-semibold">
-            افحص سيرتك الذاتية
+          <button
+            className="flex gap-2 items-center btn-secondary btn-secondary-makePurple rounded-[10px] ms-0 w-fit px-6 py-3 font-semibold
+          !bg-[#1D6FF2] hover:opacity-90"
+          >
+            متجر التطبيقات <AppStore />
           </button>
-          <button className="btn-primary rounded-[10px] px-6 py-3 font-semibold">
-            انشئ سيرتك الذاتية
+          <button
+            className="flex gap-2 items-center btn-primary rounded-[10px] px-6 py-3 font-semibold
+          !bg-[#1C1C1C] hover:opacity-90"
+          >
+            متجر التطبيقات <PlayStore />
           </button>
         </div>
       </div>

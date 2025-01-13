@@ -10,12 +10,12 @@ import { FadeInUp } from "@/components/motion/MotionWrappers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { reviewSchema } from "@/validations/review";
 import { formatDate } from "@/utils/formatDate";
+import { setUserReview } from "@/store/features/auth/authSlice";
 import {
   createReview,
   updateReview,
   deleteReview,
 } from "@/store/features/reviews/reviewsThunks";
-import { setUserReview } from "@/store/features/auth/authSlice";
 
 export default function ReviewClient() {
   const dispatch = useDispatch();
@@ -93,11 +93,12 @@ export default function ReviewClient() {
           </h2>
         </FadeInUp>
         <FadeInUp delay={0.2}>
-          <div>
+          <div style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}>
             {isEditing && (
               <button
                 onClick={handleCancel}
                 className="px-8 py-4 hover:text-text-mutated hover:underline"
+                disabled={loading}
               >
                 الغاء
               </button>
@@ -105,6 +106,7 @@ export default function ReviewClient() {
             <button
               onClick={isEditing ? onSubmit : () => setIsEditing(true)}
               className="btn-primary max-md:py-3 max-md:px-6"
+              disabled={loading}
             >
               {isEditing ? "حفظ" : hasReview ? "تعديل التقييم" : "إضافة تقييم"}
             </button>

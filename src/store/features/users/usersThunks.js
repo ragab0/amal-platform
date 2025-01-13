@@ -30,3 +30,15 @@ export const updateProfileAccountInfo = createAsyncThunk(
     }
   }
 );
+
+export const updateProfileImage = createAsyncThunk(
+  "auth/updateProfileImage",
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await myAxios.put("/users/mine?updateSet=image", data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || {});
+    }
+  }
+);

@@ -87,7 +87,6 @@ export default async function RootLayout({ children }) {
   try {
     preloadedState = await getInitialAuthState();
   } catch (error) {
-    console.log("Failed to load initial state:", error);
     initialError = error;
     preloadedState = {
       auth: {

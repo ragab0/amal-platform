@@ -40,11 +40,9 @@ export async function getInitialAuthState() {
       },
     };
   } catch (error) {
-    console.log("Failed to get initial data", error);
-
     // Throw a more user-friendly error
     throw new Error(
-      error.response?.data?.message ||
+      error.response?.data?.result ||
         "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى."
     );
   }

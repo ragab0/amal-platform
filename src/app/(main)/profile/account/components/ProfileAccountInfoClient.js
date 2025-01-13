@@ -98,7 +98,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
         ))}
       </form>
       {/* Delete Account Section */}
-      <div className="mt-12">
+      {/* <div className="mt-12">
         <FadeInUp delay={1.4}>
           <div
             onClick={() => setShowDeleteModal(true)}
@@ -107,7 +107,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
             حذف الحساب
           </div>
         </FadeInUp>
-      </div>
+      </div> */}
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
         <ConfirmModal

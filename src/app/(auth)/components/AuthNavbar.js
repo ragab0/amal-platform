@@ -13,12 +13,12 @@ export default function AuthNavbar() {
           >
             الرئيسية
           </Link>
-          <Link
+          {/* <Link
             href="/contact"
             className="text-white py-3 hover:underline text-lg md:text-2xl"
           >
             تواصل معنا
-          </Link>
+          </Link> */}
         </div>
       </div>
     </nav>

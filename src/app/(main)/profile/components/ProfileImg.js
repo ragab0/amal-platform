@@ -1,9 +1,13 @@
 "use client";
-import { useState, useRef } from "react";
 import Image from "next/image";
 import Modal from "@/components/modals/ConfirmModal";
+import { useState, useRef } from "react";
+import { toast } from "react-toastify";
+import { useAppDispatch } from "@/hooks/ReduxHooks";
+import { updateProfileImage } from "@/store/features/users/usersThunks";
 
 export default function ProfileImg() {
+  const dispatch = useAppDispatch();
   const [profileImage, setProfileImage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingImage, setPendingImage] = useState(null);
@@ -22,18 +26,27 @@ export default function ProfileImg() {
     }
   };
 
-  const handleSaveClick = () => {
+  function handleSaveClick() {
     setIsModalOpen(true);
-  };
+  }
 
-  const handleImageSave = () => {
+  async function handleImageSave() {
     if (pendingImage) {
       setProfileImage(pendingImage);
       setPendingImage(null);
       setIsModalOpen(false);
       setIsImageChanged(false);
+
+      const { payload, error } = await dispatch(
+        updateProfileImage({ photo: pendingImage })
+      );
+      if (!error && payload?.status === "success") {
+        toast.success("تم تحديث صورة الملف الشخصي بنجاح");
+      } else {
+        toast.error("فشل تحديث صورة الملف الشخصي");
+      }
     }
-  };
+  }
 
   const handleModalClose = () => {
     setPendingImage(null);
