@@ -11,12 +11,8 @@ import OurApp from "./components/OurApp";
 import OurExperts from "./components/OurExperts";
 import LastJobs from "./components/LastJobs";
 import { FadeInUp } from "@/components/motion/MotionWrappers";
-import {
-  cvTemplates,
-  faqs,
-  ourServices,
-  reviews,
-} from "@/assets/data/homeData";
+import { templatesApi } from "@/assets/data/templatesData";
+import { faqs, ourServices, reviews } from "@/assets/data/homeData";
 
 export default function HomePage() {
   return (
@@ -94,22 +90,29 @@ export default function HomePage() {
       <section className="container mx-auto px-4">
         <Banner title="انطلق في تصميم سيرتك الذاتية المميزة !وأجعل فرصك أقوى">
           <div className="flex-shrink-0 grid grid-cols-2 gap-1 mx-auto">
-            {cvTemplates.map((template, index) => (
-              <div
-                key={index}
-                className={`max-w-[170px] max-h-[240px] border-2 border-white rounded-[4px] overflow-hidden`}
-              >
-                {template.src && (
-                  <Image
-                    src={template.src}
-                    alt={template.alt}
-                    width={170}
-                    height={240}
-                    className="w-auto"
-                  />
-                )}
-              </div>
-            ))}
+            {[
+              ...templatesApi,
+              ...templatesApi,
+              ...templatesApi,
+              ...templatesApi,
+            ]
+              .slice(0, 4)
+              .map(({ image, category }, index) => (
+                <div
+                  key={index}
+                  className={`max-w-[170px] max-h-[240px] border-2 border-white rounded-[4px] overflow-hidden`}
+                >
+                  {image && (
+                    <Image
+                      src={image}
+                      alt={category}
+                      width={"auto"}
+                      height={"auto"}
+                      className="w-auto"
+                    />
+                  )}
+                </div>
+              ))}
           </div>
         </Banner>
       </section>

@@ -66,7 +66,7 @@ export function draftToPdfText(
           }
 
           return (
-            <View key={block.key} style={itemStyle}>
+            <View key={block.key} style={itemStyle} wrap={false}>
               {block.type === "unordered-list-item" && (
                 <Text style={itemBullitStyle}>•</Text>
               )}
@@ -92,7 +92,7 @@ export function draftToPdfText(
       </View>
     );
   } catch (error) {
-    console.error("Error parsing draft content:", error);
+    console.log("Error parsing draft content:", error);
     return "";
   }
 }

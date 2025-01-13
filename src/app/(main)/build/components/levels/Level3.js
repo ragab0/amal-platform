@@ -1,30 +1,48 @@
 "use client";
-
 import Image from "next/image";
-import temp1 from "@/assets/imgs/cv/cv_temp1.png";
-import temp2 from "@/assets/imgs/cv/cv_temp2.png";
-import temp3 from "@/assets/imgs/cv/cv_temp3.png";
+import { templatesApi } from "@/assets/data/templatesData";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
+import { createCv } from "@/store/features/cvs/cvsThunks";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-const templates = [
-  {
-    id: "template1",
-    name: "احترافي حديث",
-    image: temp1,
-  },
-  {
-    id: "template2",
-    name: "تصميم إبداعي",
-    image: temp2,
-  },
-  {
-    id: "template3",
-    name: "كلاسيكي أنيق",
-    image: temp3,
-  },
-];
+export default function Level3() {
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { user } = useAppSelector((state) => state.auth);
+  const [template, setTemplate] = useState(null);
 
-export default function Level3({ errors, setValue, watch }) {
-  const selectedTemplate = watch("template");
+  useEffect(() => {
+    const temp = searchParams.get("template");
+    if (temp) {
+      setTemplate(temp);
+    }
+  }, [searchParams, setTemplate]);
+
+  async function submitHandler() {
+    const data = {
+      personalInfo: {
+        fullName: user.fname + " " + user.lname,
+        headline: user.headline,
+        photo: user.photo,
+        phone: user.phone,
+        email: user.email,
+      },
+      options: {
+        templateId: template,
+      },
+    };
+
+    const { payload, error } = await dispatch(createCv(data));
+    if (!error && payload?.status === "success") {
+      toast.success("تم انشاء السيرة الذاتية بنجاح");
+      router.push(`/cv`);
+      // router.push(`/cv/${payload.result._id}`);
+    }
+  }
 
   return (
     <div className="container mx-auto flex flex-col items-center">
@@ -33,44 +51,34 @@ export default function Level3({ errors, setValue, watch }) {
           اختر قالب السيرة الذاتية
         </h1>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-[5%]">
-          {templates.map((template) => (
+          {templatesApi.map(({ id, category, image }) => (
             <div
-              key={template.id}
+              key={id}
               className={`relative cursor-pointer rounded-xl overflow-hidden transition-all duration-300
                 border ring-main
-                ${
-                  selectedTemplate === template.id ? "ring-8" : "hover:ring-2"
-                }`}
-              onClick={() => setValue("template", template.id)}
+                ${template === id ? "ring-8" : "hover:ring-2"}`}
+              onClick={() => setTemplate(id)}
             >
               <Image
-                src={template.image}
-                alt={template.name}
+                src={image}
+                alt={category}
                 width={"auto"}
                 height={"auto"}
                 className="object-contain w-full mx-auto"
               />
               {/* <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-4">
                 <h3 className="text-lg font-medium text-center">
-                  {template.name}
+                  {category}
                 </h3>
               </div> */}
             </div>
           ))}
         </div>
-        {errors.template && (
-          <p className="mt-4 text-red-500 text-sm text-center">
-            {errors.template.message}
-          </p>
-        )}
+
         <button
-          type="submit"
-          disabled={!selectedTemplate}
+          onClick={submitHandler}
+          disabled={!template}
           className="btn-build-main mt-12 !px-8 !py-4 w-full sm:w-auto mx-auto block"
-          onClick={() => {
-            // redirect to cv page;
-            window.location.href = "/cv";
-          }}
           title="انشاء السيرة الذاتية"
         >
           إنشاء السيرة الذاتية

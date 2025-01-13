@@ -1,6 +1,19 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import myAxios from "@/utils/myAxios";
 
+// Stats (00)
+export const fetchStats = createAsyncThunk(
+  "admin/fetchStats",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await myAxios.get("/admin/stats");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || {});
+    }
+  }
+);
+
 // Users (01)
 export const fetchUsers = createAsyncThunk(
   "admin/fetchUsers",

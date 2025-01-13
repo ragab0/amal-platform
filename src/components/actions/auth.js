@@ -11,8 +11,6 @@ export async function getInitialAuthState() {
   try {
     const token = cookieStore.get("jwt")?.value;
     if (!token) {
-      console.log("NO INITIAL TOKEN.........");
-
       return {
         auth: {
           user: {},
@@ -23,8 +21,6 @@ export async function getInitialAuthState() {
       };
     }
 
-    console.log("INITIAL TOKEN IS........:", token);
-
     const response = await axios.get(`${API_URL}/auth/is-login`, {
       headers: {
         Cookie: `jwt=${token}`,
@@ -32,7 +28,7 @@ export async function getInitialAuthState() {
       },
       withCredentials: true,
       credentials: "include",
-      timeout: NODE_ENV === "development" ? 8000 : 20000,
+      // timeout: 5000, // 5 second timeout
     });
 
     return {
@@ -45,13 +41,11 @@ export async function getInitialAuthState() {
     };
   } catch (error) {
     console.log("Failed to get initial data", error);
-    return {
-      auth: {
-        user: {},
-        isAuthenticated: false,
-        loading: false,
-        error: error.response?.data?.result || null,
-      },
-    };
+
+    // Throw a more user-friendly error
+    throw new Error(
+      error.response?.data?.message ||
+        "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى."
+    );
   }
 }

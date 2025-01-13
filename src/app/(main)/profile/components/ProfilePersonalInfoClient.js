@@ -23,7 +23,14 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
     reset,
   } = useForm({
     resolver: yupResolver(settingsPersonalInfoSchema),
-    defaultValues: personalInfo,
+    defaultValues: {
+      fname: personalInfo.fname,
+      lname: personalInfo.lname,
+      headline: personalInfo.headline,
+      phone: personalInfo.phone,
+      country: personalInfo.country,
+      _id: personalInfo._id,
+    },
   });
 
   async function onSubmit(data) {

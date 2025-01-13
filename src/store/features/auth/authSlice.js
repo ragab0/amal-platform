@@ -140,14 +140,15 @@ const authSlice = createSlice({
       // 03 Reset Password
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
-        state.error = null;
+        state.isInitialized = false;
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
+        state.isInitialized = true;
       })
       .addCase(resetPassword.rejected, (state, { payload }) => {
         state.loading = false;
-        state.error = payload.result?.message;
+        state.isInitialized = true;
       })
 
       /** my profile */

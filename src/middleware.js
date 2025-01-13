@@ -2,7 +2,15 @@ import { NextResponse } from "next/server";
 
 export const authRoutes = {
   public: ["/login", "/signup", "/forgotPassword", "/resetPassword"], // "/auth/callback",
-  protected: ["/profile", "/cv", "/customize", "/notifications", "/dashboard"],
+  protected: [
+    "/profile",
+    "/build",
+    "/cv",
+    "/customize",
+    "/notifications",
+    "/support",
+    "/admin",
+  ],
 };
 
 export function middleware(request) {

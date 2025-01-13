@@ -1,19 +1,31 @@
 import Image from "next/image";
-import Temp1 from "@/assets/imgs/temp1.png";
+import { templatesApi } from "@/assets/data/templatesData";
+import Link from "next/link";
 
 export default function ChooseTemplate() {
   return (
     <div
-      className="ltr text-left flex gap-8 overflow-auto pb-4"
+      className="ltr text-left flex gap-8 overflow-auto py-4 px-2 -mx-2"
       style={{
         scrollbarColor: "rgba(123, 85, 215, 0.17) transparent",
       }}
     >
-      <Image alt="template-img" src={Temp1} />
-      <Image alt="template-img" src={Temp1} />
-      <Image alt="template-img" src={Temp1} />
-      <Image alt="template-img" src={Temp1} />
-      <Image alt="template-img" src={Temp1} />
+      {templatesApi.map(({ id, category, image }) => (
+        <Link
+          key={id}
+          href={`/build?template=${id}`}
+          className="relative cursor-pointer rounded-xl 
+          overflow-hidden transition-all duration-300 border ring-main hover:ring-2"
+        >
+          <Image
+            alt={category}
+            src={image}
+            width={"auto"}
+            height={"auto"}
+            className="w-full h-full max-w-[400px]"
+          />
+        </Link>
+      ))}
     </div>
   );
 }

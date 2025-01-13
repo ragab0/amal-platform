@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
-import EyeIco from "@/assets/icons/EyeIco";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaEyeSlash, FaEye } from "react-icons/fa";
 
 export default function AuthInput({
   type = "text",
@@ -39,19 +40,27 @@ export default function AuthInput({
             hover:text-main transition-colors"
           aria-label={showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"}
         >
-          <EyeIco className="w-6 h-6 md:w-8 md:h-8" />
+          {showPassword ? (
+            <FaEye className="w-6 h-6 md:w-8 md:h-8" />
+          ) : (
+            <FaEyeSlash className="w-6 h-6 md:w-8 md:h-8" />
+          )}
         </button>
       )}
-
-      {error && (
-        <span
-          className="text-red-500 text-sm mt-1 block"
-          role="alert"
-          id={`${name}-error`}
-        >
-          {error.message}
-        </span>
-      )}
+      <AnimatePresence mode="wait">
+        {error && (
+          <motion.span
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="mt-2 text-sm text-red-500 block"
+            role="alert"
+          >
+            {error.message}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

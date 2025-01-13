@@ -1,32 +1,17 @@
 "use client";
 import getLocalDate from "@/utils/getLocalDate";
-import { styles } from "./TemplateOneStyles";
+import { createStyle } from "./TemplateOneStyles";
 import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
 import { draftToPdfText } from "@/utils/draftToPdfText";
 import { personalIcons } from "./components/personalIcons";
 
-function checkSelect(fieldKey, value) {}
-
-function getDate(date) {
-  if (!date) return "";
-  try {
-    return new Intl.DateTimeFormat("ar-EG", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    }).format(new Date(date));
-  } catch (error) {}
-}
-
-function getLocation(country, city) {
-  if (country && city) {
-    return `${country} - ${city}`;
-  } else if (country || city) {
-    return country || city;
-  }
-}
-
-export default function Template1({ data = {}, isCustomizeable = false }) {
+export default function Template1({
+  data = {},
+  cobject = {},
+  isCustomize = false,
+  myCVFontOptions = {},
+}) {
+  const styles = createStyle(isCustomize ? myCVFontOptions : {});
   const {
     personalInfo = {},
     volunteers = [],
@@ -46,8 +31,19 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
           ? getLocalDate(personalInfo[k])
           : personalInfo[k],
       Icon: v,
+      key: k,
     }))
     .filter((o) => o.text);
+
+  function isSelected(parent, key) {
+    if (!isCustomize) return true;
+    const field = cobject[parent].fields[key];
+    if (field) {
+      return field.isSelected;
+    }
+    console.warn("!!!", parent, key, "NOT exists");
+    return true;
+  }
 
   return (
     <Document
@@ -66,14 +62,17 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
           {ourPersonalInfo.length > 0 && (
             <View style={[styles.section, styles.sidebarSection]}>
               <Text style={styles.sidebarTitle}>المعلومات الشخصية</Text>
-              {ourPersonalInfo.map(({ text, Icon }, i) => (
-                <View style={styles.item} key={i}>
-                  <Icon style={styles.itemIcon} />
-                  <Text style={[styles.itemText, { color: "#fff" }]}>
-                    {text}
-                  </Text>
-                </View>
-              ))}
+              {ourPersonalInfo.map(
+                ({ text, Icon, key }, i) =>
+                  isSelected("personalInfo", key) && (
+                    <View style={styles.item} key={i}>
+                      <Icon style={styles.itemIcon} />
+                      <Text style={[styles.itemText, { color: "#fff" }]}>
+                        {text}
+                      </Text>
+                    </View>
+                  )
+              )}
             </View>
           )}
 
@@ -103,14 +102,16 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
                       {name}
                     </Text>
                   </View>
-                  <View style={styles.languageBar}>
-                    <View
-                      style={[
-                        styles.languageLevel,
-                        { width: `${levelPercentage}%` },
-                      ]}
-                    />
-                  </View>
+                  {isSelected("languages", "proficiencyLevel") && (
+                    <View style={styles.languageBar}>
+                      <View
+                        style={[
+                          styles.languageLevel,
+                          { width: `${levelPercentage}%` },
+                        ]}
+                      />
+                    </View>
+                  )}
                 </View>
               ))}
             </View>
@@ -119,18 +120,44 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
           {volunteers.length > 0 && (
             <View style={styles.section}>
               <Text style={styles.sidebarTitle}>العمل التطوعي</Text>
-              {volunteers.map((volunteer, index) => (
-                <View key={index} style={{ marginBottom: 2.5 }}>
-                  <Text style={styles.contactText}>{volunteer.title}</Text>
-                  {draftToPdfText(
-                    volunteer.description,
-                    styles.description,
-                    { ...styles.item, color: "white" },
-                    { ...styles.itemBullet, color: "white" },
-                    { ...styles.itemText, color: "white" }
-                  )}
-                </View>
-              ))}
+              {volunteers.map((volunteer, index) =>
+                isSelected("volunteers", "description") ? (
+                  <View key={index} style={{ marginBottom: 2.5 }}>
+                    <Text style={styles.contactText}>{volunteer.title}</Text>
+                    {draftToPdfText(
+                      volunteer.description,
+                      styles.description,
+                      { ...styles.item, color: "white" },
+                      { ...styles.itemBullet, color: "white" },
+                      { ...styles.itemText, color: "white" }
+                    )}
+                  </View>
+                ) : (
+                  <View
+                    key={index}
+                    style={[styles.item, { alignItems: "center", gap: 10 }]}
+                    wrap={false}
+                  >
+                    <View
+                      style={[
+                        styles.item,
+                        {
+                          flexShrink: 0,
+                          verticalAlign: "middle",
+                        },
+                      ]}
+                      wrap={false}
+                    >
+                      <Text style={[styles.itemBullet, { color: "white" }]}>
+                        •
+                      </Text>
+                      <Text style={[styles.itemTitle, { color: "white" }]}>
+                        {volunteer.title}
+                      </Text>
+                    </View>
+                  </View>
+                )
+              )}
             </View>
           )}
         </View>
@@ -157,7 +184,7 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>المؤهل العلمي</Text>
               {educations.map((edu, index) => (
-                <View key={index} style={{ marginBottom: 2.5 }}>
+                <View key={index} style={{ marginBottom: 2.5 }} wrap={false}>
                   <View
                     style={[
                       styles.item,
@@ -165,24 +192,40 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
                     ]}
                   >
                     <View style={[styles.item]}>
-                      <Text style={[styles.itemTitle]}>
-                        {edu.degree} {edu.field}
-                      </Text>
-                      <View style={styles.item}>
-                        <Text style={[styles.itemSubtitle]}>-</Text>
-                        <Text style={[styles.itemSubtitle]}>
-                          {edu.institute}
+                      {!isSelected("educations", "description") ? (
+                        <View
+                          style={[styles.item, { lineHeight: 1 }]}
+                          wrap={false}
+                        >
+                          <Text style={styles.itemBullet}>•</Text>
+                          <Text style={[styles.itemTitle]}>
+                            {edu.degree} {edu.field}
+                          </Text>
+                        </View>
+                      ) : (
+                        <Text style={[styles.itemTitle]} wrap={false}>
+                          {edu.degree} {edu.field}
                         </Text>
-                      </View>
+                      )}
+
+                      {isSelected("educations", "institute") && (
+                        <View style={styles.item} wrap={false}>
+                          <Text style={[styles.itemSubtitle]}>-</Text>
+                          <Text style={[styles.itemSubtitle]}>
+                            {edu.institute}
+                          </Text>
+                        </View>
+                      )}
                     </View>
                   </View>
-                  {draftToPdfText(
-                    edu.description,
-                    styles.description,
-                    { ...styles.item, lineHeight: 1 },
-                    styles.itemBullet,
-                    styles.itemText
-                  )}
+                  {isSelected("educations", "description") &&
+                    draftToPdfText(
+                      edu.description,
+                      styles.description,
+                      { ...styles.item, lineHeight: 1 },
+                      styles.itemBullet,
+                      styles.itemText
+                    )}
                 </View>
               ))}
             </View>
@@ -200,20 +243,28 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
                     ]}
                   >
                     <View style={[styles.item]}>
-                      <Text style={[styles.itemTitle]}>
-                        {exp.jobTitle} | {exp.company}
-                      </Text>
-                      {exp.country && (
-                        <View style={styles.item}>
-                          <Text style={[styles.itemSubtitle]}>|</Text>
-                          <Text style={[styles.itemSubtitle]}>
-                            {exp.country}
+                      {!isSelected("experiences", "description") ? (
+                        <View
+                          style={[styles.item, { lineHeight: 1 }]}
+                          wrap={false}
+                        >
+                          <Text style={styles.itemBullet}>•</Text>
+                          <Text style={[styles.itemTitle]}>{exp.jobTitle}</Text>
+                        </View>
+                      ) : (
+                        <Text style={[styles.itemTitle]}>{exp.jobTitle}</Text>
+                      )}
+                      {isSelected("experiences", "location") && (
+                        <View style={styles.item} wrap={false}>
+                          <Text style={[styles.itemTitle]}>|</Text>
+                          <Text style={[styles.itemTitle]}>
+                            {exp.company}, {exp.country}
                           </Text>
                         </View>
                       )}
-                      {exp.startDate && (
-                        <View style={styles.item}>
-                          <Text style={[styles.itemSubtitle]}>|</Text>
+                      {isSelected("experiences", "date") && exp.startDate && (
+                        <View style={styles.item} wrap={false}>
+                          <Text style={[styles.itemTitle]}>|</Text>
                           <Text style={[styles.itemDate]}>
                             {getDate(exp.startDate)} -{" "}
                             {exp.endDate ? getDate(exp.endDate) : "حتى الآن"}
@@ -222,23 +273,28 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
                       )}
                     </View>
                   </View>
-                  {draftToPdfText(
-                    exp.description,
-                    styles.description,
-                    { ...styles.item, lineHeight: 1 },
-                    styles.itemBullet,
-                    styles.itemText
-                  )}
+                  {isSelected("experiences", "description") &&
+                    draftToPdfText(
+                      exp.description,
+                      styles.description,
+                      { ...styles.item, lineHeight: 1 },
+                      styles.itemBullet,
+                      styles.itemText
+                    )}
                 </View>
               ))}
             </View>
           )}
 
           {courses.length > 0 && (
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>الدورات التدريبية</Text>
               {courses.map(({ courseName, instituteName }, index) => (
-                <View key={index} style={[styles.item, { lineHeight: 1 }]}>
+                <View
+                  key={index}
+                  style={[styles.item, { lineHeight: 1 }]}
+                  wrap={false}
+                >
                   <Text style={styles.itemBullet}>•</Text>
                   <Text style={styles.itemText}>
                     {courseName} - {instituteName}
@@ -249,10 +305,14 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
           )}
 
           {softSkills.length > 0 && (
-            <View style={styles.section}>
+            <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>المهارات الشخصية</Text>
               {softSkills.map(({ name }, index) => (
-                <View key={index} style={[styles.item, { lineHeight: 1 }]}>
+                <View
+                  key={index}
+                  style={[styles.item, { lineHeight: 1 }]}
+                  wrap={false}
+                >
                   <Text style={styles.itemBullet}>•</Text>
                   <Text style={styles.itemText}>{name}</Text>
                 </View>
@@ -263,4 +323,23 @@ export default function Template1({ data = {}, isCustomizeable = false }) {
       </Page>
     </Document>
   );
+}
+
+function getDate(date) {
+  if (!date) return "";
+  try {
+    return new Intl.DateTimeFormat("ar-EG", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(date));
+  } catch (error) {}
+}
+
+function getLocation(country, city) {
+  if (country && city) {
+    return `${country} - ${city}`;
+  } else if (country || city) {
+    return country || city;
+  }
 }

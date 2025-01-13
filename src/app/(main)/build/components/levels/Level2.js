@@ -45,17 +45,20 @@ export default function Level2({ register, errors, cvChoice, setValue }) {
             <div
               {...getRootProps()}
               className={`border-2 border-dashed border-main rounded-3xl bg-gray-50 p-8 text-center cursor-pointer transition-colors
+                relative
                 ${
                   isDragActive
                     ? "border-main ring-8 ring-green-500/20 transition-all duration-300 bg-gray-100"
                     : ""
                 }`}
             >
-              <input {...getInputProps()} {...register("cvFile")}>
-                <button type="button" className="btn-build-main mt-4 w-full">
-                  اختيار ملف
-                </button>
-              </input>
+              <label className="btn-build-main w-full h-full absolute top-0 left-0 cursor-pointer opacity-0">
+                <input
+                  {...getInputProps()}
+                  {...register("cvFile")}
+                  placeholder="اختيار ملف"
+                />
+              </label>
               <p className="text-neutral-6 text-xl font-medium">
                 {isDragActive
                   ? "اترك الملف هنا..."

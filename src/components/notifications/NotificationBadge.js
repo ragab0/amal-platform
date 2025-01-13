@@ -23,7 +23,7 @@ export default function NotificationBadge() {
       menuWrapperCls="xl:right-0 w-max"
       trigger={notificationTrigger}
     >
-      <NotificationList />
+      <NotificationList hideReadAll={true} />
     </DropdownMenu>
   );
 }

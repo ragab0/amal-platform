@@ -22,9 +22,11 @@ myAxios.interceptors.response.use(
 
     // Server returned an error response
     const { response } = error;
+    let result, results;
     switch (response?.status) {
       case 400:
-        const { result, results } = error.response.data;
+        result = error.response.data.result;
+        results = error.response.data.results;
         if (result) {
           error.message = result;
           toast.error(error.message);
@@ -44,8 +46,16 @@ myAxios.interceptors.response.use(
         toast.error(error.message);
         break;
       case 404:
-        error.message = "طلب غير صالح.";
-        toast.error(error.message);
+        result = error.response.data.result;
+        results = error.response.data.results;
+        if (result) {
+          error.message = result;
+          toast.error(error.message);
+        } else {
+          error.message = "طلب غير صالح.";
+          toast.error(error.message);
+        }
+
         break;
       case 429:
         error.message = response.data;

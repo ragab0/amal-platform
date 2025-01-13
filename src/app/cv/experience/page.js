@@ -253,7 +253,13 @@ export default function Experience() {
               register={register}
               error={errors.endDate?.message}
               spaceBlock={false}
-            />
+              inpClassName=""
+            >
+              <label className="flex items-center justify-center flex-col ms-2">
+                <input type="checkbox" {...register("present")} />
+                <span className="text-text">حاليا</span>
+              </label>
+            </FormInput>
           </div>
 
           {/* Description field */}

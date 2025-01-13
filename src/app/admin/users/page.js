@@ -106,7 +106,7 @@ export default function UsersPage() {
                   <th className="px-4 py-3">الحالة</th>
                   {/* <th className="px-4 py-3">العضوية</th> */}
                   <th className="px-4 py-3">تاريخ التسجيل</th>
-                  <th className="px-4 py-3">إجراءات</th>
+                  {/* <th className="px-4 py-3">إجراءات</th> */}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700 bg-gray-800">
@@ -121,6 +121,8 @@ export default function UsersPage() {
                               className="object-cover w-full h-full rounded-full"
                               src={user.photo}
                               alt={user.fname + " " + user.lname}
+                              width={32}
+                              height={32}
                               loading="lazy"
                             />
                           ) : (
@@ -165,8 +167,12 @@ export default function UsersPage() {
                         {user.isActive ? "نشط" : "محظور"}
                       </span>
                     </td>
-                    <td className="px-4 py-3">{user.createdAt ? new Date(user.createdAt).toLocaleString():"-"}</td>
                     <td className="px-4 py-3">
+                      {user.createdAt
+                        ? new Date(user.createdAt).toLocaleString()
+                        : "-"}
+                    </td>
+                    {/* <td className="px-4 py-3">
                       <div className="flex items-center space-x-4">
                         <button
                           onClick={() => handleAction(user, "block")}
@@ -189,7 +195,7 @@ export default function UsersPage() {
                           <HiTrash className="w-5 h-5" />
                         </button>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
               </tbody>

@@ -41,6 +41,18 @@ export const logout = createAsyncThunk(
   }
 );
 
+export const forgetPassword = createAsyncThunk(
+  "auth/forget-password",
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const response = await myAxios.post("/auth/forget-password", credentials);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || {});
+    }
+  }
+);
+
 export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {

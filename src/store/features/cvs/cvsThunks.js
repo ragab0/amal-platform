@@ -13,6 +13,18 @@ export const getCV = createAsyncThunk(
   }
 );
 
+export const createCv = createAsyncThunk(
+  "cvs/create",
+  async (cvData, { rejectWithValue }) => {
+    try {
+      const response = await myAxios.post("/cvs", cvData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || {});
+    }
+  }
+);
+
 export const updateCV = createAsyncThunk(
   "cvs/update",
   async (cvData, { rejectWithValue }) => {
@@ -35,5 +47,23 @@ export const getAllCVs = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error.response?.data || {});
     }
+  }
+);
+
+export const setMyCVOptions = createAsyncThunk(
+  "cvs/setMyCVOptions",
+  async ({ sectionKey, fieldKey, isSelected }, { getState }) => {
+    // Simulate async operation to allow for proper state updates
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    return { sectionKey, fieldKey, isSelected };
+  }
+);
+
+export const updateFontOptions = createAsyncThunk(
+  "cvs/updateFontOptions",
+  async (fontOptions) => {
+    // Simulate async operation to allow for proper state updates and loading
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    return fontOptions;
   }
 );

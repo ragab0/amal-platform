@@ -38,7 +38,6 @@ export const fetchAllRooms = createAsyncThunk(
       const response = await myAxios.get("/chats");
       return response.data;
     } catch (error) {
-      console.error(error);
       return rejectWithValue(error.response?.data || {});
     }
   }
@@ -51,7 +50,6 @@ export const fetchRoom = createAsyncThunk(
       const response = await myAxios.get(`/chats/${roomId}`);
       return response.data;
     } catch (error) {
-      console.error(error);
       return rejectWithValue(error.response?.data || {});
     }
   }

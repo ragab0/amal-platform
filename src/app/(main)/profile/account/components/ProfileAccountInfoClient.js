@@ -25,8 +25,11 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
     reset,
     setValue,
   } = useForm({
-    resolver: yupResolver(settingsAccountInfoSchema),
-    defaultValues: accountInfo,
+    // resolver: yupResolver(settingsAccountInfoSchema),
+    defaultValues: {
+      email: accountInfo.email,
+      _id: accountInfo._id,
+    },
   });
 
   async function submitHandler(data) {

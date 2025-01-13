@@ -11,6 +11,7 @@ import {
   createReview,
   updateReview,
   deleteReview,
+  fetchStats,
 } from "./adminThunks";
 
 const initialState = {
@@ -38,6 +39,16 @@ const initialState = {
     loading: false,
     error: null,
   },
+  stats: {
+    apiData: {
+      users: { total: 0, normal: 0, admin: 0 },
+      jobs: { total: 0, active: 0, inactive: 0 },
+      reviews: { total: 0 },
+    },
+    isInitialized: null,
+    loading: false,
+    error: null,
+  },
 };
 
 const adminSlice = createSlice({
@@ -46,6 +57,22 @@ const adminSlice = createSlice({
   extraReducers: (builder) => {
     // Users
     builder
+      // 00
+      .addCase(fetchStats.pending, (state) => {
+        state.stats.loading = true;
+        state.stats.error = null;
+      })
+      .addCase(fetchStats.fulfilled, (state, { payload }) => {
+        state.stats.loading = false;
+        state.stats.isInitialized = true;
+        state.stats.apiData = payload.result;
+      })
+      .addCase(fetchStats.rejected, (state, { payload }) => {
+        state.stats.loading = false;
+        state.stats.isInitialized = true;
+        state.stats.error = payload.result?.message;
+      })
+
       // 01
       .addCase(fetchUsers.pending, (state) => {
         state.users.loading = true;

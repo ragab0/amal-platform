@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import StoreProvider from "@/providers/ReduxProvider";
 import LoadingWrapper from "@/providers/LoadingWrapper";
 import SocketNotificationInitializer from "@/providers/SocketNotificationInitializer";
+import InitialDataLoader from "@/components/InitialDataLoader";
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -69,38 +70,57 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  return (
-    <html lang="ar" dir="rtl">
-      <body>
-        <div className="w-screen h-screen flex justify-center items-center">
-          مغلق للصيانة
-        </div>
-      </body>
-    </html>
-  );
+  // return (
+  //   <html lang="ar" dir="rtl">
+  //     <body>
+  //       <div className="w-screen h-screen flex justify-center items-center">
+  //         مغلق للصيانة
+  //       </div>
+  //     </body>
+  //   </html>
+  // );
   // Get initial auth state server-side
-  const preloadedState = await getInitialAuthState();
+
+  let preloadedState;
+  let initialError = null;
+
+  try {
+    preloadedState = await getInitialAuthState();
+  } catch (error) {
+    console.log("Failed to load initial state:", error);
+    initialError = error;
+    preloadedState = {
+      auth: {
+        user: {},
+        isAuthenticated: false,
+        loading: false,
+        error: error.message,
+      },
+    };
+  }
 
   return (
     <html lang="ar" dir="rtl">
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
           <LoadingWrapper>
-            <SocketNotificationInitializer />
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="colored"
-              toastClassName="font-normal"
-            />
-            {children}
+            <InitialDataLoader initialError={initialError}>
+              <SocketNotificationInitializer />
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+                toastClassName="font-normal"
+              />
+              {children}
+            </InitialDataLoader>
           </LoadingWrapper>
         </StoreProvider>
       </body>

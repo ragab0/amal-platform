@@ -5,15 +5,18 @@ import { useAppDispatch } from "@/hooks/ReduxHooks";
 import { logout } from "@/store/features/auth/authThunks";
 import { toast } from "react-toastify";
 import { HiOutlineLogout } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButton({ className = "" }) {
   const dispatch = useAppDispatch();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const router = useRouter();
 
   async function handleLogout() {
     const { error } = await dispatch(logout());
     if (!error) {
       toast.success("تم تسجيل الخروج بنجاح");
+      router.push("/");
     }
     setShowLogoutModal(false);
   }

@@ -33,13 +33,14 @@ export default function BuildCVClient() {
     resolver: yupResolver(cvBuilderSchema),
   });
 
-  const onSubmit = (data) => {
+  function onSubmit(data) {
+    console.log("data is:", data);
     if (currentLevel === 3) {
       router.push("/cv");
       return;
     }
     setCurrentLevel((prev) => prev + 1);
-  };
+  }
 
   function handleNextStep() {
     if (currentLevel < steps.length) {
@@ -47,11 +48,11 @@ export default function BuildCVClient() {
     }
   }
 
-  function handlePrevStep() {
-    if (currentLevel > 1) {
-      setCurrentLevel((prev) => prev - 1);
-    }
-  }
+  // function handlePrevStep() {
+  //   if (currentLevel > 1) {
+  //     setCurrentLevel((prev) => prev - 1);
+  //   }
+  // }
 
   function handleSkip() {
     setCurrentLevel(steps.length);
@@ -93,9 +94,9 @@ export default function BuildCVClient() {
             )}
             {currentLevel === 3 && (
               <Level3
-                register={register}
                 errors={errors}
                 setValue={setValue}
+                handleSubmit={handleSubmit}
                 watch={watch}
               />
             )}

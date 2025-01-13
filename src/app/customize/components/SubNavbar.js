@@ -12,18 +12,22 @@ export default function SubNavbar() {
   const handleTabChange = (item) => {
     setActiveTab(item);
     // Update the URL based on the selected tab
-    const route = item === "القوالب" ? "" : item === "الألوان" ? "colors" : "fonts";
+    const route =
+      item === "القوالب" ? "" : item === "الألوان" ? "colors" : "fonts";
     router.push(`/customize/${route}`);
   };
 
   return (
-    <nav className="container mx-auto px-4 py-12 flex justify-between items-center bg-[#461887]">
-      <div className="flex gap-12 items-center">
+    <nav className="container mx-auto px-4 py-12 flex justify-center xl:justify-between items-center bg-[#461887]">
+      <div className="flex gap-8 xl:gap-12 items-center">
         {navItems.map((item) => (
           <div key={item} className="relative">
             <button
               onClick={() => handleTabChange(item)}
-              className="font-cairo font-semibold text-[40px] leading-[53px] text-white"
+              className="text-xl lg:text-3xl xl:text-[40px] xl:leading-[53px] text-white duration-300
+              hover:opacity-90 transition-all
+                
+              "
             >
               {item}
             </button>
@@ -33,11 +37,11 @@ export default function SubNavbar() {
           </div>
         ))}
       </div>
-      <div>
-        <button className="bg-white text-[#461887] font-cairo font-semibold text-[32px] leading-[43px] px-8 py-4 rounded-lg">
+      {/* <div>
+        <button className="bg-white text-[#461887] font-semibold text-[32px] leading-[43px] px-8 py-4 rounded-lg">
           حفظ والاستمرار
         </button>
-      </div>
+      </div> */}
     </nav>
   );
 }

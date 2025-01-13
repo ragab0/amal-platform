@@ -12,6 +12,7 @@ const FormSelect = ({
   error,
   must = false,
   spaceBlock = true,
+  labelClass = "",
   ...props
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ const FormSelect = ({
       {label && (
         <label
           htmlFor={id}
-          className="mb-5 text-[22px] leading-[30px] font-cairo text-text"
+          className={`mb-5 text-[22px] leading-[30px] font-cairo text-text ${labelClass}`}
         >
           {label}
           {must && <span className="text-red-500">*</span>}

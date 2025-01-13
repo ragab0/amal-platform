@@ -1,63 +1,58 @@
 "use client";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
-import { fetchUsers } from "@/store/features/admin/adminThunks";
+import { fetchStats } from "@/store/features/admin/adminThunks";
 import { FadeInUp } from "@/components/motion/MotionWrappers";
 import { HiUsers, HiOfficeBuilding, HiStar } from "react-icons/hi";
+import CircleLoader from "@/components/loaders/CircleLoader";
 
 export default function DashboardStats() {
   const dispatch = useAppDispatch();
-  const {
-    users,
-    jobs: { results: jobResults },
-    reviews: { results: reviewsResults },
-  } = useAppSelector((state) => state.admin);
+  const { apiData, isInitialized, loading } = useAppSelector(
+    (state) => state.admin.stats
+  );
 
   useEffect(() => {
-    dispatch(fetchUsers());
+    dispatch(fetchStats());
   }, [dispatch]);
+
+  if (!isInitialized || loading) {
+    return <CircleLoader />;
+  }
 
   const stats = [
     {
       title: "المستخدمين",
-      count: users.stats.total || 0,
+      count: apiData.users.total,
       icon: HiUsers,
       details: [
-        { label: "نشط", value: users.stats.active || 0 },
-        { label: "خبراء", value: users.stats.experts || 0 },
-        { label: "مشرفين", value: users.stats.admins || 0 },
+        { label: "خبراء", value: apiData.users.admin || 0 },
+        { label: "مستخدمين", value: apiData.users.normal || 0 },
       ],
     },
     {
       title: "الوظائف",
-      count: jobResults?.length || 0,
+      count: apiData.jobs.total,
       icon: HiOfficeBuilding,
       details: [
         {
           label: "متاحة",
-          value:
-            jobResults?.filter((job) => job.status === "active").length || 0,
+          value: apiData.jobs.active,
         },
         {
           label: "مغلقة",
-          value:
-            jobResults?.filter((job) => job.status === "closed").length || 0,
+          value: apiData.jobs.inactive,
         },
       ],
     },
     {
       title: "التقييمات",
-      count: reviewsResults?.length || 0,
+      count: apiData.reviews.total,
       icon: HiStar,
       details: [
         {
-          label: "متوسط التقييم",
-          value: reviewsResults?.length
-            ? (
-                reviewsResults.reduce((acc, review) => acc + review.rating, 0) /
-                reviewsResults.length
-              ).toFixed(1)
-            : 0,
+          label: "التقييمات",
+          value: apiData.reviews.total,
         },
       ],
     },

@@ -4,7 +4,10 @@ import socketService from "@/services/socketService";
 import { notifications } from "@/assets/data/navbar";
 import { useAppSelector } from "@/hooks/ReduxHooks";
 
-export default function NotificationList({ isPage = false }) {
+export default function NotificationList({
+  isPage = false,
+  hideReadAll = false,
+}) {
   const { results = [...notifications], unreadCount } = useAppSelector(
     (state) => state.notifications
   );
@@ -25,7 +28,7 @@ export default function NotificationList({ isPage = false }) {
     <div>
       <div className="flex items-center justify-between px-4 py-3 border-b">
         {!isPage && <h3 className="font-semibold text-gray-700">الإشعارات</h3>}
-        {unreadCount > 0 && (
+        {unreadCount > 0 && !hideReadAll && (
           <button
             onClick={handleMarkAllAsRead}
             className="text-sm text-main hover:underline"

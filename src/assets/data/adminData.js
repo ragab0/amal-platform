@@ -16,9 +16,9 @@ export const navItems = [
     icon: HiOfficeBuilding,
     label: "الوظائف",
   },
-  {
-    href: "/admin/reviews",
-    icon: HiStar,
-    label: "التقييمات",
-  },
+  // {
+  //   href: "/admin/reviews",
+  //   icon: HiStar,
+  //   label: "التقييمات",
+  // },
 ];

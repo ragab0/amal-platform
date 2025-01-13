@@ -67,8 +67,9 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
       socketService.socket?.removeListener("user_started_typing");
       socketService.socket?.removeListener("user_stopped_typing");
       socketService.sendStopTyping(currentRoom._id);
+      setIsTyping(false);
     };
-  }, [dispatch, currentRoom._id, isAdmin]);
+  }, [dispatch, currentRoom._id, isAdmin, _id]);
 
   useEffect(
     function () {
