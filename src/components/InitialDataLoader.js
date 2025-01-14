@@ -25,10 +25,14 @@ export default function InitialDataLoader({ children, initialError }) {
           <h2 className="text-xl font-semibold text-red-600">
             عذراً، حدث خطأ أثناء تحميل البيانات
           </h2>
-          <p className="text-gray-600">
-            {initialError.message ||
-              " يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى"}
-          </p>
+          {initialError && (
+            <p className="text-gray-600">
+              {typeof initialError === "string"
+                ? initialError
+                : initialError.message ||
+                  "حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى"}
+            </p>
+          )}
           <button
             onClick={handleRetry}
             disabled={isRetrying}

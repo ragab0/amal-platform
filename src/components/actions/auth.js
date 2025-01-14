@@ -28,7 +28,6 @@ export async function getInitialAuthState() {
       },
       withCredentials: true,
       credentials: "include",
-      // timeout: 5000, // 5 second timeout
     });
 
     return {
@@ -40,9 +39,9 @@ export async function getInitialAuthState() {
       },
     };
   } catch (error) {
-    // Throw a more user-friendly error
     throw new Error(
-      error.response?.data?.result ||
+      error.response?.data?.result?.message ||
+        error.response?.data?.result ||
         "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى."
     );
   }

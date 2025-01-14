@@ -16,7 +16,7 @@ const cairo = Cairo({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://amal-dev.vercel.app"),
+  metadataBase: new URL("https://www.job.sa"),
   title: {
     template: "%s | منصة عمل",
     default: "منصة عمل - منصتك المتكاملة للتوظيف وبناء السيرة الذاتية",
@@ -39,7 +39,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "ar_SA",
-    url: "https://amal-dev.vercel.app",
+    url: "https://www.job.sa",
     siteName: "منصة عمل",
     title: "منصة عمل - منصتك المتكاملة للتوظيف وبناء السيرة الذاتية",
     description:
@@ -57,7 +57,7 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://amal-dev.vercel.app",
+    canonical: "https://www.job.sa",
   },
   verification: {
     google: "google-site-verification-code",
@@ -70,30 +70,24 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  // return (
-  //   <html lang="ar" dir="rtl">
-  //     <body>
-  //       <div className="w-screen h-screen flex justify-center items-center">
-  //         مغلق للصيانة
-  //       </div>
-  //     </body>
-  //   </html>
-  // );
-  // Get initial auth state server-side
-
   let preloadedState;
   let initialError = null;
-
   try {
     preloadedState = await getInitialAuthState();
   } catch (error) {
-    initialError = error;
+    initialError = {
+      message: error.message || 'حدث خطأ أثناء تحميل البيانات',
+      status: error.status || 500,
+      code: error.code || 'UNKNOWN_ERROR'
+    };
+    console.log("getInitialAuthState error", error);
+
     preloadedState = {
       auth: {
         user: {},
         isAuthenticated: false,
         loading: false,
-        error: error.message,
+        error: initialError.message
       },
     };
   }

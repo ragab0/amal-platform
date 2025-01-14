@@ -31,6 +31,9 @@ export const updateProfileAccountInfo = createAsyncThunk(
   }
 );
 
+// headers: {
+//   "Content-Type": "application/json",
+// }
 export const updateProfileImage = createAsyncThunk(
   "auth/updateProfileImage",
   async (data, { rejectWithValue }) => {
