@@ -1,5 +1,6 @@
 import HeroImg from "@/assets/imgs/hero-img.webp";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,12 +19,15 @@ export default function Hero() {
           أنشئ سيرتك الذاتية المثالية تصميم احترافي ومراجعة دقيقة لتميزك الوظيفي
         </h2>
         <div className="flex gap-4 justify-center flex-wrap">
-          <button className="btn-secondary btn-secondary-makePurple rounded-[10px] ms-0 w-fit px-6 py-3 font-semibold">
+          {/* <button className="btn-secondary btn-secondary-makePurple rounded-[10px] ms-0 w-fit px-6 py-3 font-semibold">
             افحص سيرتك الذاتية
-          </button>
-          <button className="btn-primary rounded-[10px] px-6 py-3 font-semibold">
+          </button> */}
+          <Link
+            href="/build"
+            className="btn-primary rounded-[10px] px-6 py-3 font-semibold"
+          >
             انشئ سيرتك الذاتية
-          </button>
+          </Link>
         </div>
       </div>
     </div>

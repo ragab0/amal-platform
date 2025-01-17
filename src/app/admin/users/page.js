@@ -1,13 +1,10 @@
 "use client";
 import Modal from "@/components/modals/ConfirmModal";
-import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
-import { HiTrash, HiLockClosed, HiLockOpen } from "react-icons/hi";
 import { FadeInUp } from "@/components/motion/MotionWrappers";
 import {
   fetchUsers,
-  updateUser,
   deleteUser,
   blockUser,
   unblockUser,

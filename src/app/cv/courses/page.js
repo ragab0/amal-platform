@@ -71,7 +71,7 @@ export default function Courses() {
         course._id === editingId ? { ...course, ...data } : course
       );
     } else {
-      updatedCourses = [...courses, data];
+      updatedCourses = [...courses, { ...data, _id: undefined }];
     }
 
     const { payload, error } = await dispatch(
@@ -89,18 +89,14 @@ export default function Courses() {
     }
   }
 
-  function handleCopy(course) {
+  async function handleCopy(course) {
     const newCourse = { ...course, _id: undefined };
-    const updatedCourses = [
-      ...courses.slice(0, courses.indexOf(course) + 1),
-      newCourse,
-      ...courses.slice(courses.indexOf(course) + 1),
-    ];
-
+    const updatedCourses = [...courses];
+    updatedCourses.splice(courses.indexOf(course) + 1, 0, newCourse);
     dispatch(updateCV({ courses: updatedCourses }));
   }
 
-  function handleMove(direction, currentIndex) {
+  async function handleMove(direction, currentIndex) {
     const newIndex = direction === "up" ? currentIndex - 1 : currentIndex + 1;
 
     if (
@@ -108,7 +104,7 @@ export default function Courses() {
       (direction === "down" && currentIndex < courses.length - 1)
     ) {
       const updatedCourses = [...courses];
-      const temp = updatedCourses[currentIndex];
+      const temp = { ...updatedCourses[currentIndex] };
       updatedCourses[currentIndex] = updatedCourses[newIndex];
       updatedCourses[newIndex] = temp;
 
@@ -130,55 +126,58 @@ export default function Courses() {
           {/* Courses Cards */}
           <div className="w-full space-y-6">
             <AnimatePresence mode="sync">
-              {courses.map((course, index) => (
-                <HoverCvPreviewCard key={course._id} index={index}>
-                  {/* Header */}
-                  <div className="flex justify-between items-center mb-3">
-                    <div className="flex gap-4 items-center">
-                      <h3 className="heading-h3 font-semibold">
-                        {course.courseName}
-                      </h3>
-                      <h4 className="heading-h4">{course.instituteName}</h4>
-                    </div>
-                    <ActionButtons
-                      onDelete={() => handleDelete(course._id)}
-                      onEdit={() => handleEdit(course)}
-                      onCopy={() => handleCopy(course)}
-                      onMoveUp={() => handleMove("up", index)}
-                      onMoveDown={() => handleMove("down", index)}
-                      isFirst={index === 0}
-                      isLast={index === courses.length - 1}
-                    />
-                  </div>
+              {courses.map(
+                (course, index) =>
+                  console.log(course) || (
+                    <HoverCvPreviewCard key={course._id} index={index}>
+                      {/* Header */}
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="flex gap-4 items-center">
+                          <h3 className="heading-h3 font-semibold">
+                            {course.courseName}
+                          </h3>
+                          <h4 className="heading-h4">{course.instituteName}</h4>
+                        </div>
+                        <ActionButtons
+                          onDelete={() => handleDelete(course._id)}
+                          onEdit={() => handleEdit(course)}
+                          onCopy={() => handleCopy(course)}
+                          onMoveUp={() => handleMove("up", index)}
+                          onMoveDown={() => handleMove("down", index)}
+                          isFirst={index === 0}
+                          isLast={index === courses.length - 1}
+                        />
+                      </div>
 
-                  {/* Info */}
-                  <div className="pb-5 border-b border-text">
-                    <div className="flex items-center gap-4 text-text">
-                      <time>
-                        {course.startDate && getLocalDate(course.startDate)}{" "}
-                        <span className="mx-2">-</span>
-                        {course.endDate && getLocalDate(course.endDate)}
-                      </time>
-                    </div>
-                  </div>
+                      {/* Info */}
+                      <div className="pb-5 border-b border-text">
+                        <div className="flex items-center gap-4 text-text">
+                          <time>
+                            {course.startDate && getLocalDate(course.startDate)}{" "}
+                            <span className="mx-2">-</span>
+                            {course.endDate && getLocalDate(course.endDate)}
+                          </time>
+                        </div>
+                      </div>
 
-                  {/* Description or Add Details Button */}
-                  {course.description ? (
-                    <div className="text-text">
-                      <DraftPreview
-                        title="وصف الدورة"
-                        source={course.description}
-                      />
-                    </div>
-                  ) : (
-                    <AddDescriptionBtn
-                      pageRef={pageRef}
-                      handleEdit={handleEdit}
-                      item={course}
-                    />
-                  )}
-                </HoverCvPreviewCard>
-              ))}
+                      {/* Description or Add Details Button */}
+                      {course.description ? (
+                        <div className="text-text">
+                          <DraftPreview
+                            title="وصف الدورة"
+                            source={course.description}
+                          />
+                        </div>
+                      ) : (
+                        <AddDescriptionBtn
+                          pageRef={pageRef}
+                          handleEdit={handleEdit}
+                          item={course}
+                        />
+                      )}
+                    </HoverCvPreviewCard>
+                  )
+              )}
             </AnimatePresence>
           </div>
 

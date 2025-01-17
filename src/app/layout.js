@@ -39,7 +39,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "ar_SA",
-    url: "https://www.job.sa",
+    url: "https://www.ragab.shop",
     siteName: "منصة عمل",
     title: "منصة عمل - منصتك المتكاملة للتوظيف وبناء السيرة الذاتية",
     description:
@@ -57,7 +57,7 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://www.job.sa",
+    canonical: "https://www.ragab.shop",
   },
   verification: {
     google: "google-site-verification-code",
@@ -76,9 +76,9 @@ export default async function RootLayout({ children }) {
     preloadedState = await getInitialAuthState();
   } catch (error) {
     initialError = {
-      message: error.message || 'حدث خطأ أثناء تحميل البيانات',
+      message: error.message || "حدث خطأ أثناء تحميل البيانات",
       status: error.status || 500,
-      code: error.code || 'UNKNOWN_ERROR'
+      code: error.code || "UNKNOWN_ERROR",
     };
     console.log("getInitialAuthState error", error);
 
@@ -87,13 +87,14 @@ export default async function RootLayout({ children }) {
         user: {},
         isAuthenticated: false,
         loading: false,
-        error: initialError.message
+        error: initialError.message,
       },
     };
   }
 
   return (
     <html lang="ar" dir="rtl">
+      {/* <body className={cairo.className} suppressHydrationWarning> */}
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
           <LoadingWrapper>

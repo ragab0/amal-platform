@@ -42,7 +42,7 @@ export async function getInitialAuthState() {
     throw new Error(
       error.response?.data?.result?.message ||
         error.response?.data?.result ||
-        "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة مرة أخرى."
+        "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة في وقت لاحق."
     );
   }
 }

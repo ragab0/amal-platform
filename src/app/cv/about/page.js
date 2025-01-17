@@ -64,6 +64,10 @@ export default function AboutPage() {
             control={control}
             error={errors.description?.message}
             placeholder="اكتب وصفك الشخصي هنا..."
+            aiPrompt={{
+              type: "about",
+              data: {},
+            }}
           />
           <FormActions
             onCancel={handleCancel}

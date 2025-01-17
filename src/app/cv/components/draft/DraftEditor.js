@@ -94,6 +94,10 @@ export default function DraftEditor({
     );
   }
 
+  if (!aiPrompt) {
+    return <h1>AiPrompt is needed</h1>;
+  }
+
   return (
     <div
       className="draft-editor"

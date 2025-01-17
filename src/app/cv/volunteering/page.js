@@ -73,7 +73,7 @@ export default function Volunteering() {
         volunteer._id === editingId ? { ...volunteer, ...data } : volunteer
       );
     } else {
-      updatedVolunteers = [...volunteers, data];
+      updatedVolunteers = [...volunteers, { ...data, _id: undefined }];
     }
 
     const { payload, error } = await dispatch(
@@ -95,11 +95,12 @@ export default function Volunteering() {
 
   function handleCopy(volunteer) {
     const newVolunteer = { ...volunteer, _id: undefined };
-    const updatedVolunteers = [
-      ...volunteers.slice(0, volunteers.indexOf(volunteer) + 1),
-      newVolunteer,
-      ...volunteers.slice(volunteers.indexOf(volunteer) + 1),
-    ];
+    const updatedVolunteers = [...volunteers];
+    updatedVolunteers.splice(
+      volunteers.indexOf(volunteer) + 1,
+      0,
+      newVolunteer
+    );
 
     dispatch(updateCV({ volunteers: updatedVolunteers }));
   }
@@ -112,7 +113,7 @@ export default function Volunteering() {
       (direction === "down" && currentIndex < volunteers.length - 1)
     ) {
       const updatedVolunteers = [...volunteers];
-      const temp = updatedVolunteers[currentIndex];
+      const temp = { ...updatedVolunteers[currentIndex] };
       updatedVolunteers[currentIndex] = updatedVolunteers[newIndex];
       updatedVolunteers[newIndex] = temp;
 

@@ -245,7 +245,7 @@ export default function Experience() {
               error={errors.startDate?.message}
               spaceBlock={false}
             />
-            <FormInput
+            {/* <FormInput
               must={true}
               label="تاريخ النهاية"
               type="date"
@@ -259,7 +259,17 @@ export default function Experience() {
                 <input type="checkbox" {...register("present")} />
                 <span className="text-text">حاليا</span>
               </label>
-            </FormInput>
+            </FormInput> */}
+            <FormInput
+              must={true}
+              label="تاريخ النهاية"
+              type="date"
+              name="endDate"
+              register={register}
+              error={errors.endDate?.message}
+              spaceBlock={false}
+              inpClassName=""
+            />
           </div>
 
           {/* Description field */}

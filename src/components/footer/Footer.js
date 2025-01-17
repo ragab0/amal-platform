@@ -13,13 +13,13 @@ import LogoIco from "@/assets/icons/LogoIco";
 const footerLinks = [
   { title: "من نحن", href: "/about" },
   { title: "الخدمات", href: "/services" },
-  { title: "سياسة الخصوصية", href: "/privacy" },
-  { title: "الشروط والأحكام", href: "/terms" },
+  { title: "سياسة الخصوصية", href: "/privacy", notYet: true },
+  { title: "الشروط والأحكام", href: "/terms", notYet: true },
 ];
 
 const contactLinks = [
-  { title: "تواصل معنا", href: "/contact" },
-  { title: "الأسئلة الشائعة FAQ", href: "/faq" },
+  { title: "تواصل معنا", href: "/contact", notYet: true },
+  { title: "الأسئلة الشائعة FAQ", href: "/faq", notYet: true },
 ];
 
 const socialIcons = [
@@ -51,7 +51,12 @@ export default function Footer() {
               </h3>
               <ul className="flex flex-col gap-[30px]">
                 {footerLinks.map((link, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className={
+                      link.notYet ? "opacity-80 pointer-events-none" : ""
+                    }
+                  >
                     <Link
                       href={link.href}
                       className="text-white text-[20px] font-medium hover:text-accent transition-colors"
@@ -68,7 +73,12 @@ export default function Footer() {
               <h2 className="heading-sub text-white mb-8">التواصــــل</h2>
               <ul className="flex flex-col gap-[30px] mb-12">
                 {contactLinks.map((link, index) => (
-                  <li key={index}>
+                  <li
+                    key={index}
+                    className={
+                      link.notYet ? "opacity-80 pointer-events-none" : ""
+                    }
+                  >
                     <Link
                       href={link.href}
                       className="text-white text-[20px] font-medium hover:text-accent transition-colors"
