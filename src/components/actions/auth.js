@@ -39,10 +39,24 @@ export async function getInitialAuthState() {
       },
     };
   } catch (error) {
-    throw new Error(
-      error.response?.data?.result?.message ||
-        error.response?.data?.result ||
-        "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة في وقت لاحق."
-    );
+    console.log("Auth Error:", error);
+    let errorMessage;
+
+    if (error.response?.data?.result?.message) {
+      errorMessage = error.response.data.result.message;
+    } else if (typeof error.response?.data?.result === "string") {
+      errorMessage = error.response.data.result;
+    } else {
+      errorMessage = "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة في وقت لاحق.";
+    }
+
+    return {
+      auth: {
+        user: {},
+        isAuthenticated: false,
+        loading: false,
+        error: errorMessage,
+      },
+    };
   }
 }

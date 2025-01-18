@@ -8,13 +8,14 @@ export function draftToPdfText(
   itemTextStyle
 ) {
   if (!draftTxt) return "";
-
   try {
     const draftContent = JSON.parse(draftTxt);
-    // console.log("draftContent:", draftContent);
+    console.log("draftContent:", draftContent);
     return (
       <View style={mainBlockStyle}>
         {draftContent.blocks.map((block, index) => {
+          if (!block || !block.text) return null;
+
           let text = block.text;
           const styledSegments = [];
 
@@ -22,16 +23,19 @@ export function draftToPdfText(
           const styleMap = new Map();
 
           // Fill the style map with all style ranges
-          block.inlineStyleRanges.forEach((range) => {
-            // For RTL text, we need to adjust the offset from the end
-            const rtlOffset = text.length - (range.offset + range.length);
-            for (let i = rtlOffset; i < rtlOffset + range.length; i++) {
-              if (!styleMap.has(i)) {
-                styleMap.set(i, new Set());
+          if (Array.isArray(block.inlineStyleRanges)) {
+            block.inlineStyleRanges.forEach((range) => {
+              const start = range.offset;
+              const end = range.offset + range.length;
+
+              for (let i = start; i < end; i++) {
+                if (!styleMap.has(i)) {
+                  styleMap.set(i, new Set());
+                }
+                styleMap.get(i).add(range.style);
               }
-              styleMap.get(i).add(range.style);
-            }
-          });
+            });
+          }
 
           // Convert the style map to segments
           let currentStyles = new Set();
@@ -66,7 +70,11 @@ export function draftToPdfText(
           }
 
           return (
-            <View key={block.key} style={itemStyle} wrap={false}>
+            <View
+              key={block.key}
+              style={[itemStyle, { lineHeight: 1 }]}
+              wrap={false}
+            >
               {block.type === "unordered-list-item" && (
                 <Text style={itemBullitStyle}>•</Text>
               )}
@@ -74,17 +82,21 @@ export function draftToPdfText(
                 <Text style={itemBullitStyle}>{index + 1}.</Text>
               )}
               <Text style={itemTextStyle}>
-                {styledSegments.map((segment, i) => (
-                  <Text
-                    key={`${block.key}-${i}`}
-                    style={{
-                      ...segment.styles,
-                      ...itemTextStyle,
-                    }}
-                  >
-                    {segment.text}
-                  </Text>
-                ))}
+                {styledSegments.length > 0 ? (
+                  styledSegments.map((segment, i) => (
+                    <Text
+                      key={`${block.key}-${i}`}
+                      style={{
+                        ...itemTextStyle,
+                        ...segment.styles,
+                      }}
+                    >
+                      {segment.text}
+                    </Text>
+                  ))
+                ) : (
+                  <Text style={itemTextStyle}>{text}</Text>
+                )}
               </Text>
             </View>
           );

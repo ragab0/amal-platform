@@ -92,8 +92,12 @@ const cvsSlice = createSlice({
         state.error = null;
       })
       .addCase(updateCV.fulfilled, (state, action) => {
+        const cv = action.payload.result || {};
+        const [fieldName] = Object.keys(cv);
         state.loading = false;
-        state.myCV = action.payload.result;
+        if (fieldName) {
+          state.myCV[fieldName] = cv[fieldName];
+        }
       })
       .addCase(updateCV.rejected, (state, { payload }) => {
         state.loading = false;

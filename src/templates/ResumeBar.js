@@ -7,8 +7,8 @@ import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
 export default function ResumeBar({ isCustomize = false }) {
   const {
     myCV = {},
-    myCVOptions,
-    myCVFontOptions,
+    myCVOptions = {},
+    myCVFontOptions = {},
     myCVoptionsLoading,
     loading,
     isInitialized,
@@ -21,14 +21,16 @@ export default function ResumeBar({ isCustomize = false }) {
   return (
     <div className="resume-bar h-full">
       <div className="w-full h-full rounded-lg shadow-md mb-4">
-        <PDFViewer width="100%" height="100%" className="rounded-lg">
-          <Template1
-            data={myCV}
-            cobject={myCVOptions}
-            isCustomize={isCustomize}
-            myCVFontOptions={myCVFontOptions}
-          />
-        </PDFViewer>
+        {
+          <PDFViewer width="100%" height="100%" className="rounded-lg">
+            <Template1
+              data={myCV}
+              cobject={myCVOptions}
+              isCustomize={isCustomize}
+              myCVFontOptions={myCVFontOptions}
+            />
+          </PDFViewer>
+        }
       </div>
       <h3 className="text-second text-center heading-h3 underline hover:opacity-70 cursor-pointer">
         تغييـــــــر القـــــــالـب

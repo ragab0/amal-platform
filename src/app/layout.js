@@ -70,27 +70,7 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  let preloadedState;
-  let initialError = null;
-  try {
-    preloadedState = await getInitialAuthState();
-  } catch (error) {
-    initialError = {
-      message: error.message || "حدث خطأ أثناء تحميل البيانات",
-      status: error.status || 500,
-      code: error.code || "UNKNOWN_ERROR",
-    };
-    console.log("getInitialAuthState error", error);
-
-    preloadedState = {
-      auth: {
-        user: {},
-        isAuthenticated: false,
-        loading: false,
-        error: initialError.message,
-      },
-    };
-  }
+  const preloadedState = await getInitialAuthState();
 
   return (
     <html lang="ar" dir="rtl">
@@ -98,7 +78,7 @@ export default async function RootLayout({ children }) {
       <body className={cairo.className}>
         <StoreProvider preloadedState={preloadedState}>
           <LoadingWrapper>
-            <InitialDataLoader initialError={initialError}>
+            <InitialDataLoader initialErrorMessage={preloadedState.auth.error}>
               <SocketNotificationInitializer />
               <ToastContainer
                 position="top-right"
