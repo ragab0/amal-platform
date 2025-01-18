@@ -185,18 +185,10 @@ export default function Template1({
               <Text style={styles.sectionTitle}>المؤهل العلمي</Text>
               {educations.map((edu, index) => (
                 <View key={index} style={{ marginBottom: 2.5 }} wrap={false}>
-                  <View
-                    style={[
-                      styles.item,
-                      { lineHeight: 1, alignItems: "center" },
-                    ]}
-                  >
+                  <View style={[styles.item, { alignItems: "center" }]}>
                     <View style={[styles.item]}>
                       {!isSelected("educations", "description") ? (
-                        <View
-                          style={[styles.item, { lineHeight: 1 }]}
-                          wrap={false}
-                        >
+                        <View style={[styles.item]} wrap={false}>
                           <Text style={styles.itemBullet}>•</Text>
                           <Text style={[styles.itemTitle]}>
                             {edu.degree} {edu.field}
@@ -222,7 +214,7 @@ export default function Template1({
                     draftToPdfText(
                       edu.description,
                       styles.description,
-                      { ...styles.item, lineHeight: 1 },
+                      styles.item,
                       styles.itemBullet,
                       styles.itemText
                     )}
@@ -236,18 +228,10 @@ export default function Template1({
               <Text style={styles.sectionTitle}>الخبرات العملية</Text>
               {experiences.map((exp, index) => (
                 <View key={index} style={{ marginBottom: 2.5 }}>
-                  <View
-                    style={[
-                      styles.item,
-                      { lineHeight: 1, alignItems: "center" },
-                    ]}
-                  >
+                  <View style={[styles.item, { alignItems: "center" }]}>
                     <View style={[styles.item]}>
                       {!isSelected("experiences", "description") ? (
-                        <View
-                          style={[styles.item, { lineHeight: 1 }]}
-                          wrap={false}
-                        >
+                        <View style={[styles.item]} wrap={false}>
                           <Text style={styles.itemBullet}>•</Text>
                           <Text style={[styles.itemTitle]}>{exp.jobTitle}</Text>
                         </View>
@@ -277,7 +261,7 @@ export default function Template1({
                     draftToPdfText(
                       exp.description,
                       styles.description,
-                      { ...styles.item, lineHeight: 1 },
+                      { ...styles.item },
                       styles.itemBullet,
                       styles.itemText
                     )}
@@ -290,11 +274,7 @@ export default function Template1({
             <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>الدورات التدريبية</Text>
               {courses.map(({ courseName, instituteName }, index) => (
-                <View
-                  key={index}
-                  style={[styles.item, { lineHeight: 1 }]}
-                  wrap={false}
-                >
+                <View key={index} style={[styles.item]} wrap={false}>
                   <Text style={styles.itemBullet}>•</Text>
                   <Text style={styles.itemText}>
                     {courseName} - {instituteName}
@@ -308,11 +288,7 @@ export default function Template1({
             <View style={styles.section} wrap={false}>
               <Text style={styles.sectionTitle}>المهارات الشخصية</Text>
               {softSkills.map(({ name }, index) => (
-                <View
-                  key={index}
-                  style={[styles.item, { lineHeight: 1 }]}
-                  wrap={false}
-                >
+                <View key={index} style={[styles.item]} wrap={false}>
                   <Text style={styles.itemBullet}>•</Text>
                   <Text style={styles.itemText}>{name}</Text>
                 </View>

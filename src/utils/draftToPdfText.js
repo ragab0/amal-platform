@@ -88,7 +88,7 @@ export function draftToPdfText(
                       key={`${block.key}-${i}`}
                       style={{
                         ...itemTextStyle,
-                        ...segment.styles,
+                        // ...segment.styles,
                       }}
                     >
                       {segment.text}

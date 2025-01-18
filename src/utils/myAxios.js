@@ -13,6 +13,8 @@ const myAxios = axios.create({
 myAxios.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log("EEEEEEEEEEEEEEEEEEEEe", error);
+
     // Network Error (No connection to backend)
     if (!error.response) {
       error.message = "لم يتم الاتصال بالخادم.";

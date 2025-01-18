@@ -1,19 +1,22 @@
 "use client";
 import "./ChatRoom.css";
+import "./EmojiPicker.css";
 import socketService from "@/services/socketService";
 import YoungCircleLoader from "@/components/loaders/YoungCircleLoader";
-import { useEffect, useRef } from "react";
+import EmojiPicker from "emoji-picker-react";
+import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { useForm } from "react-hook-form";
 import { BsEmojiSmile, BsPaperclip, BsSend } from "react-icons/bs";
 import { fetchRoom } from "@/store/features/support/supportThunks";
 import { addMessage } from "@/store/features/support/supportSlice";
-import { useState } from "react";
 
 const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
   const bodyRef = useRef(null);
+  const emojiPickerRef = useRef(null);
   const dispatch = useAppDispatch();
   const [isTyping, setIsTyping] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const {
     user: { _id },
   } = useAppSelector((state) => state.auth);
@@ -27,6 +30,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
     reset,
     watch,
     formState: { isValid },
+    setValue,
   } = useForm();
   const msg = watch("message", "");
 
@@ -99,6 +103,20 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
     });
   }, [currentRoom?.messages]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(event.target)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const onSubmit = (data) => {
     console.log(data);
 
@@ -157,6 +175,11 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
     });
   };
 
+  const onEmojiClick = (emojiObject) => {
+    const emoji = emojiObject.emoji;
+    setValue("message", msg + emoji);
+  };
+
   if (!isInitialized || loading) {
     return (
       <YoungCircleLoader
@@ -186,9 +209,57 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="border-t border-t-neutral-300 p-4"
+        className="border-t border-t-neutral-300 p-4 relative"
       >
-        <div className="flex items-center gap-2">
+        {showEmojiPicker && (
+          <div
+            ref={emojiPickerRef}
+            className="absolute bottom-full left-0 m-2 z-50 w-full max-w-[350px] overflow-hidden
+              max-sm:max-w-[250px]
+            "
+          >
+            <EmojiPicker
+              onEmojiClick={onEmojiClick}
+              autoFocusSearch={false}
+              theme="light"
+              searchPlaceHolder="ابحث عن الإيموجي..."
+              width="100%"
+              height="350px"
+              previewConfig={{
+                showPreview: false,
+              }}
+              lazyLoadEmojis={true}
+              skinTonesDisabled={true}
+              categories={[
+                {
+                  name: "Smileys & People",
+                  category: "smileys_people",
+                },
+                {
+                  name: "Animals & Nature",
+                  category: "animals_nature",
+                },
+                {
+                  name: "Food & Drink",
+                  category: "food_drink",
+                },
+                {
+                  name: "Activities",
+                  category: "activities",
+                },
+                {
+                  name: "Objects",
+                  category: "objects",
+                },
+                {
+                  name: "Symbols",
+                  category: "symbols",
+                },
+              ]}
+            />
+          </div>
+        )}
+        <div className="flex items-center gap-2 overflow-auto">
           <input
             {...register("message")}
             className="flex-1 p-3 border rounded-lg focus:outline-none focus:border-main"
@@ -198,6 +269,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
             <button
               type="button"
               className="py-3 px-2 flex items-center justify-center text-gray-500 hover:text-main"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             >
               <BsEmojiSmile size={24} />
             </button>
@@ -210,7 +282,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
             <button
               type="submit"
               className="p-2 ms-2 text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors"
-              disabled={!isValid}
+              disabled={!isValid || !msg?.trim()}
             >
               <BsSend size={24} />
             </button>

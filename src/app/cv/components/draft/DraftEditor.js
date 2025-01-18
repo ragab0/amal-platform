@@ -162,8 +162,8 @@ export default function DraftEditor({
                     }
                   />
                 </div>
-                <div className="w-px h-6 bg-gray-300 mx-1" />
-                <div className="flex items-center">
+                {/* <div className="w-px h-6 bg-gray-300 mx-1" /> */}
+                {/* <div className="flex items-center">
                   <ToolbarButton
                     icon={FiUnderline}
                     onClick={() =>
@@ -193,7 +193,7 @@ export default function DraftEditor({
                     }
                     testId="toolbar-btn-BOLD"
                   />
-                </div>
+                </div> */}
                 {/* <div className="w-px h-6 bg-gray-300 mx-1" />
                 <ToolbarButton
                   icon={FiLink}

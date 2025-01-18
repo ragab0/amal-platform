@@ -68,6 +68,7 @@ export const createStyle = ({
     item: {
       ...rtl,
       gap: 5,
+      lineHeight: 1,
     },
     itemBullet: {
       ...rtl,

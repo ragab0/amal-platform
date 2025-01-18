@@ -1,0 +1,50 @@
+/* Custom styles for emoji picker */
+.EmojiPickerReact {
+  --epr-bg-color: #ffffff !important;
+  --epr-category-label-bg-color: #f8f9fa !important;
+  --epr-hover-bg-color: #e9ecef !important;
+  --epr-focus-bg-color: #e9ecef !important;
+  --epr-highlight-color: #3b82f6 !important;
+  --epr-search-border-color: #e2e8f0 !important;
+  --epr-border-radius: 0.5rem !important;
+  --epr-category-icon-size: 20px !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  font-family: inherit !important;
+}
+
+.EmojiPickerReact .epr-search-container input {
+  border-radius: 0.375rem !important;
+  background-color: #f8f9fa !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.EmojiPickerReact .epr-emoji-category-label {
+  font-size: 0.875rem !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.EmojiPickerReact .epr-body::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.EmojiPickerReact .epr-body::-webkit-scrollbar-track {
+  background: #f1f1f1 !important;
+}
+
+.EmojiPickerReact .epr-body::-webkit-scrollbar-thumb {
+  background: #c1c1c1 !important;
+  border-radius: 3px !important;
+}
+
+/* RTL Support */
+[dir="rtl"] .EmojiPickerReact {
+  --epr-search-input-padding: 0 2.5rem 0 1rem !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .EmojiPickerReact {
+    --epr-emoji-size: 22px !important;
+  }
+}

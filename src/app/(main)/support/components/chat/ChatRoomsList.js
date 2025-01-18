@@ -59,11 +59,11 @@ export default function ChatRoomsList() {
               <div className="flex items-center justify-between">
                 <span>{`${room.user?.fname} ${room.user?.lname} | ${room.user?.email}`}</span>
 
-                {room.unreadCount > 0 && (
+                {/* {room.unreadCount > 0 && (
                   <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs">
                     {room.unreadCount}
                   </span>
-                )}
+                )} */}
               </div>
               {room.lastMessage && (
                 <p className="text-sm text-gray-500 truncate mt-1">
