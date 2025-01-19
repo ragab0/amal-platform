@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { services } from "@/assets/data/servicesData";
 import {
   FadeInUp,
   HoverCard,
@@ -26,44 +27,6 @@ export const metadata = {
   },
 };
 
-const services = [
-  {
-    title: "حزمة مجانية",
-    items: [
-      "إنشـــاء سيـــرة ذاتـــيـــة",
-      "تعديـــل وتحميـــل غيــر محدود",
-      "قالب احترافـي قابل للتعديل",
-    ],
-    to: "#",
-    btnText: "ابدأ الآن",
-    id: "free",
-  },
-  {
-    title: "حزمة مدفوعة",
-    items: [
-      "استشارة مع خبير بالسيّر الذاتية",
-      "استشارة مع مستشار عمل في لينكد ان",
-      "مشاركة سيرتك الذاتية مع شركات بمجالك",
-    ],
-    to: "#",
-    btnText: "شراء الآن",
-    price: "3$",
-    id: "premium",
-  },
-  {
-    title: "حزمة بريميوم",
-    items: [
-      "AI تحسين السيرة الذاتية بواسطة",
-      "ATS تحليل السيرة الذاتية بواسطة",
-      "إرسال السيرة الذاتية ورقياً للشركات",
-    ],
-    to: "#",
-    btnText: "شراء الآن",
-    price: "8$",
-    id: "premium-plus",
-  },
-];
-
 export default function ServicesPage() {
   return (
     <div className="container mx-auto px-4">
@@ -84,12 +47,21 @@ export default function ServicesPage() {
             className="flex flex-col bg-pink border-[3px] border-second rounded-t-xl w-full max-w-[500px] mx-auto h-full"
           >
             <HoverHeader className="bg-second flex flex-col py-10 gap-4 items-center justify-center rounded-t-lg">
-              <h3 className="heading-sub font-me text-white">
+              <h3 className="heading-sub font-medium text-white">
                 {service.title}
               </h3>
-              <h4 className="heading-sub font-me text-white">
-                {service.price || "0$"}
-              </h4>
+              <div>
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <h4 className="heading-sub font-medium text-main">
+                    ({service.price || "0$"})
+                  </h4>
+                  {service.originalPrice && (
+                    <span className="heading-sub-small text-gray-400 line-through">
+                      {service.originalPrice}
+                    </span>
+                  )}
+                </div>
+              </div>
             </HoverHeader>
             <ul className="py-[100px] px-[50px] border-b border-second space-y-6 list-disc h-full text-lg">
               {service.items.map((item, itemIndex) => (

@@ -5,6 +5,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { useAppSelector } from "@/hooks/ReduxHooks";
 import { HiMenu, HiX } from "react-icons/hi";
 import { navLinks, userMenuItems } from "@/assets/data/navbar";
+import { usePathname } from "next/navigation";
 import Logo from "../logo/Logo";
 import Link from "next/link";
 import NotificationBadge from "../notifications/NotificationBadge";
@@ -15,6 +16,9 @@ import DropdownMenu from "../drobDown/DropdownMenu";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user = {}, isAuthenticated } = useAppSelector((state) => state.auth);
+  const pathname = usePathname();
+
+  console.log(pathname);
 
   return (
     <nav className="relative bg-main">
@@ -54,9 +58,14 @@ export default function Navbar() {
             <Link
               key={i}
               href={link.href}
-              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 text-white hover:opacity-90 transition-all 
+              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 hover:opacity-90 transition-all 
                 duration-300 text-lg
                 ${i === 0 ? "outline-bottom" : ""}
+                ${
+                  pathname.startsWith(link.href) && link.href
+                    ? "text-second"
+                    : "text-white"
+                }
                 `}
             >
               {link.name}

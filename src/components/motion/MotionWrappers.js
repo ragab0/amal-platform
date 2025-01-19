@@ -61,7 +61,7 @@ export function FadeInSlide({ children, index, itemIndex }) {
   );
 }
 
-export function HoverButton({ children }) {
+export function HoverButton({ children, className, onClick }) {
   return (
     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
       {children}

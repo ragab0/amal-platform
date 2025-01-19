@@ -70,7 +70,14 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const preloadedState = await getInitialAuthState();
+  return (
+    <html lang="ar" dir="rtl">
+      <body>
+        <InitialDataLoader initialErrorMessage={"مغلق مؤقتا!"} />
+      </body>
+    </html>
+  );
+  // const preloadedState = await getInitialAuthState();
 
   return (
     <html lang="ar" dir="rtl">
