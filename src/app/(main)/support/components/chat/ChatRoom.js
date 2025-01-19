@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/ReduxHooks";
 import { useForm } from "react-hook-form";
 import { BsEmojiSmile, BsPaperclip, BsSend } from "react-icons/bs";
 import { fetchRoom } from "@/store/features/support/supportThunks";
-import { addMessage } from "@/store/features/support/supportSlice";
+import { addMessage, clearRoom } from "@/store/features/support/supportSlice";
 
 const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
   const bodyRef = useRef(null);
@@ -36,6 +36,7 @@ const ChatRoom = ({ isAdmin = false, prevRoom = null }) => {
 
   // Initialize socket with user type
   useEffect(() => {
+    if (!_id) return;
     if (isAdmin) {
       dispatch(fetchRoom(currentRoom._id));
       socketService.joinRoom(currentRoom._id);

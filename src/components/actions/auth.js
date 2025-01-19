@@ -32,7 +32,7 @@ export async function getInitialAuthState() {
 
     return {
       auth: {
-        user: response.data.result || {},
+        user: response.data?.result || {},
         isAuthenticated: true,
         loading: false,
         error: null,

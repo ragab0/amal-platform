@@ -13,7 +13,7 @@ export default function SupportClient() {
   const [showRoomList, setShowRoomList] = useState(true);
 
   function handleClick() {
-    setShowRoomList(!showRoomList);
+    setShowRoomList((prev) => !prev);
   }
 
   if (isAdmin) {

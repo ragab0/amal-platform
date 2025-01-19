@@ -7,30 +7,44 @@ import {
   setCurrentRoomId,
   setRoomsLastMsg,
   setRooms,
+  setRoomUnreadCount,
+  setNewRoom,
 } from "@/store/features/support/supportSlice";
 
 export default function ChatRoomsList() {
   const dispatch = useAppDispatch();
   const {
-    allRooms: { list: rooms = [], loading },
-    room: { result: currentRoom = {} },
+    user: { _id },
+  } = useAppSelector((state) => state.auth);
+  const {
+    allRooms: { list: rooms = [], loading, isInitialized },
+    room: { result: currentRoom = {}, loading: currentLoading },
   } = useAppSelector((state) => state.support);
 
   useEffect(() => {
+    if (!_id) return;
     const socket = socketService.connect();
     socket.emit("get_room_list");
-    socket.on("room_list_updated", function (list) {
+    socket.on("new_list", function (list) {
       dispatch(setRooms(list));
     });
-    socket.on("rooms_last_msg_updated", function (updatedMsg) {
-      dispatch(setRoomsLastMsg(updatedMsg));
+    socket.on("new_last_msg", function (updatedMsg) {
+      dispatch(setRoomsLastMsg({ updatedMsg, _id }));
     });
-
+    socket.on("new_unread_count", function ({ roomId, unreadCount }) {
+      dispatch(setRoomUnreadCount({ roomId, count: unreadCount }));
+    });
+    socket.on("new_room_status", function (room) {
+      dispatch(setNewRoom(room));
+    });
     // Cleanup listeners on unmount
     return () => {
-      socket.off("rooms_last_msg_updated");
+      socket.off("new_last_msg");
+      socket.off("new_list");
+      socket.off("new_unread_count");
+      socket.off("new_room_status");
     };
-  }, [dispatch]);
+  }, [dispatch, _id]);
 
   const handleRoomChange = (roomId) => {
     if (roomId === currentRoom?._id) return;
@@ -45,7 +59,17 @@ export default function ChatRoomsList() {
     <div className="h-full overflow-y-auto">
       <div className="p-4">
         <h2 className="text-xl font-semibold mb-4">المحادثات</h2>
-        <div className="space-y-2">
+        <div
+          className="space-y-2"
+          style={
+            currentLoading || loading
+              ? {
+                  pointerEvents: "none",
+                  opacity: 0.5,
+                }
+              : {}
+          }
+        >
           {rooms.map((room) => (
             <button
               key={room._id}

@@ -11,10 +11,14 @@ export default function DashboardStats() {
   const { apiData, isInitialized, loading } = useAppSelector(
     (state) => state.admin.stats
   );
+  const {
+    user: { _id },
+  } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
+    if (!_id) return;
     dispatch(fetchStats());
-  }, [dispatch]);
+  }, [dispatch, _id]);
 
   if (!isInitialized || loading) {
     return <CircleLoader />;

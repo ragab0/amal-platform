@@ -36,6 +36,7 @@ const services = [
     ],
     to: "#",
     btnText: "ابدأ الآن",
+    id: "free",
   },
   {
     title: "حزمة مدفوعة",
@@ -47,6 +48,7 @@ const services = [
     to: "#",
     btnText: "شراء الآن",
     price: "3$",
+    id: "premium",
   },
   {
     title: "حزمة بريميوم",
@@ -58,6 +60,7 @@ const services = [
     to: "#",
     btnText: "شراء الآن",
     price: "8$",
+    id: "premium-plus",
   },
 ];
 

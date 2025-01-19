@@ -8,9 +8,9 @@ export default function Hero() {
       <Image
         alt="Hero Image"
         src={HeroImg}
-        width={646}
-        height={586}
-        className="w-full max-w-[646px] mx-auto"
+        width={"auto"}
+        height={"auto"}
+        className="w-full max-w-[646px] mx-auto min-w-auto min-h-auto"
         priority
       />
       <div className="flex flex-col justify-start mt-10">

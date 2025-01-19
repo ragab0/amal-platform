@@ -31,14 +31,19 @@ export const updateProfileAccountInfo = createAsyncThunk(
   }
 );
 
-// headers: {
-//   "Content-Type": "application/json",
-// }
 export const updateProfileImage = createAsyncThunk(
   "auth/updateProfileImage",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await myAxios.put("/users/mine?updateSet=image", data);
+      const response = await myAxios.post(
+        "/images/upload-profile-image",
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || {});

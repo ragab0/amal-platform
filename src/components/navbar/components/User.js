@@ -21,8 +21,8 @@ export default function User({ user }) {
         <Image
           src={user.photo}
           alt="User"
-          width={40}
-          height={40}
+          width={250}
+          height={250}
           className="w-14 h-14 rounded-full"
         />
       ) : (

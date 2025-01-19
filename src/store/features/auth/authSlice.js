@@ -12,6 +12,7 @@ import {
 import {
   updateProfileAccountInfo,
   updateProfileBasicInfo,
+  updateProfileImage,
 } from "../users/usersThunks";
 
 const initialState = {
@@ -175,6 +176,19 @@ const authSlice = createSlice({
         state.user = payload.result || {};
       })
       .addCase(updateProfileAccountInfo.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload.result?.message;
+      })
+      // image upload;
+      .addCase(updateProfileImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProfileImage.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.user.photo = payload.result.photo || "";
+      })
+      .addCase(updateProfileImage.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload.result?.message;
       });

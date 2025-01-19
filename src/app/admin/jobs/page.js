@@ -12,15 +12,12 @@ import {
   updateJob,
   deleteJob,
 } from "@/store/features/admin/adminThunks";
-import CircleLoader from "@/components/loaders/CircleLoader";
 
 export default function JobsPage() {
   const dispatch = useAppDispatch();
-  const {
-    results: jobs = [],
-    loading,
-    isInitliazed,
-  } = useAppSelector((state) => state.admin.jobs);
+  const { results: jobs = [], loading } = useAppSelector(
+    (state) => state.admin.jobs
+  );
   const [showForm, setShowForm] = useState(false);
   const [editingJob, setEditingJob] = useState(null);
   const [jobToDelete, setJobToDelete] = useState(null);

@@ -26,14 +26,23 @@ const supportSlice = createSlice({
     addMessage: (state, { payload }) => {
       state.room.result.messages.push(payload);
     },
-    setRoomsLastMsg: (state, { payload }) => {
-      const i = state.allRooms.list.findIndex((r) => r._id === payload.room);
+    setRoomsLastMsg: (state, { payload: { updatedMsg } }) => {
+      const i = state.allRooms.list.findIndex((r) => r._id === updatedMsg.room);
       if (i > -1) {
-        state.allRooms.list[i].lastMessage = payload;
+        state.allRooms.list[i].lastMessage = updatedMsg;
+      }
+    },
+    setRoomUnreadCount: (state, { payload: { roomId, count } }) => {
+      const i = state.allRooms.list.findIndex((r) => r._id === roomId);
+      if (i > -1) {
+        state.allRooms.list[i].unreadCount = count;
       }
     },
     setRooms: (state, { payload }) => {
       state.allRooms.list = payload;
+    },
+    setNewRoom: (state, { payload }) => {
+      state.allRooms.list.unshift(payload);
     },
     setRoomsLoading: (state, { payload }) => {
       state.allRooms.loading = payload;
@@ -94,7 +103,9 @@ export const {
   setMessages,
   addMessage,
   setRooms,
+  setNewRoom,
   setRoomsLastMsg,
+  setRoomUnreadCount,
   setRoomsLoading,
   setCurrentRoomId,
   setTyping,
