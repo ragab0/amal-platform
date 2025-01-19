@@ -1,32 +1,44 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { processPayment } from "./paymentThunks";
 
 const initialState = {
-  showPaymentForm: false,
-  selectedPlan: null,
   loading: false,
   error: null,
+  success: false,
+  selectedMethod: "card",
 };
 
 const paymentSlice = createSlice({
   name: "payment",
   initialState,
   reducers: {
-    setShowPaymentForm: (state, { payload }) => {
-      state.showPaymentForm = payload;
+    setSelectedMethod: (state, { payload }) => {
+      state.selectedMethod = payload;
     },
-    setSelectedPlan: (state, { payload }) => {
-      state.selectedPlan = payload;
+    resetPaymentState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
     },
-    setLoading: (state, { payload }) => {
-      state.loading = payload;
-    },
-    setError: (state, { payload }) => {
-      state.error = payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(processPayment.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+      .addCase(processPayment.fulfilled, (state) => {
+        state.loading = false;
+        state.success = true;
+      })
+      .addCase(processPayment.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload;
+      });
   },
 });
 
-export const { setShowPaymentForm, setSelectedPlan, setLoading, setError } =
-  paymentSlice.actions;
+export const { setSelectedMethod, resetPaymentState } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

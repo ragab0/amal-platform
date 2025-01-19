@@ -17,7 +17,7 @@ export default function FAQClient({ questions }) {
         <RightToLeft
           key={index}
           index={index}
-          className="bg-[#F9F5FF] p-[50px] rounded-lg cursor-pointer"
+          className="bg-[#F9F5FF] p-4 sm:p-[3%] rounded-lg cursor-pointer"
           payload={{
             onClick: () => toggleQuestion(index),
           }}
@@ -30,7 +30,9 @@ export default function FAQClient({ questions }) {
               >
                 <DobleArrowIcon className="w-[16px] h-[20px] text-[#707070]" />
               </motion.div>
-              <h3 className="text-2xl">{question.question}</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl">
+                {question.question}
+              </h3>
             </div>
             <AnimatePresence>
               {activeIndex === index && (
@@ -41,7 +43,9 @@ export default function FAQClient({ questions }) {
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <p className="mt-6 text-xl leading-10">{question.answer}</p>
+                  <p className="mt-6 sm:text-lg md:text-xl leading-10">
+                    {question.answer}
+                  </p>
                 </motion.div>
               )}
             </AnimatePresence>

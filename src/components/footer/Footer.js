@@ -18,8 +18,8 @@ const footerLinks = [
 ];
 
 const contactLinks = [
-  { title: "تواصل معنا", href: "/contact", notYet: true },
-  { title: "الأسئلة الشائعة FAQ", href: "/faq", notYet: true },
+  { title: "تواصل معنا", href: "/support" },
+  { title: "الأسئلة الشائعة FAQ", href: "/faqs" },
 ];
 
 const socialIcons = [

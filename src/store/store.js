@@ -6,7 +6,6 @@ import adminReducer from "./features/admin/adminSlice";
 import aiReducer from "./features/ai/aiSlice";
 import supportReducer from "./features/support/supportSlice";
 import notificationsReducer from "./features/notifications/notificationsSlice";
-import servicesReducer from "./features/services/servicesSlice";
 import paymentReducer from "./features/payment/paymentSlice";
 import logger from "redux-logger";
 
@@ -22,7 +21,6 @@ export function makeStore(preloadedState = {}) {
       ai: aiReducer,
       notifications: notificationsReducer,
       support: supportReducer,
-      services: servicesReducer,
       payment: paymentReducer,
     },
     preloadedState,

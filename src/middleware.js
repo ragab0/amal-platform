@@ -10,6 +10,7 @@ export const authRoutes = {
     "/notifications",
     "/support",
     "/admin",
+    "/payment",
   ],
 };
 
