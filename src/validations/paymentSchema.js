@@ -5,11 +5,14 @@ export const paymentSchema = yup.object().shape({
     .string()
     .required("رقم البطاقة مطلوب")
     .matches(/^[0-9]{16}$/, "رقم البطاقة يجب أن يكون 16 رقم"),
-  cardName: yup.string().required("اسم حامل البطاقة مطلوب"),
+  // cardName: yup.string().required("اسم حامل البطاقة مطلوب"),
   expiryDate: yup
     .string()
     .required("تاريخ انتهاء البطاقة مطلوب")
-    .matches(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, "صيغة تاريخ الانتهاء غير صحيحة MM/YY"),
+    .matches(
+      /^(0[1-9]|1[0-2])\/([0-9]{2})$/,
+      "صيغة تاريخ الانتهاء غير صحيحة MM/YY"
+    ),
   cvv: yup
     .string()
     .required("رمز الأمان مطلوب")

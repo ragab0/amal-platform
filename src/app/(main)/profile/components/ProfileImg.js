@@ -24,6 +24,7 @@ export default function ProfileImg() {
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
+      // Create preview for UI
       const reader = new FileReader();
       reader.onloadend = () => {
         setPendingImage(reader.result);
@@ -33,26 +34,26 @@ export default function ProfileImg() {
     }
   }
 
-  function handleSaveClick() {
-    setIsModalOpen(true);
-  }
-
   async function handleImageSave() {
-    if (pendingImage) {
-      setProfileImage(pendingImage);
-      setPendingImage(null);
-      setIsModalOpen(false);
-      setIsImageChanged(false);
+    if (pendingImage && fileInputRef.current?.files[0]) {
+      const formData = new FormData();
+      formData.append("file", fileInputRef.current.files[0]);
 
-      const { payload, error } = await dispatch(
-        updateProfileImage({ photo: pendingImage })
-      );
+      const { payload, error } = await dispatch(updateProfileImage(formData));
       if (!error && payload?.status === "success") {
+        setProfileImage(pendingImage);
+        setPendingImage(null);
+        setIsModalOpen(false);
+        setIsImageChanged(false);
         toast.success("تم تحديث صورة الملف الشخصي بنجاح");
       } else {
         handleModalClose();
       }
     }
+  }
+
+  function handleSaveClick() {
+    setIsModalOpen(true);
   }
 
   function handleModalClose() {

@@ -2,7 +2,7 @@ import { accountInfoInputs } from "@/assets/data/profileData";
 import ProfileAccountInfoClient from "./components/ProfileAccountInfoClient";
 
 export const metadata = {
-  title: "معلومات الحساب",
+  title: "معلومات الحساب - الإعدادات",
   description: "صفحة معلومات الحساب الشخصية",
 };
 

@@ -58,6 +58,12 @@ export const menuItems = [
     label: "معلومات الحساب",
     href: "/profile/account",
   },
+
+  {
+    id: "currentPlan",
+    label: "خطة الحساب",
+    href: "/profile/current-plan",
+  },
   {
     id: "review",
     label: "تقييمي",

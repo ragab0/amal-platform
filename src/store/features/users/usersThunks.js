@@ -33,11 +33,11 @@ export const updateProfileAccountInfo = createAsyncThunk(
 
 export const updateProfileImage = createAsyncThunk(
   "auth/updateProfileImage",
-  async (data, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const response = await myAxios.post(
         "/images/upload-profile-image",
-        data,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",

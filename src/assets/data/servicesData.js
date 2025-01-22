@@ -1,16 +1,19 @@
 export const services = [
   {
+    id: "free",
     title: "حزمة مجانية",
     items: [
       "إنشـــاء سيـــرة ذاتـــيـــة",
       "تعديـــل وتحميـــل غيــر محدود",
       "قالب احترافـي قابل للتعديل",
     ],
-    to: "/build",
+    to: "/profile/current-plan",
     btnText: "ابدأ الآن",
-    id: "free",
+    clr: "text-gray-500",
+    bgClr: "bg-gray-100",
   },
   {
+    id: "premium",
     title: "حزمة مدفوعة",
     items: [
       "استشارة مع خبير بالسيّر الذاتية",
@@ -21,9 +24,11 @@ export const services = [
     btnText: "شراء الآن",
     price: "3$",
     originalPrice: "5$",
-    id: "premium",
+    clr: "text-green-500",
+    bgClr: "bg-green-50",
   },
   {
+    id: "premium-plus",
     title: "حزمة بريميوم",
     items: [
       "AI تحسين السيرة الذاتية بواسطة",
@@ -34,6 +39,7 @@ export const services = [
     btnText: "شراء الآن",
     price: "8$",
     originalPrice: "15$",
-    id: "premium-plus",
+    clr: "text-yellow-500",
+    bgClr: "bg-yellow-50",
   },
 ];

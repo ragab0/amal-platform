@@ -1,7 +1,7 @@
 import ReviewClient from "./components/ReviewClient";
 
 export const metadata = {
-  title: "تقييمي - الملف الشخصي",
+  title: "تقييمي - الإعدادات",
   description: "صفحة إدارة تقييمك على منصة أمل",
 };
 

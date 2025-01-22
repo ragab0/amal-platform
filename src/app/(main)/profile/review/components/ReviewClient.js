@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
-import { FadeInUp } from "@/components/motion/MotionWrappers";
+import { FadeIn, FadeInUp } from "@/components/motion/MotionWrappers";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { reviewSchema } from "@/validations/review";
 import { formatDate } from "@/utils/formatDate";
@@ -120,7 +120,7 @@ export default function ReviewClient() {
         style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
       >
         <div className="space-y-8">
-          <FadeInUp delay={0.4}>
+          <FadeIn delay={0.4}>
             <div className="space-y-2">
               <label className="block text-neutral-9 font-medium">
                 التقييم
@@ -148,9 +148,9 @@ export default function ReviewClient() {
                 <p className="text-red-500 text-sm">{errors.rating.message}</p>
               )}
             </div>
-          </FadeInUp>
+          </FadeIn>
 
-          <FadeInUp delay={0.6}>
+          <FadeIn delay={0.7}>
             <FormInput
               label="محتوى التقييم"
               name="content"
@@ -160,43 +160,43 @@ export default function ReviewClient() {
               textarea={true}
               placeholder="اكتب تقييمك هنا..."
             />
-          </FadeInUp>
+          </FadeIn>
         </div>
 
         {hasReview && (
           <div className="space-y-8 lg:border-r lg:pr-8">
             <div className="space-y-4">
-              <FadeInUp delay={0.8}>
+              <FadeIn delay={0.8}>
                 <h3 className="text-lg font-medium text-neutral-9">
                   معلومات التقييم
                 </h3>
-              </FadeInUp>
+              </FadeIn>
               <div className="space-y-2">
                 {user.myReview?.createdAt && (
-                  <FadeInUp delay={1}>
+                  <FadeIn delay={0.9}>
                     <div className="flex justify-between items-center text-neutral-7">
                       <span>تاريخ الإنشاء:</span>
                       <span className="font-medium">
                         {formatDate(user.myReview.createdAt, true)}
                       </span>
                     </div>
-                  </FadeInUp>
+                  </FadeIn>
                 )}
                 {user.myReview?.updatedAt &&
                   user.myReview.updatedAt !== user.myReview.createdAt && (
-                    <FadeInUp delay={1.2}>
+                    <FadeIn delay={1}>
                       <div className="flex justify-between items-center text-neutral-7">
                         <span>آخر تحديث:</span>
                         <span className="font-medium">
                           {formatDate(user.myReview.updatedAt, true)}
                         </span>
                       </div>
-                    </FadeInUp>
+                    </FadeIn>
                   )}
               </div>
             </div>
 
-            <FadeInUp delay={1.4}>
+            <FadeIn delay={1.1}>
               <div
                 onClick={() => setShowDeleteModal(true)}
                 className="flex items-center gap-2 text-red-500 cursor-pointer hover:underline"
@@ -205,7 +205,7 @@ export default function ReviewClient() {
                   حذف التقييم
                 </span>
               </div>
-            </FadeInUp>
+            </FadeIn>
           </div>
         )}
       </form>

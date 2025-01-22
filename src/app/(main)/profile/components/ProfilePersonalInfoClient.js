@@ -1,7 +1,7 @@
 "use client";
 import FormInput from "@/components/formInput/FormInput";
 import { useState } from "react";
-import { FadeInUp } from "@/components/motion/MotionWrappers";
+import { FadeIn, FadeInUp } from "@/components/motion/MotionWrappers";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { settingsPersonalInfoSchema } from "@/validations/settings";
@@ -82,9 +82,9 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
         style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
       >
         {inputs.map((input, index) => (
-          <FadeInUp
+          <FadeIn
             key={input.name}
-            delay={0.6 + index * 0.2}
+            delay={0.4 + index * 0.1}
             className={index < 2 ? "md:w-[calc(50%-10px)] w-full" : "w-full"}
           >
             <FormInput
@@ -95,7 +95,7 @@ export default function ProfilePersonalInfoClient({ children, inputs = [] }) {
               error={errors[input.name]?.message}
               disabled={!isEditing}
             />
-          </FadeInUp>
+          </FadeIn>
         ))}
       </form>
     </>

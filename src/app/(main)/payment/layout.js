@@ -5,7 +5,7 @@ import { IoIosArrowBack } from "react-icons/io";
 
 export default function layout() {
   return (
-    <div className="home-page mt-[150px] mb-[200px] container mx-auto px-4">
+    <div className="home-page mt-[150px] container mx-auto px-4">
       <h1 className="heading-sub !text-second font-normal mb-[40px]">
         الفوائد
       </h1>

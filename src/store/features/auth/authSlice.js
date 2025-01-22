@@ -14,6 +14,7 @@ import {
   updateProfileBasicInfo,
   updateProfileImage,
 } from "../users/usersThunks";
+import { processPayment } from "../payment/paymentThunks";
 
 const initialState = {
   user: {},
@@ -32,7 +33,6 @@ const authSlice = createSlice({
     resetAuth: () => initialState,
     setUserReview: (state, { payload }) => {
       console.log("############", payload);
-
       state.user.myReview = payload;
     },
   },
@@ -191,6 +191,10 @@ const authSlice = createSlice({
       .addCase(updateProfileImage.rejected, (state, { payload }) => {
         state.loading = false;
         state.error = payload.result?.message;
+      })
+      // currentPlan
+      .addCase(processPayment.fulfilled, (state, { payload }) => {
+        state.user.currentPlan = payload.result.data || {};
       });
   },
 });

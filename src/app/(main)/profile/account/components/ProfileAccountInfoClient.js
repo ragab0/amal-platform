@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import FormInput from "@/components/formInput/FormInput";
 import ConfirmModal from "@/components/modals/ConfirmModal";
-import { FadeInUp } from "@/components/motion/MotionWrappers";
+import { FadeInUp, FadeIn } from "@/components/motion/MotionWrappers";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { settingsAccountInfoSchema } from "@/validations/settings";
@@ -25,7 +25,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
     reset,
     setValue,
   } = useForm({
-    // resolver: yupResolver(settingsAccountInfoSchema),
+    resolver: yupResolver(settingsAccountInfoSchema),
     defaultValues: {
       email: accountInfo.email,
       _id: accountInfo._id,
@@ -84,7 +84,7 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
         style={loading ? { pointerEvents: "none", opacity: 0.7 } : {}}
       >
         {inputs.map((input, index) => (
-          <FadeInUp key={input.name} delay={0.6 + index * 0.2}>
+          <FadeIn key={input.name} delay={0.4 + index * 0.1}>
             <FormInput
               label={input.label}
               placeholder={input.placeholder}
@@ -94,19 +94,19 @@ export default function ProfileAccountClient({ children, inputs = [] }) {
               error={errors[input.name]?.message}
               disabled={!isEditing}
             />
-          </FadeInUp>
+          </FadeIn>
         ))}
       </form>
       {/* Delete Account Section */}
       {/* <div className="mt-12">
-        <FadeInUp delay={1.4}>
+        <FadeIn delay={1.4}>
           <div
             onClick={() => setShowDeleteModal(true)}
             className="text-xl text-red-600 cursor-pointer hover:underline transition-colors"
           >
             حذف الحساب
           </div>
-        </FadeInUp>
+        </FadeIn>
       </div> */}
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
