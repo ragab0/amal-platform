@@ -66,6 +66,11 @@ export default function CurrentPlanDetails({ services, children }) {
     <>
       <header>
         <FadeInUp>{children}</FadeInUp>
+        <div className=" hidden">
+          <span className="text-gray-500 bg-gray-100"></span>
+          <span className="text-green-500 bg-green-50"></span>
+          <span className="text-yellow-500 bg-yellow-50"></span>
+        </div>
       </header>
       <div className="space-y-12">
         <div className={`rounded-xl p-8 lg:border ${currentPlanService.bgClr}`}>
