@@ -49,6 +49,7 @@ export async function getInitialAuthState() {
     } else {
       errorMessage = "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة في وقت لاحق.";
     }
+    console.log("Error Message:", errorMessage);
 
     return {
       auth: {
