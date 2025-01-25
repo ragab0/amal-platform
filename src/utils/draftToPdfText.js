@@ -69,9 +69,11 @@ export function draftToPdfText(
             }
           }
 
+          const blockKey = block.key || `block-${index}`;
+
           return (
             <View
-              key={block.key}
+              key={blockKey}
               style={[itemStyle, { lineHeight: 1 }]}
               wrap={false}
             >
@@ -85,7 +87,7 @@ export function draftToPdfText(
                 {styledSegments.length > 0 ? (
                   styledSegments.map((segment, i) => (
                     <Text
-                      key={`${block.key}-${i}`}
+                      key={`${blockKey}-${i}`}
                       style={{
                         ...itemTextStyle,
                         // ...segment.styles,
@@ -104,13 +106,15 @@ export function draftToPdfText(
       </View>
     );
   } catch (error) {
-    console.log("Error parsing draft content:", error);
+    console.error("Error in draftToPdfText:", error);
+    // Return an empty string instead of throwing to prevent PDF generation failure
     return "";
   }
 }
 
 // Helper function to compare sets
 function setsEqual(a, b) {
+  if (!(a instanceof Set) || !(b instanceof Set)) return false;
   if (a.size !== b.size) return false;
   for (const item of a) {
     if (!b.has(item)) return false;
