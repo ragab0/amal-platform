@@ -14,7 +14,7 @@ export default function User({ user }) {
         </span>
         <span className="text-sm ">
           {user.email?.slice(0, 20) +
-            `${user.email?.length > 20 ? "..." : ""}` || "saleh@amal.com"}
+            `${user.email?.length > 20 ? "..." : ""}` || "@email.com"}
         </span>
       </div>
       {user.photo ? (

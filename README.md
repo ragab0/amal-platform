@@ -1,4 +1,4 @@
-# CV Builder (MERN)
+# NABZA - CV Builder (MERN)
 
 Created an AI-driven platform helping Arabic speakers to create professional, customizable CVs
 
