@@ -14,7 +14,7 @@ export default function Hero() {
         priority
       />
       <div className="flex flex-col justify-start mt-10">
-        <h1 className="heading-section-name">منصة عمل</h1>
+        <h1 className="heading-section-name">منصة نبذة</h1>
         <h2 className="heading-sub mb-[50px] text-center max-w-lg mx-auto leading-tight font-bold">
           أنشئ سيرتك الذاتية المثالية تصميم احترافي ومراجعة دقيقة لتميزك الوظيفي
         </h2>

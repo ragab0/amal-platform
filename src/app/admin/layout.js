@@ -4,7 +4,7 @@ import AdminHeader from "./components/AdminHeader";
 
 export const metadata = {
   title: "لوحة التحكم",
-  description: "لوحة تحكم المشرفين في منصة عمل",
+  description: "لوحة تحكم المشرفين في منصة نبذة",
 };
 
 export default function AdminLayout({ children }) {

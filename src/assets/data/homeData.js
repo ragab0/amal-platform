@@ -1,7 +1,7 @@
 export const ourServices = [
   {
     title: "إنشاء سيرة ذاتية",
-    desc: "ستوفر منصة عمل الوقت في بناء سيرتك الذاتية بأسهل أسلوب ",
+    desc: "ستوفر منصة نبذة الوقت في بناء سيرتك الذاتية بأسهل أسلوب ",
     SvgName: "CreateCv",
   },
   {
@@ -107,7 +107,7 @@ export const reviews = [
     id: 2,
     name: "سارة علي",
     rating: 5,
-    content: "خدمة ممتازة وفريق عمل محترف. أنصح بها بشدة لكل باحث عن عمل",
+    content: "خدمة ممتازة وفريق نبذة محترف. أنصح بها بشدة لكل باحث عن نبذة",
   },
   {
     id: 3,
@@ -134,4 +134,20 @@ export const reviews = [
     content:
       "تلقيت تعليقات إيجابية على سيرتي الذاتية، ووجدت وظيفة ممتازة. أنا بالتأكيد أوصي بهذا الموقع",
   },
+];
+
+import admin1 from "@/assets/imgs/adminPanel/adminPanel1.webp";
+import admin2 from "@/assets/imgs/adminPanel/adminPanel2.webp";
+import admin3 from "@/assets/imgs/adminPanel/adminPanel3.webp";
+import admin4 from "@/assets/imgs/adminPanel/adminPanel4.webp";
+import admin5 from "@/assets/imgs/adminPanel/adminPanel5.webp";
+import admin6 from "@/assets/imgs/adminPanel/adminPanel6.webp";
+
+export const adminPanelImgs = [
+  { Img: admin1 },
+  { Img: admin2 },
+  { Img: admin3 },
+  { Img: admin4 },
+  { Img: admin5 },
+  { Img: admin6 },
 ];

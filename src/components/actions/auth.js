@@ -3,9 +3,11 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const NODE_ENV = process.env.NODE_ENV;
+const axiosInstance = axios.create({
+  timeout: 120000, // 2 minutes timeout (till we use the pro maxDuration);
+  withCredentials: true,
+});
 
-// Using React cache to memoize the auth state
 export async function getInitialAuthState() {
   const cookieStore = await cookies();
   try {
@@ -21,12 +23,11 @@ export async function getInitialAuthState() {
       };
     }
 
-    const response = await axios.get(`${API_URL}/auth/is-login`, {
+    const response = await axiosInstance.get(`${API_URL}/auth/is-login`, {
       headers: {
         Cookie: `jwt=${token}`,
         "Content-Type": "application/json",
       },
-      withCredentials: true,
       credentials: "include",
     });
 
@@ -41,8 +42,10 @@ export async function getInitialAuthState() {
   } catch (error) {
     console.log("Auth Error:", error);
     let errorMessage;
-
-    if (error.response?.data?.result?.message) {
+    if (error.code === "ECONNABORTED") {
+      errorMessage =
+        "انتهت مهلة الطلب. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.";
+    } else if (error.response?.data?.result?.message) {
       errorMessage = error.response.data.result.message;
     } else if (typeof error.response?.data?.result === "string") {
       errorMessage = error.response.data.result;
@@ -50,7 +53,6 @@ export async function getInitialAuthState() {
       errorMessage = "حدث خطأ أثناء تحميل البيانات. يرجى المحاولة في وقت لاحق.";
     }
     console.log("Error Message:", errorMessage);
-
     return {
       auth: {
         user: {},

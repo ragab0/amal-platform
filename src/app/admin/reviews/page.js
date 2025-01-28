@@ -17,8 +17,8 @@ import {
 } from "@/store/features/admin/adminThunks";
 
 // export const metadata = {
-//   title: "إدارة التقييمات | منصة عمل",
-//   description: "إدارة التقييمات في منصة عمل",
+//   title: "إدارة التقييمات | منصة نبذة",
+//   description: "إدارة التقييمات في منصة نبذة",
 // };
 
 export default function ReviewsPage() {

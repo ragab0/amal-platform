@@ -54,11 +54,13 @@ export default function Navbar() {
         </div>
         {/* Desktop Navigation */}
         <div className="navbar-items hidden lg:flex items-center justify-center">
-          {navLinks.map((link, i) => (
-            <Link
-              key={i}
-              href={link.href}
-              className={`outline-bottom-hover mx-2 xl:mx-4 py-3 hover:opacity-90 transition-all 
+          {navLinks
+            .filter((e) => !e.notNow)
+            .map((link, i) => (
+              <Link
+                key={i}
+                href={link.href}
+                className={`outline-bottom-hover mx-2 xl:mx-4 py-3 hover:opacity-90 transition-all 
                 duration-300 text-lg
                 ${i === 0 ? "outline-bottom" : ""}
                 ${
@@ -67,10 +69,10 @@ export default function Navbar() {
                     : "text-white"
                 }
                 `}
-            >
-              {link.name}
-            </Link>
-          ))}
+              >
+                {link.name}
+              </Link>
+            ))}
         </div>
         {isAuthenticated ? (
           <>
@@ -103,15 +105,17 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="lg:hidden z-[1000] absolute top-full left-0 w-full bg-main border-t border-white/20 text-white">
           <div className="px-4 py-2">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="block py-2 hover:text-gray-200 transition-colors text-lg "
-              >
-                {link.name}
-              </Link>
-            ))}
+            {navLinks
+              .filter((e) => !e.notNow)
+              .map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="block py-2 hover:text-gray-200 transition-colors text-lg "
+                >
+                  {link.name}
+                </Link>
+              ))}
             {!isAuthenticated && (
               <div className="flex flex-col gap-4 mt-4 py-4 items-center">
                 <Link

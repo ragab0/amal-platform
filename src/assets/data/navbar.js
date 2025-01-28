@@ -2,8 +2,8 @@ export const navLinks = [
   { name: "بناء السيرة الذاتية", href: "/build" },
   // { name: "تحليل السيرة الذاتية", href: "/analyze" },
   { name: "الخدمات", href: "/services" },
-  { name: "الوظائف", href: "/jobs" },
-  { name: "الاستشارات", href: "/consultents" },
+  { name: "الوظائف", href: "/jobs", notNow: true },
+  { name: "الاستشارات", href: "/consultents", notNow: true },
   { name: "من نحن", href: "/about" },
 ];
 

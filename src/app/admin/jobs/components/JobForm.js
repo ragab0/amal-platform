@@ -41,9 +41,10 @@ export default function JobForm({ onSubmit, initialData, onCancel }) {
   });
 
   // Get the root requirements error if it exists
-  const requirementsError = errors.requirements?.message || 
-                           (Array.isArray(errors.requirements) && errors.requirements) || 
-                           null;
+  const requirementsError =
+    errors.requirements?.message ||
+    (Array.isArray(errors.requirements) && errors.requirements) ||
+    null;
 
   return (
     <motion.div

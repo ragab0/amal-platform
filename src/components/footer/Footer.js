@@ -3,16 +3,15 @@ import Link from "next/link";
 import CcMasterCardIco from "@/assets/icons/CcMasterCardIco";
 import CcPaypalIco from "@/assets/icons/CcPaypalIco";
 import CcVisaIco from "@/assets/icons/CcVisaIco";
-import FFacebookIco from "@/assets/icons/FFacebookIco";
-import FInstaIco from "@/assets/icons/FInstaIco";
-import FTwitterIco from "@/assets/icons/FTwitterIco";
 import FLinkedinIco from "@/assets/icons/FLinkedinIco";
 import LogoIco from "@/assets/icons/LogoIco";
-// import CopyrightIco from "@/assets/icons/CopyrightIco";
+import { FaGlobe } from "react-icons/fa";
 
 const footerLinks = [
   { title: "من نحن", href: "/about" },
   { title: "الخدمات", href: "/services" },
+  { title: "الوظائف", href: "/jobs" },
+  { title: "الاستشارات", href: "/consultents" },
   { title: "سياسة الخصوصية", href: "/privacy", notYet: true },
   { title: "الشروط والأحكام", href: "/terms", notYet: true },
 ];
@@ -23,10 +22,11 @@ const contactLinks = [
 ];
 
 const socialIcons = [
-  { Icon: FTwitterIco, href: "#" },
-  { Icon: FLinkedinIco, href: "#" },
-  { Icon: FInstaIco, href: "#" },
-  { Icon: FFacebookIco, href: "#" },
+  // { Icon: FTwitterIco, href: "#" },
+  { Icon: FLinkedinIco, href: "https://www.linkedin.com/in/ragab-eid" },
+  { Icon: FaGlobe, href: "https://ragab.vercel.app" },
+  // { Icon: FInstaIco, href: "#" },
+  // { Icon: FFacebookIco, href: "#" },
 ];
 
 const paymentIcons = [
@@ -97,6 +97,7 @@ export default function Footer() {
                     key={index}
                     href={href}
                     className="text-white hover:text-accent transition-colors"
+                    target="_blank"
                   >
                     <Icon className="w-10 h-10" />
                   </Link>
@@ -122,11 +123,21 @@ export default function Footer() {
       {/* Copyright Section */}
       <div className="bg-main py-5">
         <div className="container mx-auto px-4">
-          <p className="text-white text-[22px] text-center ">
+          {/* <p className="text-white text-[22px] text-center ">
             <span className="font-bold text-3xl leading-[0] align-middle">
               &copy;
-            </span>{" "}
-            حقوق النشر محفوظة لدى عمل
+            </span>
+            حقوق النشر محفوظة لدى نبذة
+        </p> */}
+          <p className="font-semibold text-white text-2xl text-center ">
+            Made with <span className="text-slate-700">&hearts;</span> by{" "}
+            <Link
+              href="https://ragab.vercel.app"
+              className="font-bold align-middle underline underline-offset-4 text-2xl"
+              target="_blank"
+            >
+              Ragab Eid
+            </Link>
           </p>
         </div>
       </div>

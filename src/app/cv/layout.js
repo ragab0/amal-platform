@@ -6,7 +6,7 @@ import NavBtns from "./components/NavBtns";
 import CVDataProvider from "@/providers/CVDataProvider";
 
 export const metadata = {
-  title: "منشئ السيرة الذاتية - منصة عمل",
+  title: "منشئ السيرة الذاتية - منصة نبذة",
   description:
     "قم بإنشاء سيرة ذاتية احترافية مع منشئ السير الذاتية السهل الاستخدام. اختر من بين قوالب متعددة وخصص سيرتك الذاتية للتميز.",
   keywords:

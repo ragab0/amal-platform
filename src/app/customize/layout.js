@@ -5,12 +5,12 @@ import ResumeBar from "../../templates/ResumeBar";
 import CVDataProvider from "@/providers/CVDataProvider";
 
 export const metadata = {
-  title: "تخصيص السيرة الذاتية | منصة عمل",
+  title: "تخصيص السيرة الذاتية | منصة نبذة",
   description:
     "قم بتخصيص سيرتك الذاتية باختيار القالب المناسب وتعديل الألوان والخطوط",
-  keywords: ["سيرة ذاتية", "تخصيص", "تصميم", "قوالب", "منصة عمل"],
+  keywords: ["سيرة ذاتية", "تخصيص", "تصميم", "قوالب", "منصة نبذة"],
   openGraph: {
-    title: "تخصيص السيرة الذاتية | منصة عمل",
+    title: "تخصيص السيرة الذاتية | منصة نبذة",
     description:
       "قم بتخصيص سيرتك الذاتية باختيار القالب المناسب وتعديل الألوان والخطوط",
     locale: "ar_SA",

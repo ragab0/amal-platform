@@ -13,8 +13,8 @@ import Image from "next/image";
 import { FaUserCircle } from "react-icons/fa";
 
 // export const metadata = {
-//   title: "إدارة المستخدمين | منصة عمل",
-//   description: "إدارة المستخدمين في منصة عمل",
+//   title: "إدارة المستخدمين | منصة نبذة",
+//   description: "إدارة المستخدمين في منصة نبذة",
 // };
 
 export default function UsersPage() {

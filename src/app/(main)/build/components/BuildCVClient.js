@@ -85,12 +85,19 @@ export default function BuildCVClient() {
               />
             )}
             {currentLevel === 2 && (
-              <Level2
-                register={register}
-                errors={errors}
-                cvChoice={cvChoice}
-                setValue={setValue}
-              />
+              <div
+                style={{
+                  opacity: 0.2,
+                  pointerEvents: "none",
+                }}
+              >
+                <Level2
+                  register={register}
+                  errors={errors}
+                  cvChoice={cvChoice}
+                  setValue={setValue}
+                />
+              </div>
             )}
             {currentLevel === 3 && (
               <Level3

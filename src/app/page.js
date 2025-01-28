@@ -3,20 +3,17 @@ import Image from "next/image";
 import MainLayout from "./(main)/layout";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
-import FAQClient from "./components/FAQClient";
 import Reviews from "./components/Reviews";
 import Banner from "@/components/banner/Banner";
 import ChooseTemplate from "./components/ChooseTemplate";
 import OurApp from "./components/OurApp";
-import OurExperts from "./components/OurExperts";
-import LastJobs from "./components/LastJobs";
 import { FadeInUp } from "@/components/motion/MotionWrappers";
 import { templatesApi } from "@/assets/data/templatesData";
-import { faqs, ourServices, reviews } from "@/assets/data/homeData";
+import { adminPanelImgs, ourServices, reviews } from "@/assets/data/homeData";
 
 export default function HomePage() {
   return (
-    <MainLayout className="home-page space-y-16 mb-[200px]">
+    <MainLayout className="home-page space-y-16">
       <section className="container mx-auto px-4">
         <FadeInUp>
           <Hero />
@@ -40,7 +37,7 @@ export default function HomePage() {
         <FadeInUp>
           <h3 className="heading-section-name">مميزات</h3>
           <h2 className="heading-sub mb-[50px] text-center">
-            كيف يمكن لمنصة عمل مساعدتك؟
+            كيف يمكن لمنصة نبذة مساعدتك؟
           </h2>
         </FadeInUp>
         <Services ourServices={ourServices} />
@@ -50,7 +47,7 @@ export default function HomePage() {
           <OurApp />
         </FadeInUp>
       </section>
-      <section className="container mx-auto px-4">
+      {/* <section className="container mx-auto px-4">
         <FadeInUp>
           <h3 className="heading-section-name">الخبراء</h3>
           <h2 className="heading-sub mb-[64px] text-center">
@@ -58,8 +55,8 @@ export default function HomePage() {
           </h2>
         </FadeInUp>
         <OurExperts />
-      </section>
-      <section className="container mx-auto px-4 py-[64px]">
+      </section> */}
+      {/* <section className="container mx-auto px-4 py-[64px]">
         <FadeInUp>
           <h3 className="heading-section-name">الوظائف</h3>
           <h2 className="heading-sub mb-[64px] text-center">
@@ -67,13 +64,13 @@ export default function HomePage() {
           </h2>
         </FadeInUp>
         <LastJobs />
-      </section>
-      <section className="container mx-auto px-4">
+      </section> */}
+      {/* <section className="container mx-auto px-4">
         <FadeInUp>
           <h2 className="heading-sub mb-[50px]">الأسئلة الشائعة</h2>
         </FadeInUp>
         <FAQClient questions={faqs} />
-      </section>
+      </section> */}
       <section className="container mx-auto px-4">
         <div className="text-center">
           <FadeInUp>
@@ -115,6 +112,25 @@ export default function HomePage() {
               ))}
           </div>
         </Banner>
+      </section>
+      <section className="container mx-auto px-4 overflow-hidden">
+        <div
+          className="bg-second rounded-3xl p-10 flex flex-row gap-10 overflow-auto max-h-[1000px]"
+          style={{
+            colorScheme: "dark",
+          }}
+        >
+          {adminPanelImgs.map(({ Img }, index) => (
+            <Image
+              key={index}
+              src={Img}
+              alt={`Admin Panel Image ${index + 1}`}
+              width={"auto"}
+              height={"auto"}
+              className="w-auto rounded-[inherit]"
+            />
+          ))}
+        </div>
       </section>
     </MainLayout>
   );

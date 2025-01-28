@@ -15,7 +15,7 @@ export default function Template1({
 }) {
   const [documentError, setDocumentError] = useState(null);
   const styles = createStyle(isCustomize ? myCVFontOptions : {});
-  
+
   const {
     personalInfo = {},
     volunteers = [],
@@ -53,7 +53,9 @@ export default function Template1({
   if (documentError) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center bg-gray-100 rounded-lg p-4">
-        <h3 className="text-xl font-semibold text-red-600 mb-4">خطأ في تحميل ملف PDF</h3>
+        <h3 className="text-xl font-semibold text-red-600 mb-4">
+          خطأ في تحميل ملف PDF
+        </h3>
         <p className="text-gray-700 mb-4">{documentError}</p>
       </div>
     );

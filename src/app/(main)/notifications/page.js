@@ -3,12 +3,12 @@ import { FadeInUp } from "@/components/motion/MotionWrappers";
 import NotificationList from "@/components/notifications/NotificationList";
 
 export const metadata = {
-  title: "الإشعارات | منصة عمل",
-  description: "تابع آخر التحديثات والإشعارات الخاصة بك على منصة عمل",
-  keywords: ["إشعارات", "تنبيهات", "تحديثات", "وظائف", "فرص عمل", "منصة عمل"],
+  title: "الإشعارات | منصة نبذة",
+  description: "تابع آخر التحديثات والإشعارات الخاصة بك على منصة نبذة",
+  keywords: ["إشعارات", "تنبيهات", "تحديثات", "وظائف", "فرص نبذة", "منصة نبذة"],
   openGraph: {
-    title: "الإشعارات | منصة عمل",
-    description: "تابع آخر التحديثات والإشعارات الخاصة بك على منصة عمل",
+    title: "الإشعارات | منصة نبذة",
+    description: "تابع آخر التحديثات والإشعارات الخاصة بك على منصة نبذة",
   },
 };
 
